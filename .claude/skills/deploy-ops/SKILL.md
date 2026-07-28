@@ -1,0 +1,164 @@
+---
+name: deploy-ops
+description: Deployment and operations for mariohossen.com — Cloudflare Pages setup, environment variables and secrets, redirects, the DNS cutover from Hostinger, rollback procedures, and post-launch checks. Use when deploying, configuring hosting, publishing changes, diagnosing a failed build, or running the go-live.
+---
+
+# Deployment & operations
+
+Cloudflare Pages, static output, git-push deploys. Full runbook:
+[docs/plan/06-deployment-dns.md](../../../docs/plan/06-deployment-dns.md).
+
+## The one thing to keep in mind
+
+**The original WordPress site is live and serving real visitors.** Nothing in Part 1 below touches
+it. Only the DNS cutover does, and that step is reversible in about five minutes if the TTL was
+lowered first.
+
+## Part 1 — Deploy (zero risk)
+
+### Pages project settings
+
+| Setting           | Value               |
+| ----------------- | ------------------- |
+| Production branch | `main`              |
+| Build command     | `npm run build`     |
+| Output directory  | `dist`              |
+| Node version      | `20` (via `.nvmrc`) |
+
+### Environment variables
+
+Set in **Settings → Environment variables**, for **both** Production and Preview:
+
+| Name                        | Encrypted             |
+| --------------------------- | --------------------- |
+| `RESEND_API_KEY`            | **yes**               |
+| `TURNSTILE_SECRET_KEY`      | **yes**               |
+| `CONTACT_TO_EMAIL`          | no                    |
+| `PUBLIC_TURNSTILE_SITE_KEY` | no — public by design |
+
+Rules:
+
+- Secrets **never** enter git, `.env` files that get committed, or the client bundle.
+- Only `PUBLIC_`-prefixed variables may reach the browser.
+- Encrypted values are **write-only** — you cannot read them back. Store them in a password
+  manager and hand them to the client, or they are unrecoverable when someone else takes over.
+
+## Part 2 — DNS cutover
+
+Only after the client has signed off on the `.pages.dev` preview.
+
+### Hard prerequisites ⚠
+
+Do not start without all three:
+
+1. **TTL lowered to 300 s at least 24 hours in advance.** This is what makes rollback take five
+   minutes instead of four hours. The old TTL must expire from resolver caches before the new
+   value means anything, so the 24 hours cannot be compressed.
+2. **A full WordPress backup — files and database — downloaded off Hostinger and actually opened
+   to confirm it is not a zero-byte file.** Hostinger's own backups are fine but do not count as
+   verified until one is on your own disk.
+3. **The email DNS records recorded.** `MX`, SPF `TXT`, DKIM, `autodiscover`. Screenshot the full
+   zone file.
+
+### On email — the highest-impact risk
+
+If mail for `mariohossen.com` runs through the DNS zone being moved, missing one record means the
+client **silently stops receiving email** while the website looks perfect. Nobody notices for
+hours, and by then senders have already got bounces.
+
+- Verify Cloudflare's imported zone against your screenshot, record by record. Its auto-scan is
+  good, not guaranteed complete.
+- After cutover, **send a real email to an address on the domain and confirm it arrives.** This
+  check is not optional and it is the one people forget.
+
+### Sequence
+
+1. Add the site to Cloudflare (Free plan); it scans and imports the existing zone.
+2. **Verify the imported records against the screenshot** — especially `MX`, SPF, DKIM.
+3. Update nameservers at the registrar.
+4. Add `mariohossen.com` and `www.mariohossen.com` as custom domains on the Pages project.
+5. Keep **`www` as canonical** — the current site uses it, and changing now discards accumulated
+   SEO signal for no benefit.
+
+### Post-cutover checks
+
+```bash
+for u in / /contact/ /imprint/ /privacy/ /events/ /mario-hossen-disco/ /cookie-policy-eu/; do
+  echo "$u -> $(curl -s -o /dev/null -w '%{http_code}' https://www.mariohossen.com$u)"
+done
+curl -sI https://mariohossen.com | grep -i location        # apex → www
+curl -s https://www.mariohossen.com/ | grep -c album-card  # expect 21
+curl -sI https://www.mariohossen.com/sitemap-index.xml | head -1
+```
+
+- [ ] All pages 200
+- [ ] Old URLs 301, **nothing 404s**
+- [ ] Apex redirects to `www`, SSL valid
+- [ ] All 21 albums and 12 photos in the initial HTML
+- [ ] **Contact form delivers a real email**
+- [ ] **A test email to the domain arrives** ← the mail check
+- [ ] Sitemap reachable
+
+## Redirects
+
+`public/_redirects` — nothing from the old sitemap may 404:
+
+```
+/events/               /#concerts     301
+/mario-hossen-disco/   /#recordings   301
+/cookie-policy-eu/     /privacy/      301
+/blog1/                /              301
+/blog2/                /              301
+/blog3/                /              301
+/blog4/                /              301
+/category/*            /              301
+/feed/                 /              301
+```
+
+## Rollback
+
+| Situation                        | Action                                        | Recovery                    |
+| -------------------------------- | --------------------------------------------- | --------------------------- |
+| Problem after DNS moved          | Point `A`/`CNAME` back to the Hostinger IP    | **~5 min** (with 300 s TTL) |
+| Cloudflare itself is the problem | Restore original nameservers at the registrar | 1–24 h                      |
+| Bad content deploy, DNS fine     | `git revert HEAD && git push`                 | ~2 min                      |
+| Need the exact previous build    | Pages → Deployments → **Rollback**            | ~30 s                       |
+
+WordPress stays untouched on Hostinger throughout. Rollback is a DNS change, not a restore.
+
+**Keep Hostinger live for 30 days after cutover**, then cancel.
+
+## Routine publishing
+
+```bash
+npm run verify          # must pass first
+git add -A && git commit -m "content: add Vienna concert 12 September 2026"
+git push
+```
+
+Cloudflare builds and deploys in ~60 seconds. Every PR gets its own preview URL.
+
+## When a build fails
+
+**The live site is untouched** — Cloudflare only swaps in successful builds. There is no partial
+or broken state to clean up.
+
+Read the error in the Pages dashboard or the GitHub Actions check; it names the file and field.
+Most failures are content-schema violations — fix the content, never the schema. See the
+`content-editing` skill.
+
+## Monitoring
+
+- **Google Search Console** — submit the sitemap at cutover, watch coverage for two weeks
+- **Cloudflare Web Analytics** — free, cookieless, optional; enabling it does _not_ re-introduce
+  a cookie-banner requirement
+- **Cloudflare Pages dashboard** — build history and one-click rollback
+
+## Do not
+
+- Add third-party scripts (analytics, chat, embeds) — that re-introduces the cookie banner the
+  rebuild removes
+- Commit secrets, or move a secret out of Cloudflare into the repo
+- Change the canonical host from `www` without a deliberate SEO decision
+- Cancel Hostinger before the 30-day window is up
+- Touch DNS without the TTL lowered and the backup verified
