@@ -1,0 +1,11 @@
+dist/
+.astro/
+node_modules/
+package-lock.json
+
+# Archives — captured verbatim from the original site, never reformat
+assets/
+extraction/rendered/
+extraction/reference-css/
+extraction/screenshots/
+extraction/data/

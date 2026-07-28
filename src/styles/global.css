@@ -1,0 +1,78 @@
+@import 'tailwindcss';
+
+/* Self-hosted fonts — never the Google Fonts CDN. That is what lets the site run with no
+   cookie banner (see docs/plan/02-architecture.md).
+
+   Only four faces, because that is exactly what the original loads. Verified via
+   document.fonts on the live site: Lato 400/700 and Roboto 300/400 are the only faces that
+   ever reach "loaded". Weights the original *declares* but never loads (Lato 300/500/600)
+   are resolved by the browser to the nearest available face, so we declare the resolved
+   weight directly rather than rely on synthesis. See docs/plan/03-design-system.md.
+
+   Subsets are pinned to latin + latin-ext. The default imports also ship cyrillic, greek,
+   vietnamese, math and symbol subsets, which this content never uses — the only character
+   above Latin-1 anywhere in it is the "ő" in Győr. */
+@import '@fontsource/lato/latin-400.css';
+@import '@fontsource/lato/latin-ext-400.css';
+@import '@fontsource/lato/latin-700.css';
+@import '@fontsource/lato/latin-ext-700.css';
+@import '@fontsource/roboto/latin-300.css';
+@import '@fontsource/roboto/latin-ext-300.css';
+@import '@fontsource/roboto/latin-400.css';
+@import '@fontsource/roboto/latin-ext-400.css';
+
+@theme {
+  /* Measured from the live site with getComputedStyle — not chosen.
+     Raw values: extraction/data/design-tokens.json */
+  --color-bg: #000000;
+  --color-gold: #b09153;
+  --color-text: #bbbbbb;
+  --color-ink: #000000;
+  --color-surface: rgb(35 35 35 / 0.9);
+
+  --font-sans: 'Lato', system-ui, -apple-system, sans-serif;
+  --font-display: 'Roboto', system-ui, -apple-system, sans-serif;
+
+  --container-site: 1240px;
+
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 26px;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Never remove focus visibility — see the accessibility rules in the astro-patterns skill. */
+  :focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 2px;
+  }
+}
+
+/* The original animates entrances but ignores prefers-reduced-motion. We honour it. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

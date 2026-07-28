@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main, master]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      # Formatting, linting, the content-tooling tests, type/content-schema check, then build.
+      # A malformed content file fails here rather than on the live site — that guarantee is the
+      # whole reason a non-technical owner can edit this repo safely.
+      - run: npm run verify
+
+      - name: Check output budgets
+        run: |
+          html=$(wc -c < dist/index.html)
+          css=$(cat dist/_astro/*.css | wc -c)
+          js=$(find dist -name '*.js' -exec cat {} + 2>/dev/null | wc -c)
+          echo "HTML ${html}B  CSS ${css}B  JS ${js}B"
+          # Budgets from docs/plan/02-architecture.md. Loud failure beats silent bloat.
+          [ "$css" -le 40960 ] || { echo "::error::CSS over 40 KB budget ($css B)"; exit 1; }
+          [ "$js"  -le 15360 ] || { echo "::error::JS over 15 KB budget ($js B)"; exit 1; }
+
+      - name: Fail on any third-party request
+        run: |
+          # No Google Fonts, no analytics, no external anything. This is what keeps the site
+          # free of a cookie-consent requirement — see docs/plan/02-architecture.md.
+          if grep -rhoE 'https?://[^"'"'"' )]+' dist --include='*.html' \
+               | grep -v 'mariohossen.com' | sort -u | grep .; then
+            echo "::error::External request found in built output"
+            exit 1
+          fi
+          echo "No third-party requests ✓"
