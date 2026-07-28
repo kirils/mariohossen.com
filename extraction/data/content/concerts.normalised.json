@@ -1,0 +1,890 @@
+[
+  {
+    "sourceIndex": 0,
+    "dateRaw": "22. - 29. MAY 2026",
+    "date": "2026-05-22",
+    "endDate": "2026-05-29",
+    "city": "Beijing · Shanghai · Shenzhen · Tianjin · Jinan",
+    "performers": [
+      "Mario Hossen, Violin",
+      "Julia Turnowsky, Viola",
+      "Liliana Kehayova, Violoncello",
+      "Alexander Swete, Guitar"
+    ],
+    "country": "CN",
+    "series": "China Tour",
+    "ensemble": "Paganini Ensemble Vienna",
+    "decidedWhy": "A five-city tour, not a single venue. 'CHINA TOUR' is the tour name (series); the bullet list is the cities. No venue is stated for any stop.",
+    "resolvedReview": [
+      "LOCATION: no \"(country)\" found — treated line 1 as city and line 2 as venue. Source: [\"CHINA TOUR\",\"Beijing • Shanghai • Shenzhen • Tianjin • Jinan\"]"
+    ],
+    "programme": "Chamber music works by Niccolò Paganini",
+    "infoUrl": "http://paganiniensemblewien.com/",
+    "sourceLines": [
+      "PAGANINI ENSEMBLE VIENNA",
+      "Chamber music works by Niccolò Paganini"
+    ],
+    "review": [],
+    "notes": [],
+    "needsDecision": false
+  },
+  {
+    "sourceIndex": 1,
+    "dateRaw": "15. MAY 2026",
+    "date": "2026-05-15",
+    "city": "Vienna",
+    "country": "AT",
+    "venue": "Minoritenkirche – Concert Spirituel",
+    "performers": [
+      "Mario Hossen, Conductor and Violin"
+    ],
+    "ensemble": "Les Orpheistes Festival Orchestra",
+    "series": "VIVALDI versus PAGANINI",
+    "programme": "Music by Niccolò Paganini and Antonio Lucio Vivaldi",
+    "infoUrl": "https://www.classictic.com/en/city/vienna-t1/vivaldi-versus-paganini-at-minoritenkirche/112907/?e=2024267",
+    "sourceLines": [
+      "VIVALDI versus PAGANINI",
+      "Les Orpheistes Festival Orchestra",
+      "Music by Niccolò Paganini and Antonio Lucio Vivaldi"
+    ],
+    "review": [],
+    "notes": [],
+    "needsDecision": false
+  },
+  {
+    "sourceIndex": 2,
+    "dateRaw": "01. & 02. MAY 2026",
+    "date": "2026-05-01",
+    "endDate": "2026-05-02",
+    "city": "Vienna",
+    "country": "AT",
+    "venue": "Minoritenkirche – Concert Spirituel",
+    "performers": [
+      "Mario Hossen, Violin",
+      "Nikita Gerkusov, Viola",
+      "Wladimir Kiradjiev, Conductor"
+    ],
+    "ensemble": "Les Orpheistes Festival Orchestra",
+    "series": "MOZART Cycle",
+    "programme": "W. A. Mozart: Sinfonia Concertante for Violin, Viola and Orchestra in E Flat major, KV 364",
+    "infoUrl": "https://www.viennaticket.at/en/minoritenkirche/event-18443",
+    "sourceLines": [
+      "MOZART Cycle",
+      "Les Orpheistes Festival Orchestra",
+      "W. A. Mozart: Sinfonia Concertante for Violin, Viola and Orchestra in E Flat major, KV 364"
+    ],
+    "review": [],
+    "notes": [],
+    "needsDecision": false
+  },
+  {
+    "sourceIndex": 3,
+    "dateRaw": "27. APRIL 2026",
+    "date": "2026-04-27",
+    "city": "Sofia",
+    "country": "BG",
+    "venue": "Bulgaria Hall – EU Festival Cantus Firmus",
+    "performers": [
+      "Mario Hossen, Violin",
+      "Lars Anders Tomter, Viola",
+      "Georgi Dimitrov, Conductor"
+    ],
+    "ensemble": "Wiener KammerOrchester",
+    "series": "Cantus Firmus",
+    "programme": "W. A. Mozart: Sinfonia Concertante for Violin, Viola and Orchestra in E Flat major, KV 364",
+    "infoUrl": "https://cantusfirmusbg.com/?p=8755",
+    "sourceLines": [
+      "Cantus Firmus",
+      "Wiener KammerOrchester",
+      "W. A. Mozart: Sinfonia Concertante for Violin, Viola and Orchestra in E Flat major, KV 364"
+    ],
+    "review": [],
+    "notes": [],
+    "needsDecision": false
+  },
+  {
+    "sourceIndex": 4,
+    "dateRaw": "18. APRIL 2026",
+    "date": "2026-04-18",
+    "city": "Château de Chimay",
+    "country": "BE",
+    "venue": "Théâtre du Château de Chimay",
+    "performers": [
+      "Mario Hossen, Violin",
+      "Julia Turnowsky, Viola",
+      "Liliana Kehayova, Violoncello",
+      "Alexander Swete, Guitar"
+    ],
+    "ensemble": "PAGANINI ENSEMBLE VIENNA",
+    "programme": "Chamber music works by Niccolò Paganini",
+    "infoUrl": "https://www.event.chateaudechimay.be/event/concert-18-04-26-paganini-ensemble-52/register",
+    "sourceLines": [
+      "PAGANINI ENSEMBLE VIENNA",
+      "Chamber music works by Niccolò Paganini"
+    ],
+    "review": [],
+    "notes": [],
+    "needsDecision": false
+  },
+  {
+    "sourceIndex": 5,
+    "dateRaw": "17. APRIL 2026",
+    "date": "2026-04-17",
+    "city": "Vienna",
+    "country": "AT",
+    "venue": "Wiener Hofmusikkapelle",
+    "performers": [
+      "Mario Hossen, Conductor and Violin"
+    ],
+    "ensemble": "Les Orpheistes Festival Orchestra",
+    "series": "VIVALDI versus PAGANINI",
+    "programme": "Music by Niccolò Paganini and Antonio Lucio Vivaldi",
+    "infoUrl": "https://www.hofmusikkapelle.gv.at/programm/programm-detail/vivaldi-versus-paganini",
+    "sourceLines": [
+      "VIVALDI versus PAGANINI",
+      "Les Orpheistes Festival Orchestra",
+      "Music by Niccolò Paganini and Antonio Lucio Vivaldi"
+    ],
+    "review": [],
+    "notes": [],
+    "needsDecision": false
+  },
+  {
+    "sourceIndex": 6,
+    "dateRaw": "11. APRIL 2026",
+    "date": "2026-04-11",
+    "city": "Niederösterreich",
+    "country": "AT",
+    "venue": "Burg Feistritz",
+    "performers": [
+      "Mario Hossen, Violin",
+      "Julia Turnowsky, Viola",
+      "Liliana Kehayova, Violoncello",
+      "Alexander Swete, Guitar"
+    ],
+    "ensemble": "PAGANINI ENSEMBLE VIENNA",
+    "programme": "Chamber music works by Niccolò Paganini",
+    "infoUrl": "https://www.burgfeistritz.com/events/konzerte-festivals/concerts/",
+    "sourceLines": [
+      "PAGANINI ENSEMBLE VIENNA",
+      "Chamber music works by Niccolò Paganini"
+    ],
+    "review": [],
+    "notes": [],
+    "needsDecision": false
+  },
+  {
+    "sourceIndex": 7,
+    "dateRaw": "08. APRIL 2026",
+    "date": "2026-04-08",
+    "city": "Udine",
+    "country": "IT",
+    "venue": "Teatro Palamostre",
+    "performers": [
+      "Mario Hossen, Violin",
+      "Julia Turnowsky, Viola",
+      "Liliana Kehayova, Violoncello",
+      "Alexander Swete, Guitar"
+    ],
+    "ensemble": "PAGANINI ENSEMBLE VIENNA",
+    "programme": "Chamber music works by Niccolò Paganini",
+    "infoUrl": "https://www.vivaticket.com/it/ticket/paganini-ensemble-vienna-mostly-paganini/278490",
+    "sourceLines": [
+      "PAGANINI ENSEMBLE VIENNA",
+      "Chamber music works by Niccolò Paganini"
+    ],
+    "review": [],
+    "notes": [],
+    "needsDecision": false
+  },
+  {
+    "sourceIndex": 8,
+    "dateRaw": "06. APRIL 2026",
+    "date": "2026-04-06",
+    "city": "Vienna",
+    "country": "AT",
+    "venue": "Minoritenkirche – Concert Spirituel",
+    "performers": [
+      "Mario Hossen, Conductor and Violin",
+      "Don Elias Stolz, Trumpet",
+      "Nataliya Stepanska, Sopran"
+    ],
+    "ensemble": "Les Orpheistes Festival Orchestra",
+    "series": "CONCERTO DI PASQUA",
+    "programme": "Music by J. S. Bach, A. Vivaldi, J. Haydn",
+    "infoUrl": "https://www.viennaticket.at/en/minoritenkirche/event-18441",
+    "sourceLines": [
+      "CONCERTO DI PASQUA",
+      "Les Orpheistes Festival Orchestra",
+      "Music by J. S. Bach, A. Vivaldi, J. Haydn"
+    ],
+    "review": [],
+    "notes": [],
+    "needsDecision": false
+  },
+  {
+    "sourceIndex": 9,
+    "dateRaw": "28. MARCH 2026",
+    "date": "2026-03-28",
+    "city": "Vienna",
+    "country": "AT",
+    "venue": "Minoritenkirche – Concert Spirituel",
+    "performers": [
+      "Mario Hossen, Violin",
+      "Alexander Zemtsov Gordon, Viola",
+      "Liliana Kehayova, Violoncello"
+    ],
+    "series": "GRANDE MUSICA – GOLDBERG-VARIATIONEN",
+    "programme": "Johann Sebastian Bach: Goldberg-Variationen BWV 988 (Arrangement for Stringtrio by Dmitry Sitkovetsky)",
+    "infoUrl": "https://www.viennaticket.at/en/minoritenkirche/event-18412",
+    "sourceLines": [
+      "GRANDE MUSICA – GOLDBERG-VARIATIONEN",
+      "Johann Sebastian Bach: Goldberg-Variationen BWV 988 (Arrangement for Stringtrio by Dmitry Sitkovetsky)"
+    ],
+    "review": [],
+    "notes": [],
+    "needsDecision": false
+  },
+  {
+    "sourceIndex": 11,
+    "dateRaw": "06. DECEMBER 2025",
+    "date": "2025-12-06",
+    "city": "Vienna",
+    "country": "AT",
+    "venue": "Minoritenkirche",
+    "performers": [
+      "Mario HOSSEN – Soloist und Conductor"
+    ],
+    "ensemble": "LES ORPHEISTES Orchestra",
+    "series": "CONCERT SPIRITUEL IN VIENNA",
+    "subtitle": "VIVALDI IN VIENNA",
+    "programme": "ANTONIO VIVALDI\nConcerto in g-Moll, RV 157\nConcerto in C-Dur, RV 114\nConcerto für drei Violinen in F-Dur, RV 551\nSinfonia aus Griselda, RV 718\nConcerto in d-Moll für Violine, Streicher und Basso continuo, RV 235\nSinfonia aus Olimpiade, RV 725 für Streicher und Basso continuo\nConcerto für vier Violinen in B-Dur, RV 553",
+    "infoUrl": "https://klangkultur.wien/",
+    "sourceLines": [
+      "CONCERT SPIRITUEL IN VIENNA",
+      "“VIVALDI IN VIENNA”",
+      "LES ORPHEISTES Orchestra",
+      "ANTONIO VIVALDI",
+      "Concerto in g-Moll, RV 157",
+      "Concerto in C-Dur, RV 114",
+      "Concerto für drei Violinen in F-Dur, RV 551",
+      "Sinfonia aus Griselda, RV 718",
+      "Concerto in d-Moll für Violine, Streicher und Basso continuo, RV 235",
+      "Sinfonia aus Olimpiade, RV 725 für Streicher und Basso continuo",
+      "Concerto für vier Violinen in B-Dur, RV 553"
+    ],
+    "review": [],
+    "notes": [
+      "COUNTRY: normalised \"A\" -> \"AT\""
+    ],
+    "needsDecision": false
+  },
+  {
+    "sourceIndex": 12,
+    "dateRaw": "05. DECEMBER 2025",
+    "date": "2025-12-05",
+    "city": "Plovdiv",
+    "country": "BG",
+    "venue": "Drama Theatre",
+    "performers": [
+      "Mario HOSSEN – Soloist und Conductor"
+    ],
+    "ensemble": "I VIRTUOSI DEL TEATRO ALLA SCALA",
+    "series": "SEASONS & MIRACLES",
+    "programme": "ANTONIO VIVALDI – Concerti in RV 157, RV 114, RV 269, RV 269, RV 297, RV 293\nNICOLO PAGANINI – “I Palpiti” Variations on an Aria from Rossini’s opera “Tancredi” M.S. 77 , Rondo del Campanello M.S. 67/1 (arr. R. Leopold), Sonata “Preghiera” on one string, on a theme from Rossini’s “Moses in Egypt” M.S. 23, “Le Streghe”, M.S. 19",
+    "sourceLines": [
+      "I VIRTUOSI DEL TEATRO ALLA SCALA",
+      "SEASONS & MIRACLES",
+      "ANTONIO VIVALDI – Concerti in RV 157, RV 114, RV 269, RV 269, RV 297, RV 293",
+      "NICOLO PAGANINI – “I Palpiti” Variations on an Aria from Rossini’s opera “Tancredi” M.S. 77 , Rondo del Campanello M.S. 67/1 (arr. R. Leopold), Sonata “Preghiera” on one string, on a theme from Rossini’s “Moses in Egypt” M.S. 23, “Le Streghe”, M.S. 19"
+    ],
+    "review": [],
+    "notes": [],
+    "needsDecision": false
+  },
+  {
+    "sourceIndex": 13,
+    "dateRaw": "29. 30. NOV. & 1. DEC.  2025",
+    "date": "2025-11-29",
+    "endDate": "2025-12-01",
+    "city": "Madrid · Sevilla · Salamanka",
+    "country": "ES",
+    "venue": "Auditorio Nacional · CITE",
+    "performers": [
+      "Mario HOSSEN (Violin)",
+      "Marta POTULSKA (Viola)",
+      "Liliana KEHAYOVA (Violoncello)",
+      "Alexander SWETE (Guitar)"
+    ],
+    "series": "Paganini Ensemble EU Tour 2025/26",
+    "decidedWhy": "Three concerts over three days (29, 30 Nov, 1 Dec) in three cities. Kept as ONE entry because the source does not state which date belongs to which city — splitting would require inventing that mapping. Salamanka has no venue given. Flagged to the client as a possible split.",
+    "clientQuestion": "Should the 29 Nov – 1 Dec Spain run be split into three separate concerts? If so, which city on which date?",
+    "resolvedReview": [
+      "MULTI-CITY: 3 cities in one card — decide whether to split into separate concerts. Source: [\"Madrid (ES) Auditorio Nacional\",\"Sevilla (ES) CITE\",\"Salamanka (ES)\"]"
+    ],
+    "programme": "NICOLO PAGANINI\nQuartetto Nr. 2 in C-Dur, op. 4, M.S. 29\nTerzetto concertante für Viola, Violoncello und Gitarre, M.S. 114\nCapriccio a violino solo ‘Nel cor più non mi sento’ in G‑Dur, MS 44\n“Rondo della Campanella” M.S. 67/1 (arr. Rudolf Leopold)\nGHEORGHI ARNAOUDOV\n“Canzoni Ardenti” I & II (Uraufführung)\nFRANZ LISZT\n“Consolation” No. 3 (arr. Rudolf Leopold)\nNICOLO PAGANINI\nQuartetto n. 12, M.S. 39",
+    "infoUrl": "https://www.auditorionacional.mcu.es/es/programacion/hispania-concertalia-universo-paganini-virtuosismo-creatividad",
+    "sourceLines": [
+      "PAGANINI ENSEMBLE EU TOUR 2025/26",
+      "NICOLO PAGANINI",
+      "Quartetto Nr. 2 in C-Dur, op. 4, M.S. 29",
+      "Terzetto concertante für Viola, Violoncello und Gitarre, M.S. 114",
+      "Capriccio a violino solo ‘Nel cor più non mi sento’ in G‑Dur, MS 44",
+      "“Rondo della Campanella” M.S. 67/1 (arr. Rudolf Leopold)",
+      "GHEORGHI ARNAOUDOV",
+      "“Canzoni Ardenti” I & II (Uraufführung)",
+      "FRANZ LISZT",
+      "“Consolation” No. 3 (arr. Rudolf Leopold)",
+      "NICOLO PAGANINI",
+      "Quartetto n. 12, M.S. 39"
+    ],
+    "review": [],
+    "notes": [],
+    "needsDecision": false
+  },
+  {
+    "sourceIndex": 14,
+    "dateRaw": "25. 26. NOVEMBER 2025",
+    "date": "2025-11-25",
+    "endDate": "2025-11-26",
+    "city": "Madrid · Burgos",
+    "country": "ES",
+    "venue": "Auditorio Nacional · Fórum Evolución",
+    "performers": [
+      "Mario HOSSEN, Violin",
+      "Martin SIEGHART, Conductor"
+    ],
+    "decidedWhy": "Two concerts on 25 and 26 Nov in two cities. Kept as one entry for the same reason as #13 — the date-to-city mapping is not stated. NOT part of the Paganini Ensemble EU Tour: this card is the Győr Philharmonic Orchestra's 'TOUR 2025' (Strauss & Kreisler Jubilee Gala), so `series` is left to the classifier rather than copied from #13. Verified against the concerts-modal screenshot.",
+    "clientQuestion": "Split the 25–26 Nov Spain run into two concerts? Which city on which date?",
+    "resolvedReview": [
+      "MULTI-CITY: 2 cities in one card — decide whether to split into separate concerts. Source: [\"Madrid (ES) Auditorio Nacional\",\"Burgos (ES), Fórum Evolución\"]"
+    ],
+    "ensemble": "Győr Philharmonic Orchestra",
+    "series": "TOUR 2025",
+    "programme": "STRAUSS & KREISLER Jubilee Gala – 200th and 150th Anniversarie",
+    "sourceLines": [
+      "TOUR 2025",
+      "Győr Philharmonic Orchestra",
+      "STRAUSS & KREISLER Jubilee Gala – 200th and 150th Anniversarie"
+    ],
+    "review": [],
+    "notes": [],
+    "needsDecision": false
+  },
+  {
+    "sourceIndex": 15,
+    "dateRaw": "20. 21. NOVEMBER 2025",
+    "date": "2025-11-20",
+    "endDate": "2025-11-21",
+    "city": "Gyor · Tatabánya",
+    "country": "HU",
+    "venue": "Flesch Központ · A Vértes Agorája",
+    "performers": [
+      "Mario HOSSEN, Violin",
+      "Martin SIEGHART, Conductor"
+    ],
+    "decidedWhy": "Two concerts on 20 and 21 Nov in two Hungarian cities. Kept as one entry, same reasoning as #13. Same Győr Philharmonic 'TOUR 2025' as #14 — the Hungarian leg. The two cards sharing an orchestra and programme is correct, not a duplication error.",
+    "clientQuestion": "Split the 20–21 Nov Hungary run into two concerts? Which city on which date? Also: the Info link on this card points at sion-violon-musique.ch, a Swiss festival — is that the right link for a Hungarian concert?",
+    "resolvedReview": [
+      "MULTI-CITY: 2 cities in one card — decide whether to split into separate concerts. Source: [\"Gyor (HU) Flesch Központ\",\"Tatabánya (HU) A Vértes Agorája\"]"
+    ],
+    "ensemble": "Győr Philharmonic Orchestra",
+    "series": "TOUR 2025",
+    "programme": "STRAUSS & KREISLER Jubilee Gala – 200th and 150th Anniversarie",
+    "infoUrl": "https://sion-violon-musique.ch/en/events/musique-en-fete-en-4/",
+    "sourceLines": [
+      "TOUR 2025",
+      "Győr Philharmonic Orchestra",
+      "STRAUSS & KREISLER Jubilee Gala – 200th and 150th Anniversarie"
+    ],
+    "review": [],
+    "notes": [],
+    "needsDecision": false
+  },
+  {
+    "sourceIndex": 16,
+    "dateRaw": "17. NOVEMBER 2025",
+    "date": "2025-11-17",
+    "city": "Vienna",
+    "country": "AT",
+    "venue": "Musikverein, Brahms-Saal",
+    "performers": [
+      "Mario HOSSEN (Violin)",
+      "Marta POTULSKA (Viola)",
+      "Liliana KEHAYOVA (Violoncello)",
+      "Alexander SWETE (Guitar)"
+    ],
+    "series": "PAGANINI ENSEMBLE EU TOUR 2025/26",
+    "programme": "NICOLO PAGANINI\nALESSANDRO SOLBIATI\nFRITZ KREISLER\nRAINER BISCHOF",
+    "infoUrl": "https://www.mariohossen.com/wp-content/uploads/2026/01/PAGANINI-ENSEMBLE-WIEN_BRAHMS-SAAL.pdf",
+    "sourceLines": [
+      "PAGANINI ENSEMBLE EU TOUR 2025/26",
+      "NICOLO PAGANINI",
+      "ALESSANDRO SOLBIATI",
+      "FRITZ KREISLER",
+      "RAINER BISCHOF"
+    ],
+    "review": [],
+    "notes": [],
+    "needsDecision": false
+  },
+  {
+    "sourceIndex": 17,
+    "dateRaw": "08. NOV 2025",
+    "date": "2025-11-08",
+    "city": "Vilnius",
+    "country": "LT",
+    "venue": "Philharmonic Hall",
+    "performers": [
+      "Mario HOSSEN, Violin",
+      "Victorien VANOOSTEN, Conductor"
+    ],
+    "ensemble": "Lithuanian National Philharmonic Orchestra",
+    "programme": "RICHARD STRAUSS Concerto for violin and orchestra inD minor, Op. 8, TrV110",
+    "sourceLines": [
+      "Lithuanian National Philharmonic Orchestra",
+      "RICHARD STRAUSS Concerto for violin and orchestra inD minor, Op. 8, TrV110"
+    ],
+    "review": [],
+    "notes": [
+      "COUNTRY: normalised \"LTU\" -> \"LT\""
+    ],
+    "needsDecision": false
+  },
+  {
+    "sourceIndex": 18,
+    "dateRaw": "19. OCT 2025",
+    "date": "2025-10-19",
+    "city": "Sofia",
+    "country": "BG",
+    "venue": "Bulgaria Hall",
+    "performers": [
+      "Mario HOSSEN, Violine",
+      "Tsanislav PETKOV, Conductor"
+    ],
+    "ensemble": "Sofia Philharmonic Orchestra",
+    "series": "EIGHT SEASONS – ASTOR PIAZZOLLA & ANTONIO VIVALDI",
+    "infoUrl": "https://sofiaphilharmonic.com/en/events/mario-hossen-tsanislav-petkov/",
+    "sourceLines": [
+      "Sofia Philharmonic Orchestra",
+      "EIGHT SEASONS – ASTOR PIAZZOLLA & ANTONIO VIVALDI"
+    ],
+    "review": [],
+    "notes": [],
+    "needsDecision": false
+  },
+  {
+    "sourceIndex": 19,
+    "dateRaw": "26. & 27. SEPT 2025",
+    "date": "2025-09-26",
+    "endDate": "2025-09-27",
+    "city": "Vienna",
+    "country": "AT",
+    "venue": "Minoritenkirche",
+    "performers": [
+      "Marialena FERNANDES · Piano",
+      "Mario HOSSEN · Violine"
+    ],
+    "series": "CONCERT SPIRITUEL IN VIENNA",
+    "subtitle": "GRANDE MUSICA",
+    "programme": "Marta POTULSKA · Viola Liliana KEHAYOVA · Violoncello Ciro VIGLILANTE · Kontrabass\nFRANZ SCHUBERT:\nForellenquintett A Dur, D 667\nROBERT SCHUMANN:\nKlavierquartett Es Dur, Op. 47",
+    "infoUrl": "https://klangkultur.wien/concertspirituel/",
+    "sourceLines": [
+      "CONCERT SPIRITUEL IN VIENNA",
+      "“GRANDE MUSICA”",
+      "Marta POTULSKA · Viola Liliana KEHAYOVA · Violoncello Ciro VIGLILANTE · Kontrabass",
+      "FRANZ SCHUBERT:",
+      "Forellenquintett A Dur, D 667",
+      "ROBERT SCHUMANN:",
+      "Klavierquartett Es Dur, Op. 47"
+    ],
+    "review": [],
+    "notes": [],
+    "needsDecision": false
+  },
+  {
+    "sourceIndex": 20,
+    "dateRaw": "8-11. MAY 2025",
+    "date": "2025-05-08",
+    "endDate": "2025-05-11",
+    "city": "Sofia",
+    "country": "BG",
+    "series": "I International Sofia Cantus Firmus Competition for Violinists",
+    "decidedWhy": "Not a performance — Mario Hossen sat on the jury. The single source line is a role description, not a venue. Kept on the concerts list because that is where the original shows it.",
+    "clientQuestion": "Should jury appearances sit in the concerts list, or in a separate section?",
+    "resolvedReview": [
+      "VENUE: none found in the source card"
+    ],
+    "programme": "Juri member by I international SOFIA Cantus Firmus Competition for Violinists",
+    "sourceLines": [
+      "Juri member by I international SOFIA Cantus Firmus Competition for Violinists"
+    ],
+    "review": [],
+    "notes": [
+      "PERFORMERS: the original credits no individual performers on this card"
+    ],
+    "needsDecision": false
+  },
+  {
+    "sourceIndex": 21,
+    "dateRaw": "02. & 03. MAY 2025",
+    "date": "2025-05-02",
+    "endDate": "2025-05-03",
+    "city": "Vienna",
+    "country": "AT",
+    "venue": "Minoritenkirche",
+    "performers": [
+      "Martin SIEGHART · Dirigent",
+      "Mario HOSSEN · Violine",
+      "Marta POTULSKA · Viola",
+      "Liliana KEHAYOVA · Violoncello"
+    ],
+    "series": "CONCERT SPIRITUEL",
+    "programme": "Concertante\nJOHANN SEBASTIAN BACH / O. RESPIGHI\nKonzert für Violine und Streicher (nach BWV 1023)\nWOLFGANG AMADEUS MOZART\nSinfonia concertante A-Dur, KV 320e, (Ergänzt von Eduard Melkus)\nJOSEF SUK: Serenade für Streichorchester Es-Dur, op. 6",
+    "sourceLines": [
+      "CONCERT SPIRITUEL",
+      "Concertante",
+      "JOHANN SEBASTIAN BACH / O. RESPIGHI",
+      "Konzert für Violine und Streicher (nach BWV 1023)",
+      "WOLFGANG AMADEUS MOZART",
+      "Sinfonia concertante A-Dur, KV 320e, (Ergänzt von Eduard Melkus)",
+      "JOSEF SUK: Serenade für Streichorchester Es-Dur, op. 6"
+    ],
+    "review": [],
+    "notes": [],
+    "needsDecision": false
+  },
+  {
+    "sourceIndex": 22,
+    "dateRaw": "21. APRIL 2025",
+    "date": "2025-04-21",
+    "city": "Vienna",
+    "country": "AT",
+    "venue": "Minoritenkirche",
+    "performers": [
+      "Mario HOSSEN · Violine & Leitung",
+      "Pavol VARGA · Violine"
+    ],
+    "series": "CONCERT SPIRITUEL",
+    "programme": "Concerto di Pasqua\nJOHANN SEBASTIAN BACH\nChoral: „Erfreut euch, ihr Herzen“, BWV 66\nKonzert für 2 Violinen in d-Moll, BWV 1043\nJOSEPH HAYDN:Die sieben letzten Worte unseres Erlösers am Kreuze, Hob. XX/1:B\nANTONIO VIVALDI:Sinfonia Al Santo Sepolcro h-Moll, RV 169\nGEORG PHILIPP TELEMANN: Sinfonia spirituosa D-Dur, TWV 44:1\nJOHANN SEBASTIAN BACH Choral: „Jesus bleibet meine Freude“, BWV 147",
+    "sourceLines": [
+      "CONCERT SPIRITUEL",
+      "Concerto di Pasqua",
+      "JOHANN SEBASTIAN BACH",
+      "Choral: „Erfreut euch, ihr Herzen“, BWV 66",
+      "Konzert für 2 Violinen in d-Moll, BWV 1043",
+      "JOSEPH HAYDN:Die sieben letzten Worte unseres Erlösers am Kreuze, Hob. XX/1:B",
+      "ANTONIO VIVALDI:Sinfonia Al Santo Sepolcro h-Moll, RV 169",
+      "GEORG PHILIPP TELEMANN: Sinfonia spirituosa D-Dur, TWV 44:1",
+      "JOHANN SEBASTIAN BACH Choral: „Jesus bleibet meine Freude“, BWV 147"
+    ],
+    "review": [],
+    "notes": [],
+    "needsDecision": false
+  },
+  {
+    "sourceIndex": 23,
+    "dateRaw": "14. APRIL 2025",
+    "date": "2025-04-14",
+    "city": "SOFIA",
+    "country": "BG",
+    "venue": "Bulgaria Hall",
+    "performers": [
+      "Mario HOSSEN · Violin",
+      "Radoslaw SZULC · Conductor"
+    ],
+    "ensemble": "Chamber Orchestra of the Bavarian Radio Symphony Orchestra",
+    "series": "EUROPEAN MUSIC FESTIVAL",
+    "programme": "Vivaldi, Tartini Violin Concertos",
+    "sourceLines": [
+      "EUROPEAN MUSIC FESTIVAL",
+      "Chamber Orchestra of the Bavarian Radio Symphony Orchestra",
+      "Vivaldi, Tartini Violin Concertos"
+    ],
+    "review": [],
+    "notes": [],
+    "needsDecision": false
+  },
+  {
+    "sourceIndex": 24,
+    "dateRaw": "06. APRIL 2025",
+    "date": "2025-04-06",
+    "city": "Kittsee",
+    "country": "AT",
+    "venue": "Schloss Kittsee",
+    "ensemble": "PAGANINI ENSEMBLE",
+    "series": "Konzertreihe Pannonisches Farum",
+    "sourceLines": [
+      "Konzertreihe Pannonisches Farum",
+      "PAGANINI ENSEMBLE"
+    ],
+    "review": [],
+    "notes": [
+      "PERFORMERS: the original credits no individual performers on this card"
+    ],
+    "needsDecision": false
+  },
+  {
+    "sourceIndex": 25,
+    "dateRaw": "04. & 05. APRIL 2025",
+    "date": "2025-04-04",
+    "endDate": "2025-04-05",
+    "city": "Vienna",
+    "country": "AT",
+    "venue": "Minoritenkirche",
+    "performers": [
+      "Federico Maria SARDELLI · Dirigent",
+      "Mario HOSSEN · Violine",
+      "Piero BARBARESCHI · Cembalo"
+    ],
+    "series": "CONCERT SPIRITUEL",
+    "programme": "Vivaldi in Wien\nANTONIO VIVALDI\nConcerto RV 157, RV 114\nConcerto d-Moll für Violine, RV 235\nConcerto F-Dur für drei Violinen, RV 551\nConcerto B-Dur für vier Violinen, RV 553\nSinfonia aus Griselda, RV 718\nSinfonia aus L’Olimpiade, RV 725",
+    "sourceLines": [
+      "CONCERT SPIRITUEL",
+      "Vivaldi in Wien",
+      "ANTONIO VIVALDI",
+      "Concerto RV 157, RV 114",
+      "Concerto d-Moll für Violine, RV 235",
+      "Concerto F-Dur für drei Violinen, RV 551",
+      "Concerto B-Dur für vier Violinen, RV 553",
+      "Sinfonia aus Griselda, RV 718",
+      "Sinfonia aus L’Olimpiade, RV 725"
+    ],
+    "review": [],
+    "notes": [],
+    "needsDecision": false
+  },
+  {
+    "sourceIndex": 26,
+    "dateRaw": "20 October 2024",
+    "date": "2024-10-20",
+    "city": "PADOVA",
+    "country": "IT",
+    "performers": [
+      "Giuliano Carella, Conductor",
+      "Mario Hossen, Soloist"
+    ],
+    "ensemble": "I Solisti Veneti",
+    "decidedWhy": "'I SOLISTI VENETI' is the orchestra, not a venue. No venue is stated on the card.",
+    "resolvedReview": [
+      "VENUE: none found in the source card"
+    ],
+    "programme": "G. Tartini, A. Vivaldi, N. Paganini",
+    "infoUrl": "https://solistiveneti.it",
+    "sourceLines": [
+      "I SOLISTI VENETI",
+      "G. Tartini, A. Vivaldi, N. Paganini"
+    ],
+    "review": [],
+    "notes": [],
+    "needsDecision": false
+  },
+  {
+    "sourceIndex": 27,
+    "dateRaw": "12 October 2024",
+    "date": "2024-10-12",
+    "city": "RAIDING",
+    "country": "AT",
+    "series": "Liszt Festival",
+    "ensemble": "Paganini Ensemble",
+    "decidedWhy": "'Liszt Festival' is the festival, not a venue. No venue is stated on the card.",
+    "resolvedReview": [
+      "VENUE: none found in the source card"
+    ],
+    "programme": "N. Paganini, F. Liszt, R. Bischof, N. Paganini",
+    "infoUrl": "https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://lisztfestival.at/fileadmin-liszt/user_upload/Programm/20224_25_Liszt_programmheft_WEBPDF.pdf&ved=2ahUKEwiO9vuG4fuRAxWs_AIHHRTSN8QQFnoECBQQAQ&usg=AOvVaw1d1HaMsV5zN_Ipn_jwNy_v",
+    "sourceLines": [
+      "Liszt Festival",
+      "PAGANINI ENSEMBLE",
+      "N. Paganini, F. Liszt, R. Bischof, N. Paganini"
+    ],
+    "review": [],
+    "notes": [
+      "PERFORMERS: the original credits no individual performers on this card"
+    ],
+    "needsDecision": false
+  },
+  {
+    "sourceIndex": 28,
+    "dateRaw": "05 October 2024",
+    "date": "2024-10-05",
+    "city": "VARNA",
+    "country": "BG",
+    "performers": [
+      "Georgi Dimitrov, Conductor",
+      "Mario Hossen, Soloist"
+    ],
+    "ensemble": "Bulgarian National Radio Symphony Orchestra",
+    "decidedWhy": "The festival name, not a venue. No venue is stated. `series` is left as the classifier reads it — 'Varna Summer Music Festival Festival', duplicated word and all. The typo is the client's to fix, not ours to silently correct.",
+    "clientQuestion": "'Varna Summer Music Festival Festival' has a duplicated word — correct it?",
+    "resolvedReview": [
+      "VENUE: none found in the source card"
+    ],
+    "series": "Varna Summer Music Festival Festival",
+    "programme": "Julius Conus, Violin Concerto",
+    "infoUrl": "https://varnasummerfest.org/en/program/symphony-orchestra-of-bulgarian-national-radio",
+    "sourceLines": [
+      "Varna Summer Music Festival Festival",
+      "Bulgarian National Radio Symphony Orchestra",
+      "Julius Conus, Violin Concerto"
+    ],
+    "review": [],
+    "notes": [],
+    "needsDecision": false
+  },
+  {
+    "sourceIndex": 29,
+    "dateRaw": "28 September 2024",
+    "date": "2024-09-28",
+    "city": "SOFIA",
+    "country": "BG",
+    "performers": [
+      "Radoslaw Szulc, Artistic Direction",
+      "Mario Hossen, Soloist"
+    ],
+    "venue": "Bulgaria Hall",
+    "ensemble": "Chamber Orchestra of the Bavarian Radio Symphony Orchestra",
+    "decidedWhy": "'Bulgaria Hall' is a real venue in Sofia; it sits in the second block rather than the first.",
+    "resolvedReview": [
+      "VENUE: none found in the source card"
+    ],
+    "programme": "Karl Amadeus Hartmann, Violin Concerto",
+    "infoUrl": "https://sofiaphilharmonic.com/en/#",
+    "sourceLines": [
+      "Bulgaria Hall",
+      "Chamber Orchestra of the Bavarian Radio Symphony Orchestra",
+      "Karl Amadeus Hartmann, Violin Concerto"
+    ],
+    "review": [],
+    "notes": [],
+    "needsDecision": false
+  },
+  {
+    "sourceIndex": 30,
+    "dateRaw": "25 August 2024",
+    "date": "2024-08-25",
+    "city": "STROBL AM WOLFGANGSEE",
+    "country": "AT",
+    "venue": "Pfarrkirche",
+    "series": "Festival KIRCH'KLANG am Wolfgangsee",
+    "ensemble": "Paganini Ensemble",
+    "decidedWhy": "'Pfarrkirche' is the venue; the following line is the festival.",
+    "resolvedReview": [
+      "VENUE: none found in the source card"
+    ],
+    "programme": "Paganini, Mozart, Bischof, Paganini",
+    "sourceLines": [
+      "Pfarrkirche",
+      "Festival KIRCH’KLANG am Wolfgangsee",
+      "PAGANINI ENSEMBLE",
+      "Paganini, Mozart, Bischof, Paganini"
+    ],
+    "review": [],
+    "notes": [
+      "PERFORMERS: the original credits no individual performers on this card"
+    ],
+    "needsDecision": false
+  },
+  {
+    "sourceIndex": 31,
+    "dateRaw": "04 Juli 2024",
+    "date": "2024-07-04",
+    "city": "GENOVA",
+    "country": "IT",
+    "venue": "City Hall, Palazzo Tursi",
+    "series": "Paganini Festival Genova",
+    "ensemble": "Paganini Ensemble",
+    "decidedWhy": "Palazzo Tursi is Genoa's city hall and the venue; the following line is the festival.",
+    "resolvedReview": [
+      "VENUE: none found in the source card"
+    ],
+    "infoUrl": "https://paganinigenovafestival.it/en/events",
+    "sourceLines": [
+      "City Hall, Palazzo Tursi",
+      "Paganini Festival Genova",
+      "PAGANINI ENSEMBLE"
+    ],
+    "review": [],
+    "notes": [
+      "PERFORMERS: the original credits no individual performers on this card"
+    ],
+    "needsDecision": false
+  },
+  {
+    "sourceIndex": 32,
+    "dateRaw": "07 Juni 2024",
+    "date": "2024-06-07",
+    "city": "LISBON",
+    "country": "PT",
+    "venue": "Almada, Teatro Municipal",
+    "series": "Festival de Música dos Capuchos",
+    "ensemble": "Paganini Ensemble",
+    "decidedWhy": "Teatro Municipal in Almada is the venue; the following line is the festival.",
+    "resolvedReview": [
+      "VENUE: none found in the source card"
+    ],
+    "infoUrl": "https://festivalcapuchos.com/en/a-liberdade-do-virtuoso/",
+    "sourceLines": [
+      "Almada, Teatro Municipal",
+      "Festival de Música dos Capuchos",
+      "PAGANINI ENSEMBLE"
+    ],
+    "review": [],
+    "notes": [
+      "PERFORMERS: the original credits no individual performers on this card"
+    ],
+    "needsDecision": false
+  },
+  {
+    "sourceIndex": 33,
+    "dateRaw": "24 May - 02 June 2024",
+    "date": "2024-05-24",
+    "endDate": "2024-06-02",
+    "city": "Shanghai · Tianjin · Beijing · Wuhan · Guangzhou · Shenzhen",
+    "country": "CN",
+    "series": "China Tour",
+    "ensemble": "Paganini Ensemble",
+    "decidedWhy": "The 2024 China tour — same shape as #0. 'CHINA TOUR' is the tour name and the second line lists the cities.",
+    "resolvedReview": [
+      "LOCATION: no \"(country)\" found — treated line 1 as city and line 2 as venue. Source: [\"CHINA TOUR\"]"
+    ],
+    "programme": "SHANGHAI, TIANJIN, BEIJING, WUHAN, GUANGZHOU, SHENZHEN",
+    "infoUrl": "https://paganiniensemblewien.com/",
+    "sourceLines": [
+      "SHANGHAI, TIANJIN, BEIJING, WUHAN, GUANGZHOU, SHENZHEN",
+      "PAGANINI ENSEMBLE"
+    ],
+    "review": [],
+    "notes": [
+      "PERFORMERS: the original credits no individual performers on this card"
+    ],
+    "needsDecision": false
+  },
+  {
+    "sourceIndex": 34,
+    "dateRaw": "14 May 2024",
+    "date": "2024-05-14",
+    "city": "SOFIA",
+    "country": "BG",
+    "venue": "Sofia Synagogue",
+    "series": "Sofia Fest Week Festival",
+    "ensemble": "Camerata Orphica NBU",
+    "decidedWhy": "Sofia Synagogue is the venue; the next lines are the festival and the ensemble.",
+    "resolvedReview": [
+      "VENUE: none found in the source card"
+    ],
+    "programme": "“METAMORPHOSEN”",
+    "infoUrl": "https://www.sofiaweeks.com/",
+    "sourceLines": [
+      "Sofia Synagogue",
+      "Sofia Fest Week Festival",
+      "Camerata Orphica NBU",
+      "“METAMORPHOSEN”"
+    ],
+    "review": [],
+    "notes": [
+      "PERFORMERS: the original credits no individual performers on this card"
+    ],
+    "needsDecision": false
+  }
+]

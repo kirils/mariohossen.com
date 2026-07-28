@@ -1,0 +1,53 @@
+[
+  {
+    "composer": "Niccolò PAGANINI",
+    "body": [
+      "24 Capricci für Violine solo",
+      "Besetzung: Violine solo",
+      "Herausgeber: Mario Hossen / Musikverlag Doblinger"
+    ],
+    "cover": "https://www.mariohossen.com/wp-content/uploads/2024/06/MH_NP_24Capricci.jpg",
+    "alt": "",
+    "moreUrl": "https://www.doblinger-musikverlag.at/de/werk/id-24-capricci-f%C3%BCr-violine-solo",
+    "buttonLabel": "see more"
+  },
+  {
+    "composer": "Niccolò PAGANINI",
+    "body": [
+      "Werke für Violine und Orchester",
+      "Vol. I",
+      "Besetzung: Violine und Klavier / Orgel / Cembalo / Basso continuo",
+      "Herausgeber: Mario Hossen / Mariateresa Dellaborra / Musikverlag Doblinger"
+    ],
+    "cover": "https://www.mariohossen.com/wp-content/uploads/2024/06/MH_NP_vol1.jpg",
+    "alt": "",
+    "moreUrl": "https://www.doblinger-musikverlag.at/de/werk/werke-f%c3%bcr-violine-und-orchester-heft-1-normalstimmungskordaturstimmung",
+    "buttonLabel": "see more"
+  },
+  {
+    "composer": "Niccolò PAGANINI",
+    "body": [
+      "Werke für Violine und Orchester",
+      "Vol. II",
+      "Besetzung: Violine und Klavier / Orgel / Cembalo / Basso continuo",
+      "Herausgeber: Mario Hossen / Mariateresa Dellaborra / Musikverlag Doblinger"
+    ],
+    "cover": "https://www.mariohossen.com/wp-content/uploads/2024/06/MH_NP_vol2.jpg",
+    "alt": "",
+    "moreUrl": "https://www.doblinger-musikverlag.at/de/werk/werke-f%C3%BCr-violine-und-orchester-heft-2-normalstimmungskordaturstimmung",
+    "buttonLabel": "see more"
+  },
+  {
+    "composer": "Niccolò PAGANINI",
+    "body": [
+      "Werke für Violine und Orchester",
+      "Vol. III",
+      "Besetzung: Violine und Klavier / Orgel / Cembalo / Basso continuo",
+      "Herausgeber: Mario Hossen / Mariateresa Dellaborra / Musikverlag Doblinger"
+    ],
+    "cover": "https://www.mariohossen.com/wp-content/uploads/2024/06/MH_NP_vol3.jpg",
+    "alt": "",
+    "moreUrl": "https://www.doblinger-musikverlag.at/de/werk/werke-f%C3%BCr-violine-und-orchester-mit-skordatur-heft-3-eine-ausgabe",
+    "buttonLabel": "see more"
+  }
+]

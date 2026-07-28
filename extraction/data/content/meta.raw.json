@@ -1,0 +1,84 @@
+{
+  "title": "Mario Hossen – violin soloist and conductor",
+  "description": "",
+  "nav": [
+    {
+      "label": "biography",
+      "href": "/#biography"
+    },
+    {
+      "label": "repertoire",
+      "href": "/#repertoire"
+    },
+    {
+      "label": "concerts",
+      "href": "/#concerts"
+    },
+    {
+      "label": "recordings",
+      "href": "/#recordings"
+    },
+    {
+      "label": "editions",
+      "href": "/#editions"
+    },
+    {
+      "label": "gallery",
+      "href": "/#gallery"
+    },
+    {
+      "label": "contact",
+      "href": "/#contact"
+    },
+    {
+      "label": "Contact",
+      "href": "https://www.mariohossen.com/contact/"
+    },
+    {
+      "label": "Imprint",
+      "href": "https://www.mariohossen.com/imprint/"
+    },
+    {
+      "label": "Cookie Policy (EU)",
+      "href": "https://www.mariohossen.com/cookie-policy-eu/"
+    }
+  ],
+  "social": [
+    "https://www.youtube.com/channel/UCyCB_mun4F91Efmwwm72wYw",
+    "https://open.spotify.com/artist/0JVA6wodUe5NnmnZkoiQG9?autoplay=true",
+    "https://www.facebook.com/mario.hossen",
+    "https://www.instagram.com/mariohossenofficial/",
+    "https://www.instagram.com/mariohossenofficial"
+  ],
+  "label": {
+    "lines": [
+      "Dynamic Opera and Classical Music",
+      "Dynamic S.r.l – Via Mura Chiappe, 39 16136 Genoa, Italy",
+      "Tel. +39 010 2722884 | Fax +39 010 213937",
+      "dynamic@dynamic.it | www.dynamic.it"
+    ],
+    "links": [
+      {
+        "text": "www.dynamic.it",
+        "href": "http://www.dynamic.it"
+      }
+    ]
+  },
+  "partners": {
+    "lines": [
+      "Österreichische Nationalbank | www.oenb.at",
+      "Thomastik – Infeld | www.thomastik-infeld.com"
+    ],
+    "links": [
+      {
+        "text": "www.oenb.at",
+        "href": "http://www.oenb.at"
+      },
+      {
+        "text": "www.thomastik-infeld.com",
+        "href": "http://www.thomastik-infeld.com"
+      }
+    ]
+  },
+  "copyright": "© Copyright – Mario Hossen 2026"
+}

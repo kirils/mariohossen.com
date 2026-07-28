@@ -1,0 +1,86 @@
+[
+  {
+    "order": 1,
+    "file": "Mario-Hossen-1.jpg",
+    "review": [],
+    "needsDecision": false,
+    "needsAltText": true
+  },
+  {
+    "order": 2,
+    "file": "Mario-Hossen-2.jpg",
+    "review": [],
+    "needsDecision": false,
+    "needsAltText": true
+  },
+  {
+    "order": 3,
+    "file": "Mario-Hossen-4.jpg",
+    "review": [],
+    "needsDecision": false,
+    "needsAltText": true
+  },
+  {
+    "order": 4,
+    "file": "LAN6478-1-1-scaled.jpg",
+    "review": [],
+    "needsDecision": false,
+    "needsAltText": true
+  },
+  {
+    "order": 5,
+    "file": "Mario-Hossen-6.jpg",
+    "review": [],
+    "needsDecision": false,
+    "needsAltText": true
+  },
+  {
+    "order": 6,
+    "file": "Mario-Hossen_front.jpg",
+    "review": [],
+    "needsDecision": false,
+    "needsAltText": true
+  },
+  {
+    "order": 7,
+    "file": "LAN6512-scaled.jpg",
+    "review": [],
+    "needsDecision": false,
+    "needsAltText": true
+  },
+  {
+    "order": 8,
+    "file": "20190221_MarioHossen_0402.jpg",
+    "review": [],
+    "needsDecision": false,
+    "needsAltText": true
+  },
+  {
+    "order": 9,
+    "file": "MH4.jpeg",
+    "review": [],
+    "needsDecision": false,
+    "needsAltText": true
+  },
+  {
+    "order": 10,
+    "file": "MH2.jpeg",
+    "review": [],
+    "needsDecision": false,
+    "needsAltText": true
+  },
+  {
+    "order": 11,
+    "file": "MH1.jpeg",
+    "review": [],
+    "needsDecision": false,
+    "needsAltText": true
+  },
+  {
+    "order": 12,
+    "file": "MH3.jpeg",
+    "review": [],
+    "needsDecision": false,
+    "needsAltText": true
+  }
+]

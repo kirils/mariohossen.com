@@ -1,0 +1,147 @@
+{
+  "_about": [
+    "Hand-authored resolutions for concert cards the automatic mapper could not classify safely.",
+    "Keyed by `sourceIndex` from concerts.raw.json. Applied by normalise-content.mjs.",
+    "Each entry records WHAT was decided and WHY, so the call is auditable rather than buried",
+    "in a heuristic. `null` means 'the original genuinely does not state this'.",
+    "Nothing here invents information: every value is present in the source card, only assigned",
+    "to a different field than the mapper could infer."
+  ],
+
+  "concerts": {
+    "0": {
+      "resolves": ["LOCATION"],
+      "set": {
+        "city": "Beijing · Shanghai · Shenzhen · Tianjin · Jinan",
+        "country": "CN",
+        "venue": null,
+        "series": "China Tour",
+        "ensemble": "Paganini Ensemble Vienna"
+      },
+      "why": "A five-city tour, not a single venue. 'CHINA TOUR' is the tour name (series); the bullet list is the cities. No venue is stated for any stop."
+    },
+    "13": {
+      "resolves": ["MULTI-CITY"],
+      "set": {
+        "city": "Madrid · Sevilla · Salamanka",
+        "country": "ES",
+        "venue": "Auditorio Nacional · CITE",
+        "series": "Paganini Ensemble EU Tour 2025/26"
+      },
+      "why": "Three concerts over three days (29, 30 Nov, 1 Dec) in three cities. Kept as ONE entry because the source does not state which date belongs to which city — splitting would require inventing that mapping. Salamanka has no venue given. Flagged to the client as a possible split.",
+      "clientQuestion": "Should the 29 Nov – 1 Dec Spain run be split into three separate concerts? If so, which city on which date?"
+    },
+    "14": {
+      "resolves": ["MULTI-CITY"],
+      "set": {
+        "city": "Madrid · Burgos",
+        "country": "ES",
+        "venue": "Auditorio Nacional · Fórum Evolución"
+      },
+      "why": "Two concerts on 25 and 26 Nov in two cities. Kept as one entry for the same reason as #13 — the date-to-city mapping is not stated. NOT part of the Paganini Ensemble EU Tour: this card is the Győr Philharmonic Orchestra's 'TOUR 2025' (Strauss & Kreisler Jubilee Gala), so `series` is left to the classifier rather than copied from #13. Verified against the concerts-modal screenshot.",
+      "clientQuestion": "Split the 25–26 Nov Spain run into two concerts? Which city on which date?"
+    },
+    "15": {
+      "resolves": ["MULTI-CITY"],
+      "set": {
+        "city": "Gyor · Tatabánya",
+        "country": "HU",
+        "venue": "Flesch Központ · A Vértes Agorája"
+      },
+      "why": "Two concerts on 20 and 21 Nov in two Hungarian cities. Kept as one entry, same reasoning as #13. Same Győr Philharmonic 'TOUR 2025' as #14 — the Hungarian leg. The two cards sharing an orchestra and programme is correct, not a duplication error.",
+      "clientQuestion": "Split the 20–21 Nov Hungary run into two concerts? Which city on which date? Also: the Info link on this card points at sion-violon-musique.ch, a Swiss festival — is that the right link for a Hungarian concert?"
+    },
+    "20": {
+      "resolves": ["VENUE"],
+      "set": {
+        "venue": null,
+        "series": "I International Sofia Cantus Firmus Competition for Violinists"
+      },
+      "why": "Not a performance — Mario Hossen sat on the jury. The single source line is a role description, not a venue. Kept on the concerts list because that is where the original shows it.",
+      "clientQuestion": "Should jury appearances sit in the concerts list, or in a separate section?"
+    },
+    "26": {
+      "resolves": ["VENUE"],
+      "set": { "venue": null, "ensemble": "I Solisti Veneti" },
+      "why": "'I SOLISTI VENETI' is the orchestra, not a venue. No venue is stated on the card."
+    },
+    "27": {
+      "resolves": ["VENUE"],
+      "set": { "venue": null, "series": "Liszt Festival", "ensemble": "Paganini Ensemble" },
+      "why": "'Liszt Festival' is the festival, not a venue. No venue is stated on the card."
+    },
+    "28": {
+      "resolves": ["VENUE"],
+      "set": {
+        "venue": null,
+        "ensemble": "Bulgarian National Radio Symphony Orchestra"
+      },
+      "why": "The festival name, not a venue. No venue is stated. `series` is left as the classifier reads it — 'Varna Summer Music Festival Festival', duplicated word and all. The typo is the client's to fix, not ours to silently correct.",
+      "clientQuestion": "'Varna Summer Music Festival Festival' has a duplicated word — correct it?"
+    },
+    "29": {
+      "resolves": ["VENUE"],
+      "set": {
+        "venue": "Bulgaria Hall",
+        "ensemble": "Chamber Orchestra of the Bavarian Radio Symphony Orchestra"
+      },
+      "why": "'Bulgaria Hall' is a real venue in Sofia; it sits in the second block rather than the first."
+    },
+    "30": {
+      "resolves": ["VENUE"],
+      "set": {
+        "venue": "Pfarrkirche",
+        "series": "Festival KIRCH'KLANG am Wolfgangsee",
+        "ensemble": "Paganini Ensemble"
+      },
+      "why": "'Pfarrkirche' is the venue; the following line is the festival."
+    },
+    "31": {
+      "resolves": ["VENUE"],
+      "set": {
+        "venue": "City Hall, Palazzo Tursi",
+        "series": "Paganini Festival Genova",
+        "ensemble": "Paganini Ensemble"
+      },
+      "why": "Palazzo Tursi is Genoa's city hall and the venue; the following line is the festival."
+    },
+    "32": {
+      "resolves": ["VENUE"],
+      "set": {
+        "venue": "Almada, Teatro Municipal",
+        "series": "Festival de Música dos Capuchos",
+        "ensemble": "Paganini Ensemble"
+      },
+      "why": "Teatro Municipal in Almada is the venue; the following line is the festival."
+    },
+    "33": {
+      "resolves": ["LOCATION"],
+      "set": {
+        "city": "Shanghai · Tianjin · Beijing · Wuhan · Guangzhou · Shenzhen",
+        "country": "CN",
+        "venue": null,
+        "series": "China Tour",
+        "ensemble": "Paganini Ensemble"
+      },
+      "why": "The 2024 China tour — same shape as #0. 'CHINA TOUR' is the tour name and the second line lists the cities."
+    },
+    "34": {
+      "resolves": ["VENUE"],
+      "set": {
+        "venue": "Sofia Synagogue",
+        "series": "Sofia Fest Week Festival",
+        "ensemble": "Camerata Orphica NBU"
+      },
+      "why": "Sofia Synagogue is the venue; the next lines are the festival and the ensemble."
+    }
+  },
+
+  "recordings": {
+    "17": {
+      "resolves": ["no outbound listen link"],
+      "set": { "listenUrl": null },
+      "why": "Alone among the 21 albums this has no outbound link on the original. Left unset rather than guessing a store page — `listenUrl` is optional in the schema.",
+      "clientQuestion": "Is there a listening or purchase link for 'The Spirit of Niccolò Paganini' (Interpreta)?"
+    }
+  }
+}

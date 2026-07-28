@@ -1,0 +1,237 @@
+[
+  {
+    "order": 1,
+    "composer": "N. Paganini",
+    "title": "Works for Violin and Orchestra",
+    "subtitle": null,
+    "coverFile": "N.-Paganini_WORLD-PREMIERE-RECORDING.jpg",
+    "listenUrl": "https://www.dynamic.it/product_info.php?products_id=3636&products_name=Works%20for%20Violin%20and%20Orchestra",
+    "review": [],
+    "needsDecision": false,
+    "needsAltText": true
+  },
+  {
+    "order": 2,
+    "composer": "N. Paganini",
+    "title": "The spirit of Paganini",
+    "subtitle": "Rare and unpublished works",
+    "coverFile": "Spirit_Paganini.jpg",
+    "listenUrl": "https://www.dynamic.it/product_info.php?products_id=3719&products_name=The%20spirit%20of%20Paganini%3Cbr%3ERare%20and%20unpublished%20works",
+    "review": [],
+    "needsDecision": false,
+    "needsAltText": true
+  },
+  {
+    "order": 3,
+    "composer": "A. Vivaldi",
+    "title": "The Four Seasons / Le quattro stagioni",
+    "subtitle": null,
+    "coverFile": "Vivaldi_4Seasons.jpg",
+    "listenUrl": "https://www.jiosaavn.com/song/le-quattro-stagioni-violin-concerto-no.-1-in-e-major-rv-269-spring-i.-allegro/N1wIWzN6U3U",
+    "review": [],
+    "needsDecision": false,
+    "needsAltText": true
+  },
+  {
+    "order": 4,
+    "composer": "N. Paganini",
+    "title": "Violin Concertos Nos. 2 & 4",
+    "subtitle": null,
+    "coverFile": "N.Paganini_Violin-Concertos-No.2_No.4.jpg",
+    "listenUrl": "https://www.qobuz.com/gb-en/album/niccolo-paganini-violin-concerto-nos-2-4-mario-hossen-valeri-vatchev-bulgarian-radio-symphony-orchestra/uy0qez4hodubb",
+    "review": [],
+    "needsDecision": false,
+    "needsAltText": true
+  },
+  {
+    "order": 5,
+    "composer": "N. Paganini",
+    "title": "Quartets for Strings and Guitar",
+    "subtitle": "Nos. 11, 6 & 13",
+    "coverFile": "s-l960.webp",
+    "listenUrl": "https://www.dynamic.it/product_info.php?products_id=4556&products_name=Quartets%20for%20Strings%20and%20Guitar%3Cbr%3ENos.%2011,%206%20&%2013",
+    "review": [],
+    "needsDecision": false,
+    "needsAltText": true
+  },
+  {
+    "order": 6,
+    "composer": "N. Paganini",
+    "title": "Quartets for Strings and Guitar",
+    "subtitle": "Nos. 1, 2 & 9",
+    "coverFile": "Niccolo-Paganini-Complete-Quartets-Vol.-I.jpeg",
+    "listenUrl": "https://www.dynamic.it/product_info.php?products_id=4168&products_name=Quartets%20for%20Strings%20and%20Guitar%3Cbr%3ENos.1,%202%20&%209",
+    "review": [],
+    "needsDecision": false,
+    "needsAltText": true
+  },
+  {
+    "order": 7,
+    "composer": "N. Paganini",
+    "title": "Quartets for Strings and Guitar",
+    "subtitle": "Nos. 7, 14 & 15",
+    "coverFile": "Niccolo-Paganini-Complete-Quartets-Vol.-II.jpg",
+    "listenUrl": "https://www.dynamic.it/product_info.php?products_id=4274&products_name=Quartets%20for%20Strings%20and%20Guitar%3Cbr%3ENos.7,%2014%20&%2015",
+    "review": [],
+    "needsDecision": false,
+    "needsAltText": true
+  },
+  {
+    "order": 8,
+    "composer": "N. Paganini",
+    "title": "Quartets for Strings and Guitar",
+    "subtitle": "Nos. 5, 4 & 10",
+    "coverFile": "Niccolo-Paganini-Complete-Quartets-Vol.-III.jpg",
+    "listenUrl": "https://www.dynamic.it/product_info.php?language=en&products_id=4396&products_name=Quartets%20for%20Strings%20and%20Guitar%3Cbr%3ENos.5,%204%20&%2010",
+    "review": [],
+    "needsDecision": false,
+    "needsAltText": true
+  },
+  {
+    "order": 9,
+    "composer": "J.S. Bach",
+    "title": "Sonatas for Violin & Harpsichord Vol. 1",
+    "subtitle": null,
+    "coverFile": "JSB_Complete-Sonatas-for-Violin-Harpsichord-Vol.1.jpg",
+    "listenUrl": "https://davinci-edition.com/product/c00151/",
+    "review": [],
+    "needsDecision": false,
+    "needsAltText": true
+  },
+  {
+    "order": 10,
+    "composer": "J.S. Bach",
+    "title": "Sonatas for Violin & Harpsichord, Vol. 2",
+    "subtitle": null,
+    "coverFile": "JSB_Complete-Sonatas-for-Violin_Harpsichord-Vol.2.jpg",
+    "listenUrl": "https://davinci-edition.com/product/c00441/",
+    "review": [],
+    "needsDecision": false,
+    "needsAltText": true
+  },
+  {
+    "order": 11,
+    "composer": "G.F. Handel",
+    "title": "Complete Violin Sonatas Op. 1",
+    "subtitle": null,
+    "coverFile": "Handel-Violin-Sonatas-Hossen-1.jpg",
+    "listenUrl": "https://davinci-edition.com/product/c00272/",
+    "review": [],
+    "needsDecision": false,
+    "needsAltText": true
+  },
+  {
+    "order": 12,
+    "composer": "L. v. Beethoven",
+    "title": "Complete Violin Sonatas",
+    "subtitle": null,
+    "coverFile": "Beethoven.jpg",
+    "listenUrl": "https://www.hmv.co.jp/en/artist_Beethoven-1770-1827_000000000034571/item_Comp-violin-Sonatas-Hossen-Vn-Sung-suk-Kang-P_11728099",
+    "review": [],
+    "needsDecision": false,
+    "needsAltText": true
+  },
+  {
+    "order": 13,
+    "composer": "Frank, Debussy & Fauré",
+    "title": "French Sonatas",
+    "subtitle": null,
+    "coverFile": "French-Sonatas.jpg",
+    "listenUrl": "https://www.amazon.com/French-Violin-Sonatas-Milena-Mollova/dp/B07NY7HLNB",
+    "review": [],
+    "needsDecision": false,
+    "needsAltText": true
+  },
+  {
+    "order": 14,
+    "composer": "Mendelssohn & Mozart",
+    "title": "Concerto for Violin, Piano and Strings / Orchestra",
+    "subtitle": null,
+    "coverFile": "Mendelssohn.jpg",
+    "listenUrl": "https://music.apple.com/us/album/mendelssohn-concerto-for-violin-piano-and-strings/1361071744",
+    "review": [],
+    "needsDecision": false,
+    "needsAltText": true
+  },
+  {
+    "order": 15,
+    "composer": "N. Paganini",
+    "title": "24 Caprices for Solo Violin",
+    "subtitle": null,
+    "coverFile": "N.Paganini_24-Capricci.jpg",
+    "listenUrl": "https://www.amazon.de/Paganini-Caprices-Solo-Violin-Op-1/dp/B00EW62C40",
+    "review": [],
+    "needsDecision": false,
+    "needsAltText": true
+  },
+  {
+    "order": 16,
+    "composer": "Tartini, Kreisler, Paganini",
+    "title": "Violin Impressions",
+    "subtitle": null,
+    "coverFile": "Violin-Impression.jpg",
+    "listenUrl": "https://www.amazon.fr/Violin-Impression-Carasco-Hossen-Orpheistes/dp/B01678R9HU",
+    "review": [],
+    "needsDecision": false,
+    "needsAltText": true
+  },
+  {
+    "order": 17,
+    "composer": "N. Paganini",
+    "title": "The Spirit of Niccolò Paganini",
+    "subtitle": null,
+    "coverFile": "Interpreta.jpg",
+    "review": [],
+    "needsDecision": false,
+    "needsAltText": true,
+    "decidedWhy": "Alone among the 21 albums this has no outbound link on the original. Left unset rather than guessing a store page — `listenUrl` is optional in the schema.",
+    "clientQuestion": "Is there a listening or purchase link for 'The Spirit of Niccolò Paganini' (Interpreta)?",
+    "resolvedReview": [
+      "no outbound listen link"
+    ]
+  },
+  {
+    "order": 18,
+    "composer": "A. Rolla",
+    "title": "6 Duets for flute and violin",
+    "subtitle": null,
+    "coverFile": "Rolla.jpg",
+    "listenUrl": "https://www.prestomusic.com/classical/products/8617860--alessandro-rolla-6-duets-for-flute-and-violin",
+    "review": [],
+    "needsDecision": false,
+    "needsAltText": true
+  },
+  {
+    "order": 19,
+    "composer": "S. Mercadante",
+    "title": "Quartets for Flute & Strings",
+    "subtitle": null,
+    "coverFile": "Saverio-Mercadante_WORLD-PREMIERE-RECORDING.jpg",
+    "listenUrl": "https://www.dynamic.it/product_info.php?products_id=4469&products_name=Quartetti%20per%20flauto%20e%20archi",
+    "review": [],
+    "needsDecision": false,
+    "needsAltText": true
+  },
+  {
+    "order": 20,
+    "composer": "Paganini & Bruch",
+    "title": "Violin Concertos",
+    "subtitle": null,
+    "coverFile": "N.Paganini_No.1_Max-Bruch-No.2-Violin_Concertos.jpg",
+    "listenUrl": "https://www.amazon.de/Paganini-Bruch-Concertos-Violon-Hossen/dp/B093KPXDHP",
+    "review": [],
+    "needsDecision": false,
+    "needsAltText": true
+  },
+  {
+    "order": 21,
+    "composer": "N. Paganini",
+    "title": "Paganiniana",
+    "subtitle": null,
+    "coverFile": "Paganiniana.jpg",
+    "listenUrl": "https://www.geganewonlineshop.com/product-page/paganiniana-mario-hossen-ludmil-petkov",
+    "review": [],
+    "needsDecision": false,
+    "needsAltText": true
+  }
+]

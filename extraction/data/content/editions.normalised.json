@@ -1,0 +1,54 @@
+[
+  {
+    "order": 1,
+    "composer": "Niccolò PAGANINI",
+    "title": "24 Capricci für Violine solo",
+    "volume": null,
+    "scoring": "Violine solo",
+    "editor": "Mario Hossen / Musikverlag Doblinger",
+    "coverFile": "MH_NP_24Capricci.jpg",
+    "moreUrl": "https://www.doblinger-musikverlag.at/de/werk/id-24-capricci-f%C3%BCr-violine-solo",
+    "review": [],
+    "needsDecision": false,
+    "needsAltText": true
+  },
+  {
+    "order": 2,
+    "composer": "Niccolò PAGANINI",
+    "title": "Werke für Violine und Orchester",
+    "volume": "Vol. I",
+    "scoring": "Violine und Klavier / Orgel / Cembalo / Basso continuo",
+    "editor": "Mario Hossen / Mariateresa Dellaborra / Musikverlag Doblinger",
+    "coverFile": "MH_NP_vol1.jpg",
+    "moreUrl": "https://www.doblinger-musikverlag.at/de/werk/werke-f%c3%bcr-violine-und-orchester-heft-1-normalstimmungskordaturstimmung",
+    "review": [],
+    "needsDecision": false,
+    "needsAltText": true
+  },
+  {
+    "order": 3,
+    "composer": "Niccolò PAGANINI",
+    "title": "Werke für Violine und Orchester",
+    "volume": "Vol. II",
+    "scoring": "Violine und Klavier / Orgel / Cembalo / Basso continuo",
+    "editor": "Mario Hossen / Mariateresa Dellaborra / Musikverlag Doblinger",
+    "coverFile": "MH_NP_vol2.jpg",
+    "moreUrl": "https://www.doblinger-musikverlag.at/de/werk/werke-f%C3%BCr-violine-und-orchester-heft-2-normalstimmungskordaturstimmung",
+    "review": [],
+    "needsDecision": false,
+    "needsAltText": true
+  },
+  {
+    "order": 4,
+    "composer": "Niccolò PAGANINI",
+    "title": "Werke für Violine und Orchester",
+    "volume": "Vol. III",
+    "scoring": "Violine und Klavier / Orgel / Cembalo / Basso continuo",
+    "editor": "Mario Hossen / Mariateresa Dellaborra / Musikverlag Doblinger",
+    "coverFile": "MH_NP_vol3.jpg",
+    "moreUrl": "https://www.doblinger-musikverlag.at/de/werk/werke-f%C3%BCr-violine-und-orchester-mit-skordatur-heft-3-eine-ausgabe",
+    "review": [],
+    "needsDecision": false,
+    "needsAltText": true
+  }
+]
