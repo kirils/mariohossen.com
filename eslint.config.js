@@ -19,13 +19,15 @@ export default [
   ...astro.configs.recommended,
   prettier,
   {
-    // The extraction tools are Node scripts, not part of the site bundle.
-    files: ['extraction/tools/**/*.mjs'],
+    // Node CLI tooling — extraction scripts and build-output verification. Never shipped to
+    // the browser, so `console` output IS the point (these are the tools' own report), not a
+    // stray debug statement to flag the way it would be in src/.
+    files: ['extraction/tools/**/*.mjs', 'scripts/**/*.mjs'],
     languageOptions: {
-      globals: { console: 'readonly', process: 'readonly' },
+      globals: { console: 'readonly', process: 'readonly', Buffer: 'readonly' },
     },
     rules: {
-      'no-undef': 'off', // browser globals inside page.evaluate() strings
+      'no-undef': 'off', // browser globals inside page.evaluate() strings (extraction tools)
     },
   },
 ]

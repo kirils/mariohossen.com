@@ -1,0 +1,10 @@
+---
+interface Props {
+  class?: string
+}
+
+const { class: className = '' } = Astro.props
+---
+
+{/* Measured: 1px solid #B09153 at full opacity, not a faded hairline. */}
+<hr class={`border-0 border-t border-gold ${className}`} />

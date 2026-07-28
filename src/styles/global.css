@@ -59,6 +59,43 @@
     outline: 2px solid var(--color-gold);
     outline-offset: 2px;
   }
+
+  /* Native <details> disclosure triangle: list-none handles modern browsers via ::marker,
+     but older WebKit uses its own pseudo-element that list-style doesn't reach. */
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  /* The inlined logo SVG (Header.astro) has no width/height attributes — it relies on its
+     container for sizing, matching how it is actually authored. Its embedded <style>/.st1
+     fill is stripped at import time; the gold comes from the design token here instead, so
+     there is one source of truth for "gold" rather than a hex baked into the SVG file. */
+  .logo-mark svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .logo-mark svg path {
+    fill: var(--color-gold);
+  }
+}
+
+/* Scroll-reveal (src/scripts/reveal.ts). The hidden starting state is scoped under `.js`,
+   which a blocking inline script in BaseLayout's <head> adds before first paint. Without that
+   class — JS disabled, blocked, or erroring — [data-reveal] elements get no opacity/transform
+   rule at all and simply render normally. Content can never end up stuck invisible. */
+.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity 400ms ease-out,
+    transform 400ms ease-out;
+}
+
+.js [data-reveal].is-visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* The original animates entrances but ignores prefers-reduced-motion. We honour it. */

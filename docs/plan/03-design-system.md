@@ -84,12 +84,24 @@ Size scale in use: `12, 13, 14, 15, 16, 20, 22, 26, 30, 32` px.
 The current markup is wrong (`<h1>` on a concert date, no page `<h1>`). The rebuild keeps the
 _visual_ result identical while fixing the _semantics_:
 
-| Visual element          | Current tag               | New tag                         |
-| ----------------------- | ------------------------- | ------------------------------- |
-| `MARIO HOSSEN` wordmark | `<p>`                     | **`<h1>`** (visually unchanged) |
-| Section titles          | `<h2>`                    | `<h2>` ✓                        |
-| Concert dates           | `<h3>` / one stray `<h1>` | **`<h3>`** consistently         |
-| Album / edition titles  | `<h3>`                    | `<h3>` ✓                        |
+| Visual element          | Current tag                                                   | New tag                             |
+| ----------------------- | ------------------------------------------------------------- | ----------------------------------- |
+| `MARIO HOSSEN` wordmark | hidden `<p>` title + separate `ha-site-logo` **image widget** | **`<h1>`** wrapping the inlined SVG |
+| Section titles          | `<h2>`                                                        | `<h2>` ✓                            |
+| Concert dates           | `<h3>` / one stray `<h1>`                                     | **`<h3>`** consistently             |
+| Album / edition titles  | `<h3>`                                                        | `<h3>` ✓                            |
+
+### The wordmark is a vector logo asset, not styled text — corrected 2026-07-29
+
+Checking the widget behind it (`data-widget_type="ha-site-logo.default"`) shows the visible
+"MARIO HOSSEN" mark is `assets/originals/2020/07/logo_MH.svg` — a hand-drawn vector wordmark,
+viewBox `0 0 320 58.1`, single fill `#B09153`, rendered at 480×87px (upscaled ~1.5×) in the
+header. It is not `<h1>` text set in Roboto anywhere on the original. Recreating it as text would
+not match — the letterforms, spacing and terminal shapes differ subtly from Roboto's real glyphs.
+
+The rebuild inlines this SVG directly (`?raw` import — saves one HTTP request, and lets CSS
+target `path { fill }` if ever needed) inside an `<h1>`, with `role="img"` +
+`aria-label="Mario Hossen"` since the SVG carries no accessible name of its own.
 
 ---
 
@@ -108,6 +120,23 @@ _visual_ result identical while fixing the _semantics_:
 
 Breakpoints (inherited from the current site, keep them):
 `mobile ≤ 767 px · tablet ≤ 1023 px · desktop ≥ 1024 px`
+
+### Component-level measurements — verified 2026-07-29
+
+Pulled from computed styles on specific, correctly-targeted elements (earlier probes hit the
+wrong DOM nodes — the biography "read more" toggle and the repertoire categories share one
+widget type, and recordings/gallery share another; both needed ID-level targeting to measure
+correctly).
+
+| Element                                   | Value                                                                                                                                |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| Nav link                                  | Lato 13px / weight 500 / uppercase / **`#FFFFFF`** (not the grey `#BBBBBB` earlier assumed)                                          |
+| Repertoire accordion bar                  | bg **`#B09153`** gold, title text **`#000000`** weight 600, icon `#000000`, stacked edge-to-edge (0px gap, 1px hairline border only) |
+| Biography "read more" / blog-panel toggle | bg **`#000000`** black, text/icon `#BBBBBB` grey — same widget as above, deliberately different palette                              |
+| Biography portrait                        | `object-fit: fill` (stretched to its box, not cropped), no border, rendered ~476×713                                                 |
+| "Info" button (concerts)                  | bg `#000000`, text `#B09153` gold, 13px, padding `10px 20px`, `border-radius: 2px`, no uppercase                                     |
+| Concert card border                       | `1px solid rgba(35, 11, 102, 0.24)` — the wave divider's `#230B66` at 24% opacity                                                    |
+| Gallery grid item border                  | `3px solid #B09153` gold (Recordings covers have **no** border — only Gallery photos do, despite sharing a widget type)              |
 
 ---
 
@@ -128,11 +157,29 @@ The page alternates bands, and this alternation _is_ the design:
 └─ FOOTER ──────────────── GOLD bar, copyright + links + social
 ```
 
-### The curved divider
+### The curved divider — exact source, not traced
 
-A signature detail: an SVG wave transitioning **purple → gold** where the black Concerts heading
-meets the gold Concerts band. Reproduce as an inline SVG (a few hundred bytes) rather than the
-current background image. Extract the exact curve from the screenshots — task 3.6.
+This is Elementor's stock **"mountains" shape divider**, not a custom design — three layered,
+semi-transparent mountain-shaped `<path>`s (opacity 0.33 / 0.66 / 1) sitting on the gold
+section's own edges. The exact `viewBox="0 0 1000 100"` path data and fill colours came straight
+out of the rendered HTML and its CSS, so this is reproduced exactly rather than traced from
+pixels:
+
+|                | Fill                      | Height | Where                            |
+| -------------- | ------------------------- | ------ | -------------------------------- |
+| Top divider    | `#230B66` (dark indigo)   | 35px   | Black Concerts title → gold band |
+| Bottom divider | `#1D0956` (darker indigo) | 50px   | Gold band → black Recordings     |
+
+Both sit on the section's own `background-color: #B09153` — the "purple → gold" look is just
+these indigo mountains poking up against the gold fill, viewed against black above.
+
+**A matching detail elsewhere:** the concert cards' border is
+`1px solid rgba(35, 11, 102, 0.24)` — the _same_ `#230B66` from the top divider, at 24% opacity.
+Reuse that literal value rather than picking a fresh border colour; it is clearly a deliberate
+callback in the original design.
+
+The three path `d` attributes are in `extraction/rendered/home.rendered.html` (search
+`elementor-shape-fill`) — copy them into `WaveDivider.astro` verbatim.
 
 ---
 

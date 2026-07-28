@@ -159,16 +159,33 @@ Tailwind v4 with tokens in `src/styles/global.css`. Tokens live in the `@theme` 
 - No `@apply` soup. If a pattern repeats, it is a component.
 - Mobile-first: base styles, then `md:` (768) and `lg:` (1024).
 
-## Islands
+## Interactivity — plain `<script>`, not `client:*` directives
+
+**This site has no UI framework installed** (no React/Vue/Svelte) and none of its interactive
+components are framework islands. `client:*` directives (`client:load`, `client:idle`,
+`client:visible`, `client:media`) only apply to hydrating a framework component — Astro has
+nothing to hydrate here, so writing `client:media="..."` on a plain `.astro` component is a
+no-op at best and a build error at worst.
+
+The actual mechanism, used by `MobileMenu.astro` and `src/scripts/reveal.ts`: a `.astro`
+component's own `<script>` tag (inline, or `<script src="../scripts/foo.ts">`) is automatically
+picked up by Astro's build, type-checked/bundled through Vite, and deduplicated across the page
+— no directive needed. It always runs; scope _when_ it does anything by checking conditions
+inside the script itself (media query via `matchMedia`, `IntersectionObserver` for
+below-the-fold, etc.) rather than by reaching for a hydration directive that doesn't apply.
 
 ```astro
-<Lightbox client:visible />
-<!-- gallery — below the fold -->
-<MobileMenu client:media="(max-width: 1023px)" />
-<ContactForm client:idle />
+<!-- MobileMenu.astro -->
+<div data-mobile-menu>…</div>
+<script>
+  const root = document.querySelector('[data-mobile-menu]')
+  // ...
+</script>
 ```
 
-Pick the laziest directive that works. Never `client:load` on this site.
+For the gallery Lightbox and the contact form, the same pattern applies: write the interactive
+behaviour as a plain `<script>` inside the component, and if it only matters below the fold,
+gate the logic with an `IntersectionObserver` inside that script — not with `client:visible`.
 
 ## Pages Functions
 

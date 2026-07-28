@@ -2,13 +2,13 @@
 
 Live status of the rebuild. **Update this file whenever a task completes.**
 
-|                   |                                                                                        |
-| ----------------- | -------------------------------------------------------------------------------------- |
-| **Started**       | 2026-07-28                                                                             |
-| **Current phase** | Phase 3 — Design system                                                                |
-| **Overall**       | 22 / 76 tasks (29%) — Phases 0 and 2 done; Phase 1 done bar the client-dependent parts |
-| **Blocked on**    | Task 1.6 — 13 open questions for the client (8 original + 5 from the decisions pass)   |
-| **Next action**   | Phase 3 (task 3.1) — build the design system on the scaffold                           |
+|                   |                                                                                                            |
+| ----------------- | ---------------------------------------------------------------------------------------------------------- |
+| **Started**       | 2026-07-28                                                                                                 |
+| **Current phase** | Phase 4 — Content collections                                                                              |
+| **Overall**       | 32 / 76 tasks (42%) — Phases 0, 2 and 3 done; Phase 1 done bar the client-dependent parts                  |
+| **Blocked on**    | Task 1.6 — 13 open questions for the client (8 original + 5 from the decisions pass)                       |
+| **Next action**   | Phase 4 (task 4.1) — content.config.ts schemas, then generate content files from the normalised extraction |
 
 Task definitions and acceptance criteria: [docs/plan/05-task-list.md](./docs/plan/05-task-list.md).
 
@@ -21,8 +21,8 @@ Task definitions and acceptance criteria: [docs/plan/05-task-list.md](./docs/pla
 | 0 — Discovery & asset capture | ✅ **complete**    | 10/10 | —      |
 | 1 — Content extraction        | ⏳ **in progress** | 5/7   | 1.0 d  |
 | 2 — Project scaffold          | ✅ **complete**    | 7/7   | —      |
-| 3 — Design system             | ⏳ **next**        | 0/10  | 1.0 d  |
-| 4 — Content collections       | ⬜ not started     | 0/10  | 0.5 d  |
+| 3 — Design system             | ✅ **complete**    | 10/10 | —      |
+| 4 — Content collections       | ⏳ **next**        | 0/10  | 0.5 d  |
 | 5 — Page sections             | ⬜ not started     | 0/11  | 1.5 d  |
 | 6 — Contact form              | ⬜ not started     | 0/9   | 0.5 d  |
 | 7 — SEO / a11y / performance  | ⬜ not started     | 0/9   | 0.75 d |
@@ -91,18 +91,6 @@ Use the `content-extraction` skill.
 
 ### Phase 2 — Project scaffold · 2026-07-28
 
-- [x] **2.1** Astro 7.1.5 scaffolded, static output, TypeScript strict
-- [x] **2.2** `@astrojs/sitemap`, Tailwind v4 (`@tailwindcss/vite`), `sharp`, `zod`, `@astrojs/check`
-- [x] **2.3** Lato + Roboto self-hosted via `@fontsource` — **4 faces, latin + latin-ext only**
-- [x] **2.4** `astro.config.mjs` — site URL, `trailingSlash: 'always'`, sitemap filtering retired paths
-- [x] **2.5** ESLint (flat config) + Prettier + `npm run verify`
-- [x] **2.6** `.gitignore`, `README.md`, `.nvmrc` (22)
-- [x] **2.7** GitHub Actions — verify on every PR, **plus budget and third-party-request gates**
-
-Verified output: **0 JS · 28.9 KB CSS · 1.7 KB HTML · 0 external requests**.
-
-### Phase 2 — Project scaffold · 2026-07-28
-
 - [x] **2.1** Astro 7.1.5 scaffolded — static output, TypeScript strict
 - [x] **2.2** `@astrojs/sitemap`, Tailwind v4 (`@tailwindcss/vite`), `sharp`, `zod`, `@astrojs/check`
 - [x] **2.3** Lato + Roboto self-hosted via `@fontsource` — **4 faces, latin + latin-ext only**
@@ -113,21 +101,62 @@ Verified output: **0 JS · 28.9 KB CSS · 1.7 KB HTML · 0 external requests**.
 
 Verified output: **0 JS · 28.9 KB CSS · 1.7 KB HTML · 0 external requests**.
 
+### Phase 3 — Design system · 2026-07-29
+
+- [x] **3.1** `global.css` token block (refined — gold hairline, logo sizing, reveal states)
+- [x] **3.2** `BaseLayout` wired with Header/Footer, the `.js`-class gate script, canonical/OG tags
+- [x] **3.3** `Header` — centred stacked layout, **inlined SVG logo** (not styled text — see below), 156px measured vs 157px target
+- [x] **3.4** `MobileMenu` — plain `<script>`, aria-expanded, Escape-to-close, focus trap; verified at 375px
+- [x] **3.5** `Footer` — gold bar, verified against the original crop
+- [x] **3.6** `WaveDivider` — Elementor's stock "mountains" shape divider, **exact path data + fill
+      colours copied from source**, not traced
+- [x] **3.7** `SectionTitle` + `GoldRule` — verified full-opacity `1px solid #B09153`, not a faded
+      hairline as first assumed
+- [x] **3.8** `Accordion` on native `<details>`/`<summary>` — gold (repertoire) and dark
+      (biography/blog) variants, both measured; open/close verified
+- [x] **3.9** Scroll reveal (`src/scripts/reveal.ts`) + `prefers-reduced-motion`, with a `.js`-class
+      gate so content is never stuck invisible if JS fails
+- [x] **3.10** Visual diff at 1600px (header/footer near-pixel match, header height 156px vs
+      157px target) and 375px (mobile menu open/closed)
+
+Verified output: **1.46 KB inline JS · 33.9 KB CSS · 20.3 KB HTML · 0 external resource
+requests**, all against budget via a new `scripts/verify-output.mjs` (see below).
+
+**The wordmark is not text.** Checking the actual widget behind "MARIO HOSSEN" showed it is an
+SVG logo asset (`ha-site-logo` widget → `logo_MH.svg`), not `<h1>` text in Roboto as the design
+doc had described. Recreating it as text would not have matched — different letterforms
+entirely. Inlined via `?raw` import inside the page's one `<h1>` (`role="img"` +
+`aria-label="Mario Hossen"`), with its embedded `<style>`/`.st1` fill stripped so the gold comes
+from the design token instead of a hex baked into the SVG file.
+
+**One nav weight correction reversed itself.** Phase 2 guessed "Lato 600 → renders 700" for the
+nav by pattern-matching against a different row: the nav is actually **declared 500**, and per
+CSS font matching a declared weight ≤500 searches _lighter_ first (500→400), while >500 searches
+_heavier_ first (600→700) — opposite directions. Measured directly this time: nav renders Lato
+400, white (not grey), 13px.
+
+**Built a permanent output-verification script**, `scripts/verify-output.mjs`, after the CI
+budget/external-request gates from Phase 2 turned out to have two real gaps once real components
+existed:
+
+- The JS-budget check searched only for separate `dist/**/*.js` files. Astro inlines a
+  single-page site's scripts directly into the HTML — the check would have silently read 0
+  bytes forever regardless of how much inline JS accumulated.
+- The external-request check flagged **any** `https://` substring, which caught the SVG
+  `xmlns="http://www.w3.org/2000/svg"` namespace declaration (never fetched — required markup)
+  and plain `<a href="https://open.spotify.com/...">` outbound links to the artist's own
+  profiles (real functional content, not a background request).
+
+The new script distinguishes actual browser-fetched attributes (`script[src]`, fetchable
+`link[href]`, `img/source[src|srcset]`, etc.) from inert URLs, is wired into `npm run verify`
+so local and CI runs are identical, and was tested both ways — confirmed it still catches a real
+injected `<script src="https://cdn.example.com/...">`.
+
 ---
 
 ## ⬜ Upcoming
 
 Condensed. Full detail in [docs/plan/05-task-list.md](./docs/plan/05-task-list.md).
-
-<details>
-<summary><b>Phase 3 — Design system</b> (10 tasks)</summary>
-
-- [ ] 3.1 `global.css` token block · 3.2 `BaseLayout` · 3.3 `Header` · 3.4 `MobileMenu`
-- [ ] 3.5 `Footer` · 3.6 `WaveDivider` (purple→gold SVG curve) · 3.7 `SectionTitle` + `GoldRule`
-- [ ] 3.8 `Accordion` on native `<details>` · 3.9 Scroll reveal + `prefers-reduced-motion`
-- [ ] 3.10 Visual diff at 1600 / 1024 / 375 px
-
-</details>
 
 <details>
 <summary><b>Phase 4 — Content collections</b> (10 tasks)</summary>

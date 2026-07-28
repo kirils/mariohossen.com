@@ -1,0 +1,54 @@
+---
+/**
+ * Native <details>/<summary> — keyboard-accessible and zero JavaScript by construction.
+ * Replaces the Essential Addons accordion widget used for the repertoire categories, the
+ * biography "read more" toggle, and the two blog panels.
+ *
+ * Two colour variants were measured on the live site (they share one widget type but render
+ * with deliberately different palettes — see docs/plan/03-design-system.md):
+ *   gold  — repertoire categories: bg #B09153, text #000000 weight 600
+ *   dark  — biography "read more" / blog panels: bg #000000, text #BBBBBB
+ */
+interface Props {
+  title: string
+  variant: 'gold' | 'dark'
+  /** Renders open on first paint (used for nothing on this site today, kept for completeness). */
+  open?: boolean
+  class?: string
+}
+
+const { title, variant, open = false, class: className = '' } = Astro.props
+
+const barClasses =
+  variant === 'gold' ? 'bg-gold text-ink font-semibold' : 'bg-bg text-text border border-white/10'
+---
+
+<details class={`group ${className}`} open={open}>
+  <summary
+    class={`flex cursor-pointer list-none items-center justify-between gap-4 px-4 py-4 text-sm uppercase tracking-wide ${barClasses}`}
+  >
+    <span class="flex items-center gap-3">
+      <svg
+        aria-hidden="true"
+        viewBox="0 0 16 12"
+        class="h-3 w-4 shrink-0 opacity-70"
+        fill="currentColor"
+      >
+        <rect width="16" height="2"></rect>
+        <rect y="5" width="16" height="2"></rect>
+        <rect y="10" width="16" height="2"></rect>
+      </svg>
+      {title}
+    </span>
+    <span
+      class="relative h-3 w-3 shrink-0 transition-transform duration-200 group-open:rotate-45"
+      aria-hidden="true"
+    >
+      <span class="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-current"></span>
+      <span class="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-current"></span>
+    </span>
+  </summary>
+  <div class="px-4 py-5 text-sm leading-relaxed">
+    <slot />
+  </div>
+</details>

@@ -1,0 +1,60 @@
+---
+import logoSource from '../../assets/brand/logo-mario-hossen.svg?raw'
+import SocialLinks from './SocialLinks.astro'
+import MobileMenu from './MobileMenu.astro'
+import GoldRule from '../ui/GoldRule.astro'
+
+// The source file bakes its gold fill into an embedded <style>/.st1 class. Stripped so the
+// colour instead comes from the design token (.logo-mark svg path in global.css) — one
+// source of truth for "gold" — and so the class="st1" text (harmless but pointless) doesn't
+// leak into el.textContent for anything that queries the <h1>.
+const logoRaw = logoSource.replace(/<style[^>]*>.*?<\/style>/s, '')
+
+/**
+ * Centred, stacked layout: social row → wordmark → nav → gold hairline. Measured header
+ * height on the original is 157px; this reproduces the same rhythm rather than a fixed height,
+ * since content-driven height is more robust to font-rendering differences across browsers.
+ */
+const NAV = [
+  { label: 'biography', href: '/#biography' },
+  { label: 'repertoire', href: '/#repertoire' },
+  { label: 'concerts', href: '/#concerts' },
+  { label: 'recordings', href: '/#recordings' },
+  { label: 'editions', href: '/#editions' },
+  { label: 'gallery', href: '/#gallery' },
+  { label: 'contact', href: '/#contact' },
+] as const
+---
+
+<header class="bg-bg relative pt-3">
+  <div class="mx-auto flex max-w-(--container-site) flex-col items-center px-5 md:px-10">
+    <SocialLinks class="mb-1.5" />
+
+    <h1 class="mb-1.5 w-[260px] md:w-[380px]" role="img" aria-label="Mario Hossen">
+      <a href="/" class="logo-mark block" set:html={logoRaw} />
+    </h1>
+
+    <nav aria-label="Primary" class="hidden lg:block">
+      <ul class="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
+        {
+          NAV.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                class="hover:text-gold text-[13px] font-normal tracking-wide text-white uppercase transition-colors"
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <MobileMenu nav={NAV} class="lg:hidden" />
+  </div>
+
+  <div class="mx-auto mt-2 max-w-(--container-site) px-5 md:px-10">
+    <GoldRule />
+  </div>
+</header>

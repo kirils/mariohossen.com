@@ -1,5 +1,7 @@
 ---
 import '../styles/global.css'
+import Header from '../components/layout/Header.astro'
+import Footer from '../components/layout/Footer.astro'
 
 interface Props {
   title: string
@@ -33,6 +35,15 @@ const desc =
     <meta property="og:description" content={desc} />
     <meta property="og:url" content={canonicalUrl.href} />
     <meta name="twitter:card" content="summary_large_image" />
+
+    {
+      /* Blocking on purpose: this must land before first paint. It gates the scroll-reveal
+       hidden state (.js [data-reveal] in global.css) so content is only ever hidden when a
+       script is confirmed to be running to un-hide it later — never on a no-JS visit. */
+    }
+    <script is:inline>
+      document.documentElement.classList.add('js')
+    </script>
   </head>
 
   <body>
@@ -43,8 +54,14 @@ const desc =
       Skip to content
     </a>
 
+    <Header />
+
     <main id="main">
       <slot />
     </main>
+
+    <Footer />
+
+    <script src="../scripts/reveal.ts"></script>
   </body>
 </html>

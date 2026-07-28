@@ -1,0 +1,122 @@
+---
+/**
+ * Hamburger toggle for the primary nav below the `lg` breakpoint (1024px), where the desktop
+ * centred-stacked nav no longer fits on one line. Plain markup + a small inline <script> — no
+ * client-framework directive needed, Astro bundles a component's own <script> automatically.
+ *
+ * Accessibility: aria-expanded on the trigger, Escape closes, focus returns to the trigger,
+ * and the panel is focus-trapped while open. Wrapped in prefers-reduced-motion via global.css.
+ */
+interface NavItem {
+  label: string
+  href: string
+}
+
+interface Props {
+  nav: readonly NavItem[]
+  class?: string
+}
+
+const { nav, class: className = '' } = Astro.props
+---
+
+<div class={className} data-mobile-menu>
+  <button
+    type="button"
+    class="flex h-11 w-11 flex-col items-center justify-center gap-1.5"
+    aria-expanded="false"
+    aria-controls="mobile-nav-panel"
+    data-menu-trigger
+  >
+    <span class="sr-only">Open menu</span>
+    <span class="h-px w-6 bg-white transition-transform" data-bar="1"></span>
+    <span class="h-px w-6 bg-white transition-opacity" data-bar="2"></span>
+    <span class="h-px w-6 bg-white transition-transform" data-bar="3"></span>
+  </button>
+
+  <div
+    id="mobile-nav-panel"
+    class="bg-bg fixed inset-0 z-50 hidden"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Primary"
+    data-menu-panel
+  >
+    <div class="flex justify-end px-5 pt-6">
+      <button type="button" class="p-2 text-3xl leading-none text-white" data-menu-close>
+        <span class="sr-only">Close menu</span>
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <nav aria-label="Primary">
+      <ul class="flex flex-col items-center gap-6 px-5 pt-10">
+        {
+          nav.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                class="hover:text-gold text-lg tracking-wide text-white uppercase transition-colors"
+                data-menu-link
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+</div>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-mobile-menu]')
+  if (root) {
+    const trigger = root.querySelector<HTMLButtonElement>('[data-menu-trigger]')!
+    const panel = root.querySelector<HTMLElement>('[data-menu-panel]')!
+    const closeBtn = root.querySelector<HTMLButtonElement>('[data-menu-close]')!
+    const links = root.querySelectorAll<HTMLAnchorElement>('[data-menu-link]')
+
+    const getFocusable = () =>
+      panel.querySelectorAll<HTMLElement>('a[href], button:not([disabled])')
+
+    function open() {
+      panel.classList.remove('hidden')
+      trigger.setAttribute('aria-expanded', 'true')
+      document.body.style.overflow = 'hidden'
+      closeBtn.focus()
+      document.addEventListener('keydown', onKeydown)
+    }
+
+    function close() {
+      panel.classList.add('hidden')
+      trigger.setAttribute('aria-expanded', 'false')
+      document.body.style.overflow = ''
+      trigger.focus()
+      document.removeEventListener('keydown', onKeydown)
+    }
+
+    function onKeydown(e: KeyboardEvent) {
+      if (e.key === 'Escape') {
+        close()
+        return
+      }
+      if (e.key !== 'Tab') return
+      // Basic focus trap: wrap Tab/Shift+Tab within the panel's focusable elements.
+      const focusable = [...getFocusable()]
+      if (focusable.length === 0) return
+      const first = focusable[0]
+      const last = focusable[focusable.length - 1]
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault()
+        last.focus()
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault()
+        first.focus()
+      }
+    }
+
+    trigger.addEventListener('click', open)
+    closeBtn.addEventListener('click', close)
+    links.forEach((link) => link.addEventListener('click', close))
+  }
+</script>
