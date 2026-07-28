@@ -199,9 +199,10 @@ silly.
 ```json
 [
   {
-    "src": "gallery/Mario-Hossen-1.jpg",
-    "alt": "Mario Hossen playing violin, dark studio portrait",
-    "credit": "© Photographer Name"
+    "id": "01",
+    "src": "../../assets/images/gallery/Mario-Hossen-1.jpg",
+    "alt": "Mario Hossen playing the violin, head bowed over the instrument, dramatic side-lit studio portrait against a black background",
+    "order": 1
   }
 ]
 ```
@@ -209,11 +210,13 @@ silly.
 ```ts
 const gallery = defineCollection({
   loader: file('./src/content/gallery/gallery.json'),
-  schema: z.object({
-    src: z.string(),
-    alt: z.string().min(5, 'Every photo needs a real description'),
-    credit: z.string().optional(),
-  }),
+  schema: ({ image }) =>
+    z.object({
+      src: image(),
+      alt: z.string().min(5, 'Every photo needs a real description'),
+      credit: z.string().optional(),
+      order: z.number().default(999),
+    }),
 })
 ```
 
@@ -221,8 +224,16 @@ That `.min(5)` on `alt` is deliberate and slightly opinionated: **the build refu
 no description.** The current site has 82 images with empty `alt`. Making it impossible to
 regress is worth one strict rule.
 
-Photographer credits are currently absent from the site — ask the client (task 1.6). If the
-photos were commissioned, crediting is usually contractual.
+### An `id` field is required — discovered at build time (2026-07-29)
+
+Astro's `file()` loader requires every item in a JSON **array** to carry an `id` or `slug` —
+without one the build fails with `Item ... is missing an id or slug field`, for every entry.
+Order-padded strings (`"01"`, `"02"`, …) are used here since gallery photos have no other
+natural unique key.
+
+Photographer credits are absent from the source site. All 12 alt texts were written by directly
+viewing each photograph (not invented, not deferred) — see the Phase 4 log in `PROGRESS.md` for
+the reasoning and the full text. Credits remain an open question for the client (task 1.6).
 
 ---
 
@@ -262,6 +273,22 @@ everything behind "read more", plus the two blog panels as sub-sections.
   "contactEmail": "…"
 }
 ```
+
+### Singleton config has to be nested one level — discovered at build time (2026-07-29)
+
+Astro's `file()` loader treats a **flat top-level JSON object** as a _map of separate entries_,
+keyed by that object's own top-level property names — not as one entry. Given the shape above
+directly, it tried to validate the bare string `"Mario Hossen"` against the entire `site` schema
+as if it were a standalone entry called `"title"`, and failed with `title data does not match
+collection schema`.
+
+The actual file nests everything under one key:
+
+```json
+{ "main": { "title": "Mario Hossen", "tagline": "...", "nav": [...], ... } }
+```
+
+Query it with `getEntry('site', 'main')`, not `getCollection('site')`.
 
 ---
 

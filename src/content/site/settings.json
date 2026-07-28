@@ -1,0 +1,61 @@
+{
+  "main": {
+    "title": "Mario Hossen",
+    "tagline": "violin soloist and conductor",
+    "nav": [
+      {
+        "label": "biography",
+        "href": "/#biography"
+      },
+      {
+        "label": "repertoire",
+        "href": "/#repertoire"
+      },
+      {
+        "label": "concerts",
+        "href": "/#concerts"
+      },
+      {
+        "label": "recordings",
+        "href": "/#recordings"
+      },
+      {
+        "label": "editions",
+        "href": "/#editions"
+      },
+      {
+        "label": "gallery",
+        "href": "/#gallery"
+      },
+      {
+        "label": "contact",
+        "href": "/#contact"
+      }
+    ],
+    "social": {
+      "youtube": "https://www.youtube.com/channel/UCyCB_mun4F91Efmwwm72wYw",
+      "spotify": "https://open.spotify.com/artist/0JVA6wodUe5NnmnZkoiQG9?autoplay=true",
+      "facebook": "https://www.facebook.com/mario.hossen",
+      "instagram": "https://www.instagram.com/mariohossenofficial/"
+    },
+    "label": {
+      "name": "Dynamic Opera and Classical Music",
+      "address": "Dynamic S.r.l – Via Mura Chiappe, 39 16136 Genoa, Italy",
+      "phone": "+39 010 2722884",
+      "fax": "+39 010 213937",
+      "email": "dynamic@dynamic.it",
+      "website": "https://www.dynamic.it"
+    },
+    "partners": [
+      {
+        "name": "Österreichische Nationalbank",
+        "url": "https://www.oenb.at"
+      },
+      {
+        "name": "Thomastik – Infeld",
+        "url": "https://www.thomastik-infeld.com"
+      }
+    ],
+    "contactEmail": "mariohossen@gmail.com"
+  }
+}

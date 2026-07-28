@@ -1,0 +1,74 @@
+[
+  {
+    "id": "01",
+    "src": "../../assets/images/gallery/Mario-Hossen-1.jpg",
+    "alt": "Mario Hossen playing the violin, head bowed over the instrument, dramatic side-lit studio portrait against a black background",
+    "order": 1
+  },
+  {
+    "id": "02",
+    "src": "../../assets/images/gallery/Mario-Hossen-2.jpg",
+    "alt": "Mario Hossen in a black turtleneck, standing three-quarter view, holding his violin by the neck at chest height, looking directly at camera",
+    "order": 2
+  },
+  {
+    "id": "03",
+    "src": "../../assets/images/gallery/Mario-Hossen-4.jpg",
+    "alt": "Close-up of Mario Hossen playing the violin, sharp focus on his face and the instrument with the bow softly blurred in the foreground",
+    "order": 3
+  },
+  {
+    "id": "04",
+    "src": "../../assets/images/gallery/LAN6478-1-1-scaled.jpg",
+    "alt": "Side-profile silhouette of Mario Hossen in formal black tie, holding his violin and bow vertically, lit with dramatic rim lighting against near-black",
+    "order": 4
+  },
+  {
+    "id": "05",
+    "src": "../../assets/images/gallery/Mario-Hossen-6.jpg",
+    "alt": "Mario Hossen with arms crossed in a dark embellished jacket over a black turtleneck, a faint ghosted profile visible in the shadow behind him",
+    "order": 5
+  },
+  {
+    "id": "06",
+    "src": "../../assets/images/gallery/Mario-Hossen_front.jpg",
+    "alt": "Close three-quarter portrait of Mario Hossen holding his violin toward the camera, black turtleneck, dark blue-black background",
+    "order": 6
+  },
+  {
+    "id": "07",
+    "src": "../../assets/images/gallery/LAN6512-scaled.jpg",
+    "alt": "Mario Hossen playing the violin in profile, white bow tie and shirt cuff visible beneath a dark formal jacket, the instrument lit against black",
+    "order": 7
+  },
+  {
+    "id": "08",
+    "src": "../../assets/images/gallery/20190221_MarioHossen_0402.jpg",
+    "alt": "Mario Hossen wearing a wide-brimmed black hat and grey blazer over a black turtleneck, holding his violin and bow, one hand in his pocket",
+    "order": 8
+  },
+  {
+    "id": "09",
+    "src": "../../assets/images/gallery/MH4.jpeg",
+    "alt": "Black-and-white photograph of Mario Hossen seated in profile, adjusting the tuning pegs of his violin, looking down in concentration",
+    "order": 9
+  },
+  {
+    "id": "10",
+    "src": "../../assets/images/gallery/MH2.jpeg",
+    "alt": "Black-and-white close head-and-shoulders portrait of Mario Hossen, wrist resting near his jaw, looking directly at camera",
+    "order": 10
+  },
+  {
+    "id": "11",
+    "src": "../../assets/images/gallery/MH1.jpeg",
+    "alt": "Black-and-white candid portrait of Mario Hossen smiling, chin resting on his hand, seated indoors near a staircase",
+    "order": 11
+  },
+  {
+    "id": "12",
+    "src": "../../assets/images/gallery/MH3.jpeg",
+    "alt": "Black-and-white close-up of Mario Hossen looking over the scroll of his violin, the pegbox in sharp focus and his face softly out of focus behind it",
+    "order": 12
+  }
+]

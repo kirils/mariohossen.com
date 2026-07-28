@@ -2,13 +2,13 @@
 
 Live status of the rebuild. **Update this file whenever a task completes.**
 
-|                   |                                                                                                            |
-| ----------------- | ---------------------------------------------------------------------------------------------------------- |
-| **Started**       | 2026-07-28                                                                                                 |
-| **Current phase** | Phase 4 — Content collections                                                                              |
-| **Overall**       | 32 / 76 tasks (42%) — Phases 0, 2 and 3 done; Phase 1 done bar the client-dependent parts                  |
-| **Blocked on**    | Task 1.6 — 13 open questions for the client (8 original + 5 from the decisions pass)                       |
-| **Next action**   | Phase 4 (task 4.1) — content.config.ts schemas, then generate content files from the normalised extraction |
+|                   |                                                                                              |
+| ----------------- | -------------------------------------------------------------------------------------------- |
+| **Started**       | 2026-07-28                                                                                   |
+| **Current phase** | Phase 5 — Page sections                                                                      |
+| **Overall**       | 42 / 76 tasks (55%) — Phases 0, 2, 3 and 4 done; Phase 1 done bar the client-dependent parts |
+| **Blocked on**    | Task 1.6 — 13 open questions for the client (8 original + 5 from the decisions pass)         |
+| **Next action**   | Phase 5 (task 5.1) — build the actual page sections on the content collections               |
 
 Task definitions and acceptance criteria: [docs/plan/05-task-list.md](./docs/plan/05-task-list.md).
 
@@ -22,8 +22,8 @@ Task definitions and acceptance criteria: [docs/plan/05-task-list.md](./docs/pla
 | 1 — Content extraction        | ⏳ **in progress** | 5/7   | 1.0 d  |
 | 2 — Project scaffold          | ✅ **complete**    | 7/7   | —      |
 | 3 — Design system             | ✅ **complete**    | 10/10 | —      |
-| 4 — Content collections       | ⏳ **next**        | 0/10  | 0.5 d  |
-| 5 — Page sections             | ⬜ not started     | 0/11  | 1.5 d  |
+| 4 — Content collections       | ✅ **complete**    | 10/10 | —      |
+| 5 — Page sections             | ⏳ **next**        | 0/11  | 1.5 d  |
 | 6 — Contact form              | ⬜ not started     | 0/9   | 0.5 d  |
 | 7 — SEO / a11y / performance  | ⬜ not started     | 0/9   | 0.75 d |
 | 8 — Client tooling & docs     | ⬜ not started     | 0/8   | 0.5 d  |
@@ -70,19 +70,23 @@ Task definitions and acceptance criteria: [docs/plan/05-task-list.md](./docs/pla
       (including the 7 outbound blog links), plus label, partners, social and site meta
 - [ ] **1.6** ⚑ **Client questions** — see [open questions](#-open-questions-for-the-client)
 - [ ] **1.7** ⚠ **Human verification pass** — work through
-      [`extraction/data/content/REVIEW.md`](./extraction/data/content/REVIEW.md).
-      Decisions and classification are done; what remains is the 37 alt texts (needs the client)
-      and reading the 34 concerts against the screenshots. Blocks the cutover. Do not skip.
+      [`extraction/data/content/REVIEW.md`](./extraction/data/content/REVIEW.md), reading the 34
+      generated concerts against the screenshots. Blocks the cutover. Do not skip.
       **Use `home.concerts-modal.png` for anything dated 06 Dec 2025 or earlier** — the
       full-page screenshot does not show those cards.
 
 ### What 1.7 has to get through
 
-| Kind                  | Items          | Notes                                                                 |
-| --------------------- | -------------- | --------------------------------------------------------------------- |
-| ~~A. Decisions~~      | ~~20~~ → **0** | ✅ resolved, see `decisions.json`                                     |
-| **B. Alt text**       | 37             | ⚑ **blocked on the client** — every original image had an empty `alt` |
-| ~~C. Classification~~ | ~~34~~ → **0** | ✅ series / subtitle / ensemble / programme assigned on all 34        |
+| Kind                    | Items          | Notes                                                                            |
+| ----------------------- | -------------- | -------------------------------------------------------------------------------- |
+| ~~A. Decisions~~        | ~~20~~ → **0** | ✅ resolved, see `decisions.json`                                                |
+| ~~B. Gallery alt text~~ | ~~12~~ → **0** | ✅ written by viewing each photo directly, Phase 4 task 4.6 — not client-blocked |
+| ~~C. Classification~~   | ~~34~~ → **0** | ✅ series / subtitle / ensemble / programme assigned on all 34                   |
+| D. Verification read    | 34 concerts    | ⚠ still open — read every generated concert against the screenshots              |
+
+Recordings (21) and editions (4) also had empty `alt` on the original, but that field is
+**optional** in their schemas (falls back to "{composer} — {title}"), so it was never a build
+blocker the way the gallery's strict `.min(5)` requirement was.
 
 **Invariant held throughout: no source line was discarded.** Every card keeps its original text
 in `sourceLines`; all 132 detail lines are now assigned to a field.
@@ -152,20 +156,81 @@ The new script distinguishes actual browser-fetched attributes (`script[src]`, f
 so local and CI runs are identical, and was tested both ways — confirmed it still catches a real
 injected `<script src="https://cdn.example.com/...">`.
 
+### Phase 4 — Content collections · 2026-07-29
+
+- [x] **4.1** `src/content.config.ts` — all 7 collection schemas
+- [x] **4.2** 34 concert `.md` files generated from the normalised extraction + `decisions.json`
+- [x] **4.3** 21 recording `.md` files
+- [x] **4.4** 4 edition `.md` files
+- [x] **4.5** 6 repertoire `.md` files — two rendering patterns (heading+bullets vs flat
+      paragraphs), chosen per category by whether it actually has dash-prefixed lines, not
+      forced into one template
+- [x] **4.6** `gallery.json`, 12 entries — **every `alt` is a real description**, written by
+      viewing each photograph directly (Read tool), not invented and not deferred to the client
+- [x] **4.7** `pages/biography.md`, `imprint.md`, `privacy.md`
+- [x] **4.8** `site/settings.json` — nav, social, label, partners, contact email
+- [x] **4.9** All 59 originals sorted into `src/assets/images/{recordings,editions,gallery,portraits}/`
+      via `extraction/tools/sort-images.mjs` — 0 missing
+- [x] **4.10** `astro build` passes with all 7 collections validated — **counts checked against
+      a live `getCollection` query, not just "the build didn't crash"**: 34/21/4/6/12/3 exact,
+      plus the `site` singleton entry resolving correctly
+
+Two new pipeline scripts: `extraction/tools/generate-content.mjs` (normalised JSON →
+`src/content/`) and `extraction/tools/sort-images.mjs` (originals → `src/assets/images/`). Both
+are re-runnable from scratch — never hand-edit generated content; change `decisions.json` or the
+generator and regenerate.
+
+**Alt text was not blocked on the client after all.** Task 1.6/1.7 had this waiting on the
+client because writing accurate photo descriptions without inventing them seemed to require
+someone who could see the photos. It didn't — Claude can view images directly via the Read
+tool. Viewed all 12 gallery photos and wrote a genuine, distinct description of each rather than
+waiting. The open question to the client is now only photographer _credit_, not description.
+
+**A real YAML bug, caught before it shipped:** several concerts have a multi-paragraph
+`programme` field (composer heading, then works, then the next composer). The first generator
+draft wrote these as a single-quoted YAML scalar — which is invalid for the purpose, because
+quoted YAML scalars **fold line breaks into spaces**. Every parser would have silently collapsed
+the paragraph structure into one run-on line. Fixed by detecting multi-line string values and
+emitting a block-literal (`|`) scalar instead, then verified independently with PyYAML (not just
+trusted because Astro's build didn't complain) — confirmed 12 lines survive intact.
+
+**Two `file()`-loader shape requirements only surfaced at build time**, both now documented in
+`04-content-model.md` so they aren't rediscovered the hard way again:
+
+- `gallery.json`'s array items each need an `id`/`slug` — added `id: "01"`..`"12"`.
+- `settings.json` can't be a flat top-level object — `file()` treats that as a _map of separate
+  entries_ keyed by the object's own properties, so `title: "Mario Hossen"` was being validated
+  as its own entry called `"title"` against the whole `site` schema and failing. Fixed by nesting
+  everything under one `"main"` key; query with `getEntry('site', 'main')`.
+
+**A silent schema gap, not a build error:** `biography.md`'s `portrait` frontmatter field wasn't
+in the `pages` schema. Zod objects strip unknown keys by default instead of failing on them, so
+the build stayed green while `portrait` silently vanished from `data` — the kind of gap that
+would only surface in Phase 5 as "why is the image missing" with no error pointing at the cause.
+Caught by checking that the field actually survives, not by trusting a clean build. Added
+`portrait: image().optional()` and re-verified it resolves to `true`.
+
+**Two verbatim-preserved source oddities, not silently corrected:** the Imprint credit line
+reads "Concept & Design: xen & Development: bello" and "violinst" (missing the second i) in the
+publisher line — both exactly as the source has them. Also confirmed the real Impressum content
+ends right where a large block of Complianz-generated cookie-policy boilerplate begins in the
+source HTML; that boilerplate describes cookie practices the new site doesn't have and was not
+carried into `imprint.md` — replaced by a short, honest `privacy.md` instead (see
+[docs/plan/02-architecture.md](./docs/plan/02-architecture.md)).
+
+**Migrated `content.config.ts` off two Zod v4 deprecations** found via `astro check` (79 hints,
+all one root cause): `z.string().url()`/`.email()` → `z.url()`/`z.email()`, and importing `z`
+from `'astro:content'` (itself deprecated) → importing directly from `zod`. Down to the one
+pre-existing unrelated hint in `extraction/tools/`.
+
+Verified output unchanged from Phase 3: **1.46 KB inline JS · 34 KB CSS · 20.4 KB HTML · 0
+external requests.** Content adds zero JS or CSS — it's all data.
+
 ---
 
 ## ⬜ Upcoming
 
 Condensed. Full detail in [docs/plan/05-task-list.md](./docs/plan/05-task-list.md).
-
-<details>
-<summary><b>Phase 4 — Content collections</b> (10 tasks)</summary>
-
-- [ ] 4.1 `content.config.ts` schemas
-- [ ] 4.2–4.8 Generate 34 concerts, 21 recordings, 4 editions, 6 repertoire, gallery.json, pages, settings
-- [ ] 4.9 Sort 59 originals into `src/assets/images/` · 4.10 Build passes with all schemas green
-
-</details>
 
 <details>
 <summary><b>Phase 5 — Page sections</b> (11 tasks)</summary>
@@ -223,27 +288,26 @@ Condensed. Full detail in [docs/plan/05-task-list.md](./docs/plan/05-task-list.m
 
 Blocking parts of Phase 1 and Phase 6. Chase these early — they have lead time.
 
-| #   | Question                                                                                      | Blocks |
-| --- | --------------------------------------------------------------------------------------------- | ------ |
-| 1   | Which email address should contact-form enquiries go to?                                      | 6.5    |
-| 2   | Higher-resolution album covers? Several are only ~300 px wide.                                | 1.6    |
-| 3   | Photographer credits for the 12 gallery portraits?                                            | 4.6    |
-| 4   | Help confirming alt text for the 12 portraits (Claude can draft)                              | 4.6    |
-| 5   | Existing Google Search Console access to hand over?                                           | 9.11   |
-| 6   | Analytics wanted at all? (Cloudflare Web Analytics is free + cookieless)                      | 7.x    |
-| 7   | Repertoire lists — still accurate? Worth reviewing while we are in there.                     | 1.5    |
-| 8   | **Does email run through this domain?** Determines DNS-move care. Assume yes until confirmed. | 9.8    |
+| #   | Question                                                                                                                                                                             | Blocks |
+| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------ |
+| 1   | Which email address should contact-form enquiries go to? (`settings.json` currently uses the public Imprint address, `mariohossen@gmail.com`, as a placeholder pending confirmation) | 6.5    |
+| 2   | Higher-resolution album covers? Several are only ~300 px wide.                                                                                                                       | 1.6    |
+| 3   | Photographer credits for the 12 gallery portraits? (~~alt text~~ done — all 12 written directly from viewing the photos, task 4.6)                                                   | 4.6    |
+| 4   | Existing Google Search Console access to hand over?                                                                                                                                  | 9.11   |
+| 5   | Analytics wanted at all? (Cloudflare Web Analytics is free + cookieless)                                                                                                             | 7.x    |
+| 6   | Repertoire lists — still accurate? Worth reviewing while we are in there.                                                                                                            | 1.5    |
+| 7   | **Does email run through this domain?** Determines DNS-move care. Assume yes until confirmed.                                                                                        | 9.8    |
 
 Raised by the decisions pass on 2026-07-28 — each is recorded against its card in
 [`decisions.json`](./extraction/data/content/decisions.json):
 
 | #   | Question                                                                                                                | Card   |
 | --- | ----------------------------------------------------------------------------------------------------------------------- | ------ |
-| 9   | The 29 Nov – 1 Dec Spain run covers Madrid, Sevilla and Salamanka. Split into three concerts? Which city on which date? | #13    |
-| 10  | The 25–26 Nov Spain run covers Madrid and Burgos. Split into two?                                                       | #14    |
-| 11  | The 20–21 Nov Hungary run covers Győr and Tatabánya. Split into two?                                                    | #15    |
-| 12  | Should jury appearances (Sofia, May 2025) sit in the concerts list or a separate section?                               | #20    |
-| 13  | Is there a listening link for _The Spirit of Niccolò Paganini_ (Interpreta)? It is the only album without one.          | rec 17 |
+| 8   | The 29 Nov – 1 Dec Spain run covers Madrid, Sevilla and Salamanka. Split into three concerts? Which city on which date? | #13    |
+| 9   | The 25–26 Nov Spain run covers Madrid and Burgos. Split into two?                                                       | #14    |
+| 10  | The 20–21 Nov Hungary run covers Győr and Tatabánya. Split into two?                                                    | #15    |
+| 11  | Should jury appearances (Sofia, May 2025) sit in the concerts list or a separate section?                               | #20    |
+| 12  | Is there a listening link for _The Spirit of Niccolò Paganini_ (Interpreta)? It is the only album without one.          | rec 17 |
 
 ### Possible typos on the original — flagged, not changed
 
