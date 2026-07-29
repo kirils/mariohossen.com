@@ -1,0 +1,67 @@
+---
+import type { CollectionEntry } from 'astro:content'
+import { formatConcertDate } from '../../lib/concerts'
+
+interface Props {
+  concert: CollectionEntry<'concerts'>
+}
+
+const { concert } = Astro.props
+const { date, endDate, city, country, venue, series, ensemble, performers, programme, infoUrl } =
+  concert.data
+
+const location = country ? `${city} (${country})` : city
+---
+
+<article
+  class="border p-6 md:p-8"
+  style="border-color: rgba(35, 11, 102, 0.24)"
+  itemscope
+  itemtype="https://schema.org/Event"
+>
+  <h3
+    class="border-l-2 border-white pl-3 text-[26px] leading-tight font-bold text-white md:text-[30px]"
+  >
+    <time datetime={date.toISOString().slice(0, 10)} itemprop="startDate">
+      {formatConcertDate(date, endDate)}
+    </time>
+  </h3>
+
+  <div class="text-ink mt-4 space-y-0.5 text-[15px] leading-snug font-bold" itemprop="location">
+    <p>{location}</p>
+    {venue && <p>{venue}</p>}
+  </div>
+
+  {
+    (series || ensemble || performers.length > 0) && (
+      <div class="mt-4 space-y-0.5 text-[15px] leading-snug font-bold text-white">
+        {series && <p>{series}</p>}
+        {ensemble && <p itemprop="performer">{ensemble}</p>}
+        {performers.map((p) => (
+          <p>{p}</p>
+        ))}
+      </div>
+    )
+  }
+
+  {
+    programme && (
+      <p class="text-ink mt-4 text-sm leading-snug font-bold" itemprop="description">
+        {programme}
+      </p>
+    )
+  }
+
+  {
+    infoUrl && (
+      <a
+        href={infoUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-gold mt-6 inline-block bg-black px-5 py-2.5 text-[13px]"
+      >
+        Info
+      </a>
+    )
+  }
+</article>

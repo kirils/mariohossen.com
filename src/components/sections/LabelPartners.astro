@@ -1,0 +1,63 @@
+---
+import { getEntry } from 'astro:content'
+import GoldRule from '../ui/GoldRule.astro'
+
+const site = await getEntry('site', 'main')
+if (!site) throw new Error('site/settings.json is missing')
+const { label, partners } = site.data
+---
+
+<div>
+  <h2 class="font-display text-gold text-[26px] font-light uppercase">Label</h2>
+  <div class="text-text mt-4 space-y-0.5 text-sm">
+    <p>{label.name}</p>
+    <p>{label.address}</p>
+    {
+      (label.phone || label.fax) && (
+        <p>
+          {label.phone && <>Tel. {label.phone}</>}
+          {label.phone && label.fax && ' | '}
+          {label.fax && <>Fax {label.fax}</>}
+        </p>
+      )
+    }
+    {
+      (label.email || label.website) && (
+        <p>
+          {label.email && (
+            <a href={`mailto:${label.email}`} class="hover:text-gold">
+              {label.email}
+            </a>
+          )}
+          {label.email && label.website && ' | '}
+          {label.website && (
+            <a
+              href={label.website}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="hover:text-gold"
+            >
+              {label.website.replace(/^https?:\/\//, '')}
+            </a>
+          )}
+        </p>
+      )
+    }
+  </div>
+
+  <GoldRule class="my-6 max-w-xs" />
+
+  <h2 class="font-display text-gold text-[26px] font-light uppercase">Partners</h2>
+  <div class="text-text mt-4 space-y-0.5 text-sm">
+    {
+      partners.map((partner) => (
+        <p>
+          {partner.name} |{' '}
+          <a href={partner.url} target="_blank" rel="noopener noreferrer" class="hover:text-gold">
+            {partner.url.replace(/^https?:\/\//, '')}
+          </a>
+        </p>
+      ))
+    }
+  </div>
+</div>

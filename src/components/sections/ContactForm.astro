@@ -1,0 +1,87 @@
+---
+/**
+ * Static markup only — task 5.8. The Cloudflare Pages Function that actually receives this
+ * POST (validation, Turnstile, sending via Resend) is Phase 6. A plain HTML form with method
+ * POST works with JS disabled by construction; nothing here should add a JS submit handler
+ * that would take that away.
+ */
+---
+
+<div>
+  <h2 class="font-display text-gold text-[26px] font-light uppercase">Contact</h2>
+
+  <form action="/api/contact" method="post" class="mt-6 space-y-4">
+    <div class="grid gap-4 sm:grid-cols-2">
+      <div>
+        <label for="contact-name" class="sr-only">Name</label>
+        <input
+          id="contact-name"
+          name="name"
+          type="text"
+          required
+          placeholder="Name*"
+          class="text-ink w-full bg-white px-4 py-3 placeholder:text-black/50"
+        />
+      </div>
+      <div>
+        <label for="contact-email" class="sr-only">Email</label>
+        <input
+          id="contact-email"
+          name="email"
+          type="email"
+          required
+          placeholder="Email*"
+          class="text-ink w-full bg-white px-4 py-3 placeholder:text-black/50"
+        />
+      </div>
+    </div>
+
+    <div>
+      <label for="contact-subject" class="sr-only">Subject</label>
+      <input
+        id="contact-subject"
+        name="subject"
+        type="text"
+        required
+        placeholder="Subject*"
+        class="text-ink w-full bg-white px-4 py-3 placeholder:text-black/50"
+      />
+    </div>
+
+    <div>
+      <label for="contact-message" class="sr-only">Message</label>
+      <textarea
+        id="contact-message"
+        name="message"
+        rows="5"
+        placeholder="Message"
+        class="text-ink w-full bg-white px-4 py-3 placeholder:text-black/50"></textarea>
+    </div>
+
+    {/* Honeypot for Phase 6's spam filtering — real visitors never see or fill this in. */}
+    <input
+      type="text"
+      name="website"
+      tabindex="-1"
+      autocomplete="off"
+      class="hidden"
+      aria-hidden="true"
+    />
+
+    <label class="text-text flex items-start gap-2 text-sm">
+      <input type="checkbox" name="consent" required class="mt-1" />
+      <span>
+        I agree to the terms set out in the <a href="/privacy/" class="hover:text-gold underline"
+          >privacy policy</a
+        > *
+      </span>
+    </label>
+
+    <button
+      type="submit"
+      class="border-gold hover:bg-gold hover:text-ink w-full border bg-black py-3.5 text-sm text-white transition-colors"
+    >
+      send message
+    </button>
+  </form>
+</div>

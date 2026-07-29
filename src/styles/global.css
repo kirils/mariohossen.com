@@ -98,6 +98,45 @@
   transform: translateY(0);
 }
 
+/* Gallery/Recordings grid-item hover treatment — measured from the original's Filterable
+   Gallery widget CSS (black overlay at 70% opacity, gold 50px circular icon badge). Plain
+   classes rather than repeated Tailwind utility strings: with up to 33 grid items each
+   carrying this markup, the long utility class list added real weight to the HTML budget
+   (see docs/plan/02-architecture.md) — one shared rule costs nothing extra per instance. */
+.hover-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgb(0 0 0 / 70%);
+  opacity: 0;
+  transition: opacity 500ms ease-out;
+}
+
+.group:hover .hover-overlay,
+.group:focus-visible .hover-overlay {
+  opacity: 1;
+}
+
+.hover-badge {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  height: 50px;
+  width: 50px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background: var(--color-gold);
+  color: #fff;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.hover-icon {
+  width: 18px;
+  height: 18px;
+}
+
 /* The original animates entrances but ignores prefers-reduced-motion. We honour it. */
 @media (prefers-reduced-motion: reduce) {
   html {

@@ -62,11 +62,18 @@ const editions = readJSON('editions.normalised')
 const gallery = readJSON('gallery.normalised')
 const biography = readJSON('biography.normalised')
 
+// MHossen.jpg is the Repertoire section's portrait (tuxedo, white bow tie) — a second portrait
+// alongside the biography one. It sits *after* the REPERTOIRE heading in the source DOM, so
+// biography.normalised.json's `portraits` list (deliberately scoped to images *before* that
+// heading) never picks it up. Found by comparing the rendered screenshot against what Phase 4
+// had actually sorted — not present in any extraction JSON, so it is listed by hand here.
+const REPERTOIRE_PORTRAIT = 'MHossen.jpg'
+
 const jobs = [
   ['recordings', recordings.map((r) => r.coverFile)],
   ['editions', editions.map((e) => e.coverFile)],
   ['gallery', gallery.map((g) => g.file)],
-  ['portraits', biography.portraits],
+  ['portraits', [...biography.portraits, REPERTOIRE_PORTRAIT]],
   // The header logo is already a hand-placed src/assets/brand/ asset from Phase 3 — not sorted
   // here.
 ]

@@ -25,7 +25,12 @@ if (prefersReducedMotion || !('IntersectionObserver' in window)) {
         obs.unobserve(entry.target)
       }
     },
-    { rootMargin: '0px 0px -10% 0px', threshold: 0.1 }
+    // threshold 0 fires as soon as a single pixel crosses the (rootMargin-shrunk) viewport edge.
+    // A ratio-based threshold like 0.1 requires 10% of the *target's own height* to be visible —
+    // fine for viewport-sized sections, but the Concerts section (34 stacked cards on mobile) can
+    // exceed 10,000px tall, and no real viewport ever shows 10% of that while it's on screen. That
+    // silently left it permanently hidden at opacity: 0 on narrow viewports.
+    { rootMargin: '0px 0px -10% 0px', threshold: 0 }
   )
   targets.forEach((el) => observer.observe(el))
 }

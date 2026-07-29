@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import { Image } from 'astro:assets'
+import logo from '../assets/brand/404-logo.png'
+---
+
+<BaseLayout title="Page not found – Mario Hossen">
+  <section class="bg-bg flex min-h-[60vh] items-center py-16 md:py-20">
+    <div class="mx-auto max-w-(--container-site) px-5 text-center md:px-10">
+      <Image src={logo} alt="404" width={280} class="mx-auto invert" loading="eager" />
+      <p class="text-text mt-8 text-lg">This page could not be found.</p>
+      <a
+        href="/"
+        class="border-gold hover:bg-gold hover:text-ink mt-8 inline-block border bg-black px-8 py-3.5 text-sm text-white transition-colors"
+      >
+        back to homepage
+      </a>
+    </div>
+  </section>
+</BaseLayout>

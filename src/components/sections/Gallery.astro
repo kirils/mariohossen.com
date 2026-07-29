@@ -1,0 +1,262 @@
+---
+import { getCollection } from 'astro:content'
+import { Image, getImage } from 'astro:assets'
+import SectionTitle from '../ui/SectionTitle.astro'
+import HoverIcon from '../ui/HoverIcon.astro'
+
+const sorted = (await getCollection('gallery')).sort((a, b) => a.data.order - b.data.order)
+
+// The grid thumbnail's responsive `currentSrc` is sized for its small grid slot (as little as
+// 260px wide) — reusing it for the lightbox, which displays up to 75vh tall, would upscale a
+// small source and look blurry. Generate a dedicated full-size image for the lightbox instead.
+const photos = await Promise.all(
+  sorted.map(async (photo) => {
+    const full = await getImage({
+      src: photo.data.src,
+      width: Math.min(1400, photo.data.src.width),
+      format: 'webp',
+    })
+    return { ...photo, fullSrc: full.src }
+  })
+)
+---
+
+<section id="gallery" class="bg-bg py-16 md:py-20">
+  {
+    /* data-reveal (and the transform it applies once visible) lives on this inner wrapper,
+     not the <section>, because a non-none `transform` creates a new containing block for any
+     `position: fixed` descendant — which would trap the lightbox below inside the section's
+     box instead of covering the full viewport. */
+  }
+  <div class="mx-auto max-w-(--container-site) px-5 md:px-10" data-reveal>
+    <SectionTitle text="Gallery" />
+
+    <div class="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 lg:grid-cols-4" data-gallery>
+      {
+        photos.map((photo, i) => (
+          <button
+            type="button"
+            class:list={[
+              'group border-gold relative aspect-square w-full overflow-hidden border-[3px]',
+              i >= 4 ? 'hidden' : 'block',
+            ]}
+            data-gallery-open={i}
+            data-gallery-full={photo.fullSrc}
+            aria-label={`View larger: ${photo.data.alt}`}
+          >
+            <Image
+              src={photo.data.src}
+              alt={photo.data.alt}
+              class="h-full w-full object-cover"
+              widths={[400, 600, 900]}
+              sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 25vw"
+              loading="lazy"
+            />
+            <span class="hover-overlay">
+              <HoverIcon icon="zoom" />
+            </span>
+          </button>
+        ))
+      }
+    </div>
+
+    {
+      photos.length > 4 && (
+        <div class="mt-8 text-center md:mt-10">
+          <button
+            type="button"
+            class="border-gold hover:bg-gold hover:text-ink inline-block border bg-black px-8 py-3.5 text-sm text-white transition-colors"
+            data-gallery-load-more
+          >
+            load more
+          </button>
+        </div>
+      )
+    }
+  </div>
+
+  <div
+    id="gallery-lightbox"
+    class="fixed inset-0 z-50 hidden items-center justify-center bg-black/95 p-4 md:p-10"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Gallery photo"
+    data-lightbox
+  >
+    <button
+      type="button"
+      class="absolute top-4 right-4 p-2 text-3xl leading-none text-white md:top-6 md:right-6"
+      data-lightbox-close
+    >
+      <span class="sr-only">Close</span>
+      <span aria-hidden="true">&times;</span>
+    </button>
+
+    <button
+      type="button"
+      class="absolute left-2 p-3 text-3xl leading-none text-white md:left-6"
+      data-lightbox-prev
+    >
+      <span class="sr-only">Previous photo</span>
+      <span aria-hidden="true">&#8249;</span>
+    </button>
+    <button
+      type="button"
+      class="absolute right-2 p-3 text-3xl leading-none text-white md:right-6"
+      data-lightbox-next
+    >
+      <span class="sr-only">Next photo</span>
+      <span aria-hidden="true">&#8250;</span>
+    </button>
+
+    <figure class="flex max-h-full max-w-4xl flex-col items-center">
+      <img data-lightbox-img src="" alt="" class="max-h-[75vh] w-auto max-w-full object-contain" />
+    </figure>
+  </div>
+</section>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-gallery]')
+  const lightbox = document.querySelector<HTMLElement>('[data-lightbox]')
+  if (root && lightbox) {
+    const buttons = [...root.querySelectorAll<HTMLButtonElement>('[data-gallery-open]')]
+    const img = lightbox.querySelector<HTMLImageElement>('[data-lightbox-img]')!
+    const closeBtn = lightbox.querySelector<HTMLButtonElement>('[data-lightbox-close]')!
+    const prevBtn = lightbox.querySelector<HTMLButtonElement>('[data-lightbox-prev]')!
+    const nextBtn = lightbox.querySelector<HTMLButtonElement>('[data-lightbox-next]')!
+
+    const photos = buttons.map((btn) => {
+      const thumb = btn.querySelector('img')!
+      return {
+        // data-gallery-full is a dedicated large image generated for the lightbox — the
+        // thumbnail's own currentSrc is sized for its small grid slot and looks blurry when
+        // stretched to fill the lightbox.
+        src: btn.dataset.galleryFull || thumb.currentSrc || thumb.src,
+        alt: thumb.alt,
+      }
+    })
+
+    let current = 0
+    let lastFocused: HTMLElement | null = null
+
+    function show(index: number) {
+      current = (index + photos.length) % photos.length
+      const photo = photos[current]
+      // Reset to the zoomed-out starting state and only reveal once the new photo has actually
+      // loaded, so switching images never flashes the previous photo mid-transition.
+      img.classList.remove('is-visible')
+      img.addEventListener('load', () => img.classList.add('is-visible'), { once: true })
+      img.src = photo.src
+      img.alt = photo.alt
+    }
+
+    function open(index: number) {
+      lastFocused = document.activeElement as HTMLElement
+      show(index)
+      lightbox!.classList.remove('hidden')
+      lightbox!.classList.add('flex')
+      document.body.style.overflow = 'hidden'
+      closeBtn.focus()
+      document.addEventListener('keydown', onKeydown)
+    }
+
+    function close() {
+      lightbox!.classList.add('hidden')
+      lightbox!.classList.remove('flex')
+      document.body.style.overflow = ''
+      document.removeEventListener('keydown', onKeydown)
+      lastFocused?.focus()
+    }
+
+    function onKeydown(e: KeyboardEvent) {
+      if (e.key === 'Escape') return close()
+      if (e.key === 'ArrowLeft') return show(current - 1)
+      if (e.key === 'ArrowRight') return show(current + 1)
+      if (e.key !== 'Tab') return
+      const focusable = [closeBtn, prevBtn, nextBtn]
+      const first = focusable[0]
+      const last = focusable[focusable.length - 1]
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault()
+        last.focus()
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault()
+        first.focus()
+      }
+    }
+
+    // Fade each thumbnail in once its image actually loads, rather than popping in at whatever
+    // moment the network happens to deliver it. Listener is attached up front even for photos
+    // still hidden behind "load more" — the browser only starts fetching a lazy, hidden image
+    // once it's unhidden and laid out, so this still fires correctly for those once revealed.
+    buttons.forEach((btn) => {
+      const thumb = btn.querySelector<HTMLImageElement>('img')!
+      if (thumb.complete) thumb.classList.add('is-loaded')
+      else thumb.addEventListener('load', () => thumb.classList.add('is-loaded'), { once: true })
+    })
+
+    // Not scoped to `root` — the load-more button is a sibling of [data-gallery], not a
+    // descendant of it.
+    const loadMoreBtn = document.querySelector<HTMLButtonElement>('[data-gallery-load-more]')
+    loadMoreBtn?.addEventListener('click', () => {
+      buttons.forEach((btn) => {
+        btn.classList.remove('hidden')
+        btn.classList.add('block')
+      })
+      loadMoreBtn.parentElement?.remove()
+    })
+
+    buttons.forEach((btn, i) => btn.addEventListener('click', () => open(i)))
+    closeBtn.addEventListener('click', close)
+    prevBtn.addEventListener('click', () => show(current - 1))
+    nextBtn.addEventListener('click', () => show(current + 1))
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) close()
+    })
+
+    // Basic swipe support on touch devices.
+    let touchStartX = 0
+    lightbox.addEventListener('touchstart', (e) => (touchStartX = e.touches[0].clientX), {
+      passive: true,
+    })
+    lightbox.addEventListener(
+      'touchend',
+      (e) => {
+        const dx = e.changedTouches[0].clientX - touchStartX
+        if (Math.abs(dx) > 40) show(current + (dx < 0 ? 1 : -1))
+      },
+      { passive: true }
+    )
+  }
+</script>
+
+<style>
+  /* prefers-reduced-motion is handled globally (global.css forces transition: none !important). */
+
+  /* Grid thumbnails — including ones revealed by "load more" — start slightly zoomed in and
+     fade+settle to their normal size once loaded. */
+  [data-gallery] :global(img) {
+    opacity: 0;
+    transform: scale(1.08);
+    transition:
+      opacity 500ms ease-out,
+      transform 500ms ease-out;
+  }
+  [data-gallery] :global(img.is-loaded) {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  /* Lightbox image — same zoom-out reveal, replayed on open and on every prev/next. */
+  :global([data-lightbox-img]) {
+    opacity: 0;
+    transform: scale(1.1);
+    transition:
+      opacity 400ms ease-out,
+      transform 400ms ease-out;
+  }
+  :global([data-lightbox-img].is-visible) {
+    opacity: 1;
+    transform: scale(1);
+  }
+</style>

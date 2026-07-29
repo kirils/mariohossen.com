@@ -1,0 +1,60 @@
+---
+import { getCollection } from 'astro:content'
+import SectionTitle from '../ui/SectionTitle.astro'
+import EditionCard from '../cards/EditionCard.astro'
+
+const EDITIONS_LIMIT = 4
+
+const editions = (await getCollection('editions', ({ data }) => !data.draft)).sort(
+  (a, b) => a.data.order - b.data.order
+)
+---
+
+<section id="editions" class="bg-bg py-16 md:py-20" data-reveal>
+  <div class="mx-auto max-w-(--container-site) px-5 md:px-10">
+    <SectionTitle text="Editions" />
+
+    {
+      /* The wrapper's visible state is `contents`, not `block` — a `block` wrapper would itself
+       stretch to match the grid row (the default grid behaviour), but the card inside it is
+       just a plain block child and wouldn't inherit that stretched height, leaving it shorter
+       than its siblings whenever it has less text. `contents` removes the wrapper's own box so
+       the card underneath becomes the real grid item and stretches correctly itself. */
+    }
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
+      {
+        editions.map((edition, i) => (
+          <div class:list={[i >= EDITIONS_LIMIT ? 'hidden' : 'contents']} data-editions-item>
+            <EditionCard edition={edition} />
+          </div>
+        ))
+      }
+    </div>
+
+    {
+      editions.length > EDITIONS_LIMIT && (
+        <div class="mt-8 text-center md:mt-10">
+          <button
+            type="button"
+            class="border-gold hover:bg-gold hover:text-ink inline-block border bg-black px-8 py-3.5 text-sm text-white transition-colors"
+            data-editions-load-more
+          >
+            load more
+          </button>
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<script>
+  const items = document.querySelectorAll<HTMLElement>('[data-editions-item]')
+  const loadMoreBtn = document.querySelector<HTMLButtonElement>('[data-editions-load-more]')
+  loadMoreBtn?.addEventListener('click', () => {
+    items.forEach((item) => {
+      item.classList.remove('hidden')
+      item.classList.add('contents')
+    })
+    loadMoreBtn.parentElement?.remove()
+  })
+</script>

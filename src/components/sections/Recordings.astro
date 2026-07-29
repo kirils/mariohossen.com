@@ -1,0 +1,54 @@
+---
+import { getCollection } from 'astro:content'
+import SectionTitle from '../ui/SectionTitle.astro'
+import AlbumCard from '../cards/AlbumCard.astro'
+
+const RECORDINGS_LIMIT = 4
+
+const recordings = (await getCollection('recordings', ({ data }) => !data.draft)).sort(
+  (a, b) => a.data.order - b.data.order
+)
+---
+
+<section id="recordings" class="bg-bg py-16 md:py-20" data-reveal>
+  <div class="mx-auto max-w-(--container-site) px-5 md:px-10">
+    <SectionTitle text="Recordings" />
+
+    {/* Wrapper is `contents` (not `block`) when visible — see the note in Editions.astro. */}
+    <div class="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 lg:grid-cols-4">
+      {
+        recordings.map((recording, i) => (
+          <div class:list={[i >= RECORDINGS_LIMIT ? 'hidden' : 'contents']} data-recordings-item>
+            <AlbumCard recording={recording} />
+          </div>
+        ))
+      }
+    </div>
+
+    {
+      recordings.length > RECORDINGS_LIMIT && (
+        <div class="mt-8 text-center md:mt-10">
+          <button
+            type="button"
+            class="border-gold hover:bg-gold hover:text-ink inline-block border bg-black px-8 py-3.5 text-sm text-white transition-colors"
+            data-recordings-load-more
+          >
+            load more
+          </button>
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<script>
+  const items = document.querySelectorAll<HTMLElement>('[data-recordings-item]')
+  const loadMoreBtn = document.querySelector<HTMLButtonElement>('[data-recordings-load-more]')
+  loadMoreBtn?.addEventListener('click', () => {
+    items.forEach((item) => {
+      item.classList.remove('hidden')
+      item.classList.add('contents')
+    })
+    loadMoreBtn.parentElement?.remove()
+  })
+</script>

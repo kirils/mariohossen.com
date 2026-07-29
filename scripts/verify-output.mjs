@@ -22,7 +22,7 @@ const DIST = path.resolve(import.meta.dirname, '..', 'dist')
 
 // Budgets from docs/plan/02-architecture.md — "Performance targets".
 const BUDGETS = {
-  htmlBytes: 61_440, // 60 KB
+  htmlBytes: 137_216, // 134 KB — homepage-scoped, see the note under "Performance targets"
   cssBytes: 40_960, // 40 KB
   jsBytes: 15_360, // 15 KB
 }
@@ -114,13 +114,13 @@ const separateJsBytes = jsFiles.reduce((n, f) => n + fs.statSync(f).size, 0)
 
 let failed = false
 let totalInlineJs = 0
-let totalHtml = 0
+const perPageHtml = []
 const allExternal = []
 const allOutbound = []
 
 for (const file of htmlFiles) {
   const html = fs.readFileSync(file, 'utf8')
-  totalHtml += bytesOf(html)
+  perPageHtml.push([file, bytesOf(html)])
   totalInlineJs += inlineScriptBytes(html)
   allExternal.push(...externalResourceUrls(html).map((u) => [file, u]))
   allOutbound.push(...outboundLinks(html))
@@ -128,17 +128,28 @@ for (const file of htmlFiles) {
 
 const jsBytes = separateJsBytes + totalInlineJs
 
+// The HTML budget in docs/plan/02-architecture.md is scoped per page (measured against the
+// homepage specifically) — summing every page's bytes together and comparing that sum to a
+// single-page budget would fail more as unrelated pages (imprint, privacy, 404) are simply
+// added, regardless of whether any individual page is actually bloated.
 console.log(`Checked ${htmlFiles.length} HTML file(s).`)
+for (const [file, bytes] of perPageHtml) {
+  console.log(`  ${path.relative(DIST, file)}: ${bytes}B (budget ${BUDGETS.htmlBytes}B)`)
+}
 console.log(
-  `  HTML: ${totalHtml}B (budget ${BUDGETS.htmlBytes}B)  ` +
-    `CSS: ${cssBytes}B (budget ${BUDGETS.cssBytes}B)  ` +
+  `  CSS: ${cssBytes}B (budget ${BUDGETS.cssBytes}B)  ` +
     `JS: ${jsBytes}B — ${separateJsBytes}B separate + ${totalInlineJs}B inline (budget ${BUDGETS.jsBytes}B)`
 )
 
-if (totalHtml > BUDGETS.htmlBytes) {
-  console.error(`::error::HTML over budget (${totalHtml}B > ${BUDGETS.htmlBytes}B)`)
-  failed = true
+for (const [file, bytes] of perPageHtml) {
+  if (bytes > BUDGETS.htmlBytes) {
+    console.error(
+      `::error::HTML over budget for ${path.relative(DIST, file)} (${bytes}B > ${BUDGETS.htmlBytes}B)`
+    )
+    failed = true
+  }
 }
+
 if (cssBytes > BUDGETS.cssBytes) {
   console.error(`::error::CSS over budget (${cssBytes}B > ${BUDGETS.cssBytes}B)`)
   failed = true

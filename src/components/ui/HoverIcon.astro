@@ -1,0 +1,19 @@
+---
+/**
+ * The gold circular hover badge used by Recordings and Gallery grid items — measured from the
+ * original site's Essential Addons "Filterable Gallery" widget CSS: 50px circle, bg #B09153,
+ * white 18px icon, centered over the thumbnail. The original uses Font Awesome (`fa-link` /
+ * `fa-search-plus`); this site has no icon font, so the same shapes are drawn as inline SVG —
+ * defined once as a <symbol> in BaseLayout.astro and referenced here via <use>, since up to 33
+ * grid items would otherwise each repeat the full path data.
+ */
+interface Props {
+  icon: 'link' | 'zoom'
+}
+
+const { icon } = Astro.props
+---
+
+<span class="hover-badge" aria-hidden="true">
+  <svg class="hover-icon"><use href={`#i-${icon}`}></use></svg>
+</span>

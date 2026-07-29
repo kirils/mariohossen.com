@@ -1,0 +1,68 @@
+---
+import { getCollection } from 'astro:content'
+import SectionTitle from '../ui/SectionTitle.astro'
+import WaveDivider from '../ui/WaveDivider.astro'
+import ConcertCard from '../cards/ConcertCard.astro'
+import { sortConcerts } from '../../lib/concerts'
+
+const CONCERTS_LIMIT = 12
+
+const concerts = await getCollection('concerts', ({ data }) => !data.draft)
+const { all } = sortConcerts(concerts)
+---
+
+<section id="concerts" class="bg-bg pt-16 md:pt-20" data-reveal>
+  <div class="mx-auto max-w-(--container-site) px-5 pb-16 md:px-10 md:pb-24">
+    <SectionTitle text="Concerts" />
+  </div>
+
+  <div class="bg-gold relative py-16 md:py-20">
+    <WaveDivider variant="top" />
+    <div class="mx-auto max-w-(--container-site) px-5 md:px-10">
+      {
+        all.length === 0 ? (
+          <p class="text-ink">New concert dates will be announced soon.</p>
+        ) : (
+          <>
+            {/* Wrapper is `contents` (not `block`) when visible — see the note in
+               Editions.astro. A `block` wrapper stretches to match the grid row itself, but the
+               card inside it wouldn't inherit that height and ends up shorter than taller
+               siblings on the same row. */}
+            <div class="grid gap-6 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
+              {all.map((concert, i) => (
+                <div class:list={[i >= CONCERTS_LIMIT ? 'hidden' : 'contents']} data-concerts-item>
+                  <ConcertCard concert={concert} />
+                </div>
+              ))}
+            </div>
+
+            {all.length > CONCERTS_LIMIT && (
+              <div class="mt-10 text-center md:mt-12">
+                <button
+                  type="button"
+                  class="text-gold hover:text-ink inline-block bg-black px-8 py-3.5 text-sm transition-colors hover:bg-white"
+                  data-concerts-load-more
+                >
+                  load more
+                </button>
+              </div>
+            )}
+          </>
+        )
+      }
+    </div>
+    <WaveDivider variant="bottom" />
+  </div>
+</section>
+
+<script>
+  const items = document.querySelectorAll<HTMLElement>('[data-concerts-item]')
+  const loadMoreBtn = document.querySelector<HTMLButtonElement>('[data-concerts-load-more]')
+  loadMoreBtn?.addEventListener('click', () => {
+    items.forEach((item) => {
+      item.classList.remove('hidden')
+      item.classList.add('contents')
+    })
+    loadMoreBtn.parentElement?.remove()
+  })
+</script>

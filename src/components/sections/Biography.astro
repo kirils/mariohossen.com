@@ -1,0 +1,77 @@
+---
+import { getEntry } from 'astro:content'
+import { Image } from 'astro:assets'
+import Accordion from '../ui/Accordion.astro'
+import { parseBiography } from '../../lib/parse-biography'
+
+const entry = await getEntry('pages', 'biography')
+if (!entry) throw new Error('pages/biography.md is missing')
+
+// The raw markdown source (entry.body), not the rendered HTML — parseBiography splits it
+// itself, so there is no need to run it through Astro's full markdown compiler for content
+// that is about to be re-parsed anyway.
+const { intro, readMore, panels } = parseBiography(entry.body ?? '')
+---
+
+<section id="biography" class="bg-bg py-16 md:py-20" data-reveal>
+  <div class="mx-auto max-w-(--container-site) px-5 md:px-10">
+    {
+      /* Measured proportions, not an even split — the portrait is ~38% of the row on the
+       original, text ~62%. A bare grid-cols-2 stretched the portrait noticeably wider than
+       the reference and looked visibly off at a glance. */
+    }
+    <div class="grid gap-8 md:grid-cols-[2fr_3fr] md:gap-10">
+      {
+        entry.data.portrait && (
+          <div class="aspect-[476/713] w-full overflow-hidden">
+            <Image
+              src={entry.data.portrait}
+              alt="Mario Hossen holding his violin, studio portrait"
+              class="h-full w-full object-fill"
+              widths={[400, 700, 1000]}
+              sizes="(max-width: 767px) 100vw, 50vw"
+              loading="eager"
+              fetchpriority="high"
+            />
+          </div>
+        )
+      }
+
+      <div>
+        <p class="text-text text-base leading-relaxed">{intro}</p>
+
+        <div class="mt-6 space-y-1">
+          <Accordion variant="dark" title="read more">
+            <div class="text-text space-y-4">
+              {readMore.map((paragraph) => <p>{paragraph}</p>)}
+            </div>
+          </Accordion>
+
+          {
+            panels.map((panel) => (
+              <Accordion variant="gold" title={panel.title}>
+                <div class="space-y-2">
+                  {panel.lead && <p class="text-text mb-3 font-semibold">{panel.lead}</p>}
+                  <ul class="space-y-2">
+                    {panel.links.map((link) => (
+                      <li>
+                        <a
+                          href={link.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class="text-text hover:text-gold underline-offset-2 hover:underline"
+                        >
+                          {link.text}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </Accordion>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

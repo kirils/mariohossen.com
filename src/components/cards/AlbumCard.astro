@@ -1,0 +1,34 @@
+---
+import type { CollectionEntry } from 'astro:content'
+import { Image } from 'astro:assets'
+import HoverIcon from '../ui/HoverIcon.astro'
+
+interface Props {
+  recording: CollectionEntry<'recordings'>
+}
+
+const { recording } = Astro.props
+const { composer, title, subtitle, cover, alt, listenUrl } = recording.data
+const caption = subtitle ? `${title} — ${subtitle}` : title
+---
+
+<a
+  href={listenUrl ?? undefined}
+  target={listenUrl ? '_blank' : undefined}
+  rel={listenUrl ? 'noopener noreferrer' : undefined}
+  class="group border-gold relative block aspect-square overflow-hidden border-[3px]"
+>
+  <Image
+    src={cover}
+    alt={alt ?? `${composer} — ${title}`}
+    class="h-full w-full object-cover"
+    widths={[400, 600, 900]}
+    sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 25vw"
+    loading="lazy"
+  />
+  <span class="hover-overlay flex flex-col justify-end p-4 text-white">
+    {listenUrl && <HoverIcon icon="link" />}
+    <span class="text-sm font-bold">{composer}</span>
+    <span class="mt-1 text-xs">{caption}</span>
+  </span>
+</a>

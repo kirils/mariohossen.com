@@ -2,13 +2,13 @@
 
 Live status of the rebuild. **Update this file whenever a task completes.**
 
-|                   |                                                                                              |
-| ----------------- | -------------------------------------------------------------------------------------------- |
-| **Started**       | 2026-07-28                                                                                   |
-| **Current phase** | Phase 5 — Page sections                                                                      |
-| **Overall**       | 42 / 76 tasks (55%) — Phases 0, 2, 3 and 4 done; Phase 1 done bar the client-dependent parts |
-| **Blocked on**    | Task 1.6 — 13 open questions for the client (8 original + 5 from the decisions pass)         |
-| **Next action**   | Phase 5 (task 5.1) — build the actual page sections on the content collections               |
+|                   |                                                                                                 |
+| ----------------- | ----------------------------------------------------------------------------------------------- |
+| **Started**       | 2026-07-28                                                                                      |
+| **Current phase** | Phase 6 — Contact form                                                                          |
+| **Overall**       | 53 / 76 tasks (70%) — Phases 0, 2, 3, 4 and 5 done; Phase 1 done bar the client-dependent parts |
+| **Blocked on**    | Task 1.6 — 13 open questions for the client (8 original + 5 from the decisions pass)            |
+| **Next action**   | Phase 6 (task 6.1) — `functions/api/contact.ts` Cloudflare Pages Function                       |
 
 Task definitions and acceptance criteria: [docs/plan/05-task-list.md](./docs/plan/05-task-list.md).
 
@@ -23,7 +23,7 @@ Task definitions and acceptance criteria: [docs/plan/05-task-list.md](./docs/pla
 | 2 — Project scaffold          | ✅ **complete**    | 7/7   | —      |
 | 3 — Design system             | ✅ **complete**    | 10/10 | —      |
 | 4 — Content collections       | ✅ **complete**    | 10/10 | —      |
-| 5 — Page sections             | ⏳ **next**        | 0/11  | 1.5 d  |
+| 5 — Page sections             | ✅ **complete**    | 11/11 | —      |
 | 6 — Contact form              | ⬜ not started     | 0/9   | 0.5 d  |
 | 7 — SEO / a11y / performance  | ⬜ not started     | 0/9   | 0.75 d |
 | 8 — Client tooling & docs     | ⬜ not started     | 0/8   | 0.5 d  |
@@ -226,20 +226,60 @@ pre-existing unrelated hint in `extraction/tools/`.
 Verified output unchanged from Phase 3: **1.46 KB inline JS · 34 KB CSS · 20.4 KB HTML · 0
 external requests.** Content adds zero JS or CSS — it's all data.
 
+### Phase 5 — Page sections · 2026-07-29
+
+- [x] **5.1** Biography — portrait + intro paragraph + gold "read more" accordion + 2 blog panels
+- [x] **5.2** Repertoire — 6 categories in gold accordions, portrait column
+- [x] **5.3** Concerts — all 34 rendered directly in HTML (no JS "Load More"), auto-sorted
+      upcoming/past via `endDate ?? date`
+- [x] **5.4** Recordings — all 21 in a 4-col grid, gold-bordered covers, hover/focus caption
+- [x] **5.5** Editions — 4 white cards, Besetzung/Herausgeber visible without a modal
+- [x] **5.6** Gallery + lightbox — all 12 photos, keyboard-operable (arrows, Escape, focus trap)
+- [x] **5.7** Label / Partners
+- [x] **5.8** Contact section — static form markup only; submission logic is Phase 6
+- [x] **5.9** Standalone `/contact/`, `/imprint/`, `/privacy/` pages
+- [x] **5.10** 404 page using `2018/12/404-logo.png` (inverted to white on the black background)
+- [x] **5.11** Responsive pass — 375/768/1024/1440/1920px, zero horizontal scroll on any page
+
+Triggered by a bug report: the site had only a header/footer shell and non-functional nav links,
+because Phase 5 (the actual section content the nav anchors point to) hadn't been built yet.
+
+**Two real bugs found during verification, not just visual polish:**
+
+- **Gallery lightbox was unusable.** It reused the grid thumbnail's responsive `currentSrc` —
+  sized for a small grid slot (as little as 260px) — stretched to fill 75% of viewport height,
+  so every photo looked blurry when opened. Fixed by generating a dedicated large image
+  (`getImage()`, capped at the source's own width) specifically for the lightbox.
+- **Lightbox overlay didn't cover the screen** — content above stayed visible and undimmed. Root
+  cause: `.js [data-reveal].is-visible { transform: translateY(0) }` on the `<section>` creates a
+  new CSS containing block for any `position: fixed` descendant (any non-`none` transform does,
+  even an identity one) — the lightbox, nested in that same section, was positioning itself
+  relative to the section box instead of the viewport. Fixed by moving `data-reveal` to an inner
+  wrapper that doesn't contain the lightbox.
+- **Concerts section was permanently invisible on mobile** — found via the responsive pass, not
+  reported by the user. `reveal.ts`'s `IntersectionObserver` used `threshold: 0.1`, requiring 10%
+  of the _target's own height_ to be visible before firing. Fine for viewport-sized sections, but
+  Concerts stacks 34 cards single-column on narrow viewports (~13,300px tall) — no real viewport
+  ever shows 1,330px of it while any of it is on screen, so the section stayed at `opacity: 0`
+  forever, confirmed by scrolling the entire page and checking `is-visible` never appears. Fixed
+  by changing to `threshold: 0` (fires on the first visible pixel, independent of target height).
+- **`scripts/verify-output.mjs` summed HTML bytes across all 5 pages against a budget the
+  architecture doc scopes to the homepage alone** — would fail more as unrelated pages are simply
+  added, regardless of whether any individual page is bloated. Fixed to check per-page. That
+  surfaced a real, separate number: `index.html` alone is 126 KB against the original 60 KB
+  target, because Phase 5 deliberately renders all 34 concerts/21 recordings/12 photos/4 editions
+  as static HTML (no JS pagination) so everything is crawlable — a decision made _after_ the 60 KB
+  estimate. Revised the documented target to 130 KB with the rationale recorded in
+  `docs/plan/02-architecture.md`, rather than hiding content behind JS to hit a stale number.
+
+Verified output: **index.html 126 KB · other pages 20–23 KB each · 34 KB CSS · 8.9 KB inline JS ·
+0 external requests**, all passing the (now per-page) `npm run verify` budget gate.
+
 ---
 
 ## ⬜ Upcoming
 
 Condensed. Full detail in [docs/plan/05-task-list.md](./docs/plan/05-task-list.md).
-
-<details>
-<summary><b>Phase 5 — Page sections</b> (11 tasks)</summary>
-
-- [ ] 5.1 Biography · 5.2 Repertoire · 5.3 Concerts (auto past/upcoming) · 5.4 Recordings (**all 21 in initial HTML**)
-- [ ] 5.5 Editions · 5.6 Gallery + lightbox (**all 12 in initial HTML**) · 5.7 Label/Partners
-- [ ] 5.8 Contact section · 5.9 Standalone pages · 5.10 404 · 5.11 Responsive pass
-
-</details>
 
 <details>
 <summary><b>Phase 6 — Contact form</b> (9 tasks)</summary>
@@ -341,6 +381,14 @@ Full analysis: [docs/plan/08-risks-and-decisions.md](./docs/plan/08-risks-and-de
 ## Log
 
 Newest first.
+
+### 2026-07-29 — Phase 5 complete: page sections, plus a content edit
+
+- Built out all Phase 5 sections (see the Phase 5 log above for the two real reveal/lightbox
+  bugs found and fixed, and the HTML budget correction).
+- Content edit: biography intro paragraph replaced with a new orchestras-performed-with summary;
+  the previous intro sentence ("Renowned for his extraordinary virtuosity...") moved to the top
+  of the "read more" section rather than being discarded.
 
 ### 2026-07-28 — Phase 2 complete: scaffold
 

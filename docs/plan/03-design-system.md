@@ -128,15 +128,16 @@ wrong DOM nodes — the biography "read more" toggle and the repertoire categori
 widget type, and recordings/gallery share another; both needed ID-level targeting to measure
 correctly).
 
-| Element                                   | Value                                                                                                                                |
-| ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| Nav link                                  | Lato 13px / weight 500 / uppercase / **`#FFFFFF`** (not the grey `#BBBBBB` earlier assumed)                                          |
-| Repertoire accordion bar                  | bg **`#B09153`** gold, title text **`#000000`** weight 600, icon `#000000`, stacked edge-to-edge (0px gap, 1px hairline border only) |
-| Biography "read more" / blog-panel toggle | bg **`#000000`** black, text/icon `#BBBBBB` grey — same widget as above, deliberately different palette                              |
-| Biography portrait                        | `object-fit: fill` (stretched to its box, not cropped), no border, rendered ~476×713                                                 |
-| "Info" button (concerts)                  | bg `#000000`, text `#B09153` gold, 13px, padding `10px 20px`, `border-radius: 2px`, no uppercase                                     |
-| Concert card border                       | `1px solid rgba(35, 11, 102, 0.24)` — the wave divider's `#230B66` at 24% opacity                                                    |
-| Gallery grid item border                  | `3px solid #B09153` gold (Recordings covers have **no** border — only Gallery photos do, despite sharing a widget type)              |
+| Element                             | Value                                                                                                                                                                                                                                    |
+| ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Nav link                            | Lato 13px / weight 500 / uppercase / **`#FFFFFF`** (not the grey `#BBBBBB` earlier assumed)                                                                                                                                              |
+| Repertoire accordion bar            | bg **`#B09153`** gold, title text **`#000000`** weight 600, icon `#000000`, stacked edge-to-edge (0px gap, 1px hairline border only)                                                                                                     |
+| Biography's own "read more" toggle  | bg **`#000000`** black, text/icon **`#B09153`** gold — corrected 2026-07-29, an earlier pass here said grey                                                                                                                              |
+| Biography's 2 blog panels           | **Same as repertoire** — bg `#B09153` gold, text `#000000` black. Not "dark" like read-more; measured per-ID, not assumed from the shared widget                                                                                         |
+| Biography portrait                  | `object-fit: fill` (stretched to its box, not cropped), no border, rendered ~476×713                                                                                                                                                     |
+| "Info" button (concerts)            | bg `#000000`, text `#B09153` gold, 13px, padding `10px 20px`, `border-radius: 2px`, no uppercase                                                                                                                                         |
+| Concert card border                 | `1px solid rgba(35, 11, 102, 0.24)` — the wave divider's `#230B66` at 24% opacity                                                                                                                                                        |
+| Gallery/Recordings grid item border | `3px solid #B09153` gold on **both** widgets — corrected 2026-07-29, an earlier pass here wrongly claimed Recordings had none. Re-measured directly on `.eael-gallery-grid-item` in each widget rather than trusted from an earlier note |
 
 ---
 

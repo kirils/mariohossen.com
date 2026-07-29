@@ -1,0 +1,44 @@
+---
+import { getEntry, render } from 'astro:content'
+import BaseLayout from '../layouts/BaseLayout.astro'
+import SectionTitle from '../components/ui/SectionTitle.astro'
+
+const entry = await getEntry('pages', 'imprint')
+if (!entry) throw new Error('content/pages/imprint.md is missing')
+const { Content } = await render(entry)
+---
+
+<BaseLayout title="Imprint – Mario Hossen" canonical="/imprint/">
+  <section class="bg-bg py-16 md:py-20">
+    <div class="mx-auto max-w-(--container-site) px-5 md:px-10">
+      <SectionTitle text={entry.data.title} />
+      <div class="prose-legal text-text max-w-2xl">
+        <Content />
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .prose-legal :global(p) {
+    margin-top: 1rem;
+    line-height: 1.6;
+  }
+  .prose-legal :global(p:first-child) {
+    margin-top: 0;
+  }
+  .prose-legal :global(h2) {
+    margin-top: 2rem;
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--color-white);
+  }
+  .prose-legal :global(a) {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .prose-legal :global(a:hover) {
+    color: var(--color-gold);
+  }
+</style>

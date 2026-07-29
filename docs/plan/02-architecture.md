@@ -144,12 +144,26 @@ Measured against the current site:
 
 |                         | Now                                                                 | Target                                                |
 | ----------------------- | ------------------------------------------------------------------- | ----------------------------------------------------- |
-| HTML (homepage)         | 380 KB                                                              | < 60 KB                                               |
+| HTML (homepage)         | 380 KB                                                              | < 134 KB                                              |
 | Stylesheets             | 47 files                                                            | 1 file, < 40 KB                                       |
 | JavaScript              | jQuery + Isotope + Magnific + Vegas + Swiper + Elementor + 6 addons | < 15 KB, only for menu/lightbox/accordion             |
 | Images                  | unoptimised JPEG                                                    | AVIF + WebP, responsive `srcset`, lazy below the fold |
 | Lighthouse              | —                                                                   | ≥ 95 on all four categories                           |
 | Items visible to Google | 8 of 33                                                             | **all of them**                                       |
+
+The homepage target was revised from the original 60 KB estimate once Phase 5 built out real
+content volume: 34 concerts, 21 recordings, 12 photos and 4 editions all render as static HTML
+(no JS-gated "Load More") specifically so every item is crawlable — see the row above. Revised
+again, 130 KB → 134 KB, when Recordings/Gallery grid items gained a hover overlay + icon badge
+matching the original site (up to 33 instances). That markup was already cut ~80% per instance
+(510 B → 108 B) via an SVG `<symbol>`/`<use>` sprite defined once in `BaseLayout.astro` and two
+shared CSS classes (`.hover-overlay`, `.hover-badge`) instead of repeating full path data and
+long Tailwind utility strings on every item — the remaining ~1 KB is genuine new content
+(the overlay markup itself), not something left uncompressed. 134 KB still gives a ~2.8×
+reduction from the original's 380 KB, achieved with real content, not by hiding it behind
+JavaScript. Standalone pages (`/contact/`, `/imprint/`, `/privacy/`, 404) stay well
+under 25 KB each; `scripts/verify-output.mjs` checks the budget per page, not summed across the
+site.
 
 ---
 

@@ -143,13 +143,14 @@ widget type. Target by known `id`/position, not by class alone, or you will sile
 wrong element (as an earlier probe here did — its first pass read the read-more toggle's black
 background and reported it as the repertoire accordion colour).
 
-| Element                                 | Value                                                                                        |
-| --------------------------------------- | -------------------------------------------------------------------------------------------- |
-| Repertoire accordion bar                | bg `#B09153` gold, title `#000000` weight 600, edge-to-edge (no gap, 1px hairline only)      |
-| Biography read-more / blog-panel toggle | bg `#000000` black, text `#BBBBBB` grey — same widget, deliberately different palette        |
-| Biography portrait                      | `object-fit: fill` (stretched, not cropped), no border                                       |
-| "Info" button                           | bg `#000000`, text `#B09153`, 13px, `padding: 10px 20px`, `border-radius: 2px`, no uppercase |
-| Gallery grid item border                | `3px solid #B09153` — Recordings covers have **no** border despite the shared widget         |
+| Element                             | Value                                                                                                                                                    |
+| ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Repertoire accordion bar            | bg `#B09153` gold, title `#000000` weight 600, edge-to-edge (no gap, 1px hairline only)                                                                  |
+| Biography's own "read more" toggle  | bg `#000000` black, text `#B09153` **gold** (not grey — corrected 2026-07-29)                                                                            |
+| Biography's 2 blog panels           | **Same as repertoire** — bg `#B09153` gold, text `#000000` black. Not "dark" like read-more; verified per-ID, not assumed from the shared widget type    |
+| Biography portrait                  | `object-fit: fill` (stretched, not cropped), no border                                                                                                   |
+| "Info" button                       | bg `#000000`, text `#B09153`, 13px, `padding: 10px 20px`, `border-radius: 2px`, no uppercase                                                             |
+| Gallery/Recordings grid item border | `3px solid #B09153` on **both** — an earlier pass here wrongly said Recordings had none; re-measured directly, don't trust this table over a fresh check |
 
 ## Motion
 

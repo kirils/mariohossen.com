@@ -4,10 +4,12 @@
  * Replaces the Essential Addons accordion widget used for the repertoire categories, the
  * biography "read more" toggle, and the two blog panels.
  *
- * Two colour variants were measured on the live site (they share one widget type but render
- * with deliberately different palettes — see docs/plan/03-design-system.md):
- *   gold  — repertoire categories: bg #B09153, text #000000 weight 600
- *   dark  — biography "read more" / blog panels: bg #000000, text #BBBBBB
+ * Two colour variants, verified by computed style on the live site's exact element IDs (not
+ * assumed from the widget type they share):
+ *   gold — repertoire categories AND both blog panels: bg #B09153, text #000000, weight 600
+ *   dark — biography's own "read more" toggle ONLY: bg #000000, text #B09153 (gold — not grey,
+ *          an earlier pass here mismeasured this), weight 600
+ * See docs/plan/03-design-system.md and the design-fidelity skill for the measurement trail.
  */
 interface Props {
   title: string
@@ -20,12 +22,12 @@ interface Props {
 const { title, variant, open = false, class: className = '' } = Astro.props
 
 const barClasses =
-  variant === 'gold' ? 'bg-gold text-ink font-semibold' : 'bg-bg text-text border border-white/10'
+  variant === 'gold' ? 'bg-gold text-ink font-semibold' : 'bg-bg text-gold font-semibold'
 ---
 
 <details class={`group ${className}`} open={open}>
   <summary
-    class={`flex cursor-pointer list-none items-center justify-between gap-4 px-4 py-4 text-sm uppercase tracking-wide ${barClasses}`}
+    class={`flex cursor-pointer list-none items-center justify-between gap-4 px-4 py-4 text-sm tracking-wide ${barClasses}`}
   >
     <span class="flex items-center gap-3">
       <svg
