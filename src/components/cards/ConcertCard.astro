@@ -33,13 +33,22 @@ const location = country ? `${city} (${country})` : city
   </div>
 
   {
+    /* A one-line-per-performer list reads well for the usual 2–5 person ensemble, but a large
+     guest lineup (e.g. a "…and Friends" festival) would stretch the card far taller than its
+     neighbours in the same grid row. Past a handful of names, wrap them into a single
+     comma-separated block instead — same type style, far more compact, and every name still
+     shown (nothing truncated). */
+  }
+  {
     (series || ensemble || performers.length > 0) && (
       <div class="mt-4 space-y-0.5 text-[15px] leading-snug font-bold text-white">
         {series && <p>{series}</p>}
         {ensemble && <p itemprop="performer">{ensemble}</p>}
-        {performers.map((p) => (
-          <p>{p}</p>
-        ))}
+        {performers.length > 6 ? (
+          <p itemprop="performer">{performers.join(' · ')}</p>
+        ) : (
+          performers.map((p) => <p itemprop="performer">{p}</p>)
+        )}
       </div>
     )
   }
