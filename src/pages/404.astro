@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro'
 import { Image } from 'astro:assets'
 import logo from '../assets/brand/404-logo.png'
+import { withBase } from '../lib/url'
 ---
 
 <BaseLayout title="Page not found – Mario Hossen">
@@ -10,7 +11,7 @@ import logo from '../assets/brand/404-logo.png'
       <Image src={logo} alt="404" width={280} class="mx-auto invert" loading="eager" />
       <p class="text-text mt-8 text-lg">This page could not be found.</p>
       <a
-        href="/"
+        href={withBase('/')}
         class="border-gold hover:bg-gold hover:text-ink mt-8 inline-block border bg-black px-8 py-3.5 text-sm text-white transition-colors"
       >
         back to homepage

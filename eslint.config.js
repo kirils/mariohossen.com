@@ -22,7 +22,7 @@ export default [
     // Node CLI tooling — extraction scripts and build-output verification. Never shipped to
     // the browser, so `console` output IS the point (these are the tools' own report), not a
     // stray debug statement to flag the way it would be in src/.
-    files: ['extraction/tools/**/*.mjs', 'scripts/**/*.mjs'],
+    files: ['extraction/tools/**/*.mjs', 'scripts/**/*.mjs', 'astro.config.mjs'],
     languageOptions: {
       globals: { console: 'readonly', process: 'readonly', Buffer: 'readonly' },
     },

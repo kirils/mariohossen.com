@@ -4,7 +4,12 @@
  * POST (validation, Turnstile, sending via Resend) is Phase 6. A plain HTML form with method
  * POST works with JS disabled by construction; nothing here should add a JS submit handler
  * that would take that away.
+ *
+ * The form action is deliberately left as a literal "/api/contact", not base-prefixed — it's
+ * a Cloudflare Pages Function route at the true domain root on the real deploy target, and it
+ * doesn't exist yet regardless (GitHub Pages can't run it either way).
  */
+import { withBase } from '../../lib/url'
 ---
 
 <div>
@@ -71,8 +76,9 @@
     <label class="text-text flex items-start gap-2 text-sm">
       <input type="checkbox" name="consent" required class="mt-1" />
       <span>
-        I agree to the terms set out in the <a href="/privacy/" class="hover:text-gold underline"
-          >privacy policy</a
+        I agree to the terms set out in the <a
+          href={withBase('/privacy/')}
+          class="hover:text-gold underline">privacy policy</a
         > *
       </span>
     </label>

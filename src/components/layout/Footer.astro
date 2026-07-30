@@ -4,13 +4,14 @@
  * see the contrast note in docs/plan/03-design-system.md).
  */
 import SocialLinks from './SocialLinks.astro'
+import { withBase } from '../../lib/url'
 
 const YEAR = new Date().getFullYear()
 
 const LINKS = [
-  { label: 'Contact', href: '/contact/' },
-  { label: 'Imprint', href: '/imprint/' },
-  { label: 'Cookie Policy (EU)', href: '/privacy/' },
+  { label: 'Contact', href: withBase('/contact/') },
+  { label: 'Imprint', href: withBase('/imprint/') },
+  { label: 'Cookie Policy (EU)', href: withBase('/privacy/') },
 ] as const
 ---
 

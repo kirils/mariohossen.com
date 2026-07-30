@@ -3,6 +3,7 @@ import logoSource from '../../assets/brand/logo-mario-hossen.svg?raw'
 import SocialLinks from './SocialLinks.astro'
 import MobileMenu from './MobileMenu.astro'
 import GoldRule from '../ui/GoldRule.astro'
+import { withBase } from '../../lib/url'
 
 // The source file bakes its gold fill into an embedded <style>/.st1 class. Stripped so the
 // colour instead comes from the design token (.logo-mark svg path in global.css) — one
@@ -16,13 +17,13 @@ const logoRaw = logoSource.replace(/<style[^>]*>.*?<\/style>/s, '')
  * since content-driven height is more robust to font-rendering differences across browsers.
  */
 const NAV = [
-  { label: 'biography', href: '/#biography' },
-  { label: 'repertoire', href: '/#repertoire' },
-  { label: 'concerts', href: '/#concerts' },
-  { label: 'recordings', href: '/#recordings' },
-  { label: 'editions', href: '/#editions' },
-  { label: 'gallery', href: '/#gallery' },
-  { label: 'contact', href: '/#contact' },
+  { label: 'biography', href: withBase('/#biography') },
+  { label: 'repertoire', href: withBase('/#repertoire') },
+  { label: 'concerts', href: withBase('/#concerts') },
+  { label: 'recordings', href: withBase('/#recordings') },
+  { label: 'editions', href: withBase('/#editions') },
+  { label: 'gallery', href: withBase('/#gallery') },
+  { label: 'contact', href: withBase('/#contact') },
 ] as const
 ---
 
@@ -31,7 +32,7 @@ const NAV = [
     <SocialLinks class="mb-1.5" />
 
     <h1 class="mb-1.5 w-[260px] md:w-[380px]" role="img" aria-label="Mario Hossen">
-      <a href="/" class="logo-mark block" set:html={logoRaw} />
+      <a href={withBase('/')} class="logo-mark block" set:html={logoRaw} />
     </h1>
 
     <nav aria-label="Primary" class="hidden lg:block">
