@@ -144,7 +144,7 @@ Measured against the current site:
 
 |                         | Now                                                                 | Target                                                |
 | ----------------------- | ------------------------------------------------------------------- | ----------------------------------------------------- |
-| HTML (homepage)         | 380 KB                                                              | < 134 KB                                              |
+| HTML (homepage)         | 380 KB                                                              | < 142 KB                                              |
 | Stylesheets             | 47 files                                                            | 1 file, < 40 KB                                       |
 | JavaScript              | jQuery + Isotope + Magnific + Vegas + Swiper + Elementor + 6 addons | < 15 KB, only for menu/lightbox/accordion             |
 | Images                  | unoptimised JPEG                                                    | AVIF + WebP, responsive `srcset`, lazy below the fold |
@@ -159,7 +159,10 @@ matching the original site (up to 33 instances). That markup was already cut ~80
 (510 B → 108 B) via an SVG `<symbol>`/`<use>` sprite defined once in `BaseLayout.astro` and two
 shared CSS classes (`.hover-overlay`, `.hover-badge`) instead of repeating full path data and
 long Tailwind utility strings on every item — the remaining ~1 KB is genuine new content
-(the overlay markup itself), not something left uncompressed. 134 KB still gives a ~2.8×
+(the overlay markup itself), not something left uncompressed. Revised again, 134 KB → 142 KB,
+when 7 new concerts were added to the calendar (34 → 41). This budget will keep needing small
+upward revisions as the touring calendar grows — that is the expected cost of the "all static
+HTML, nothing hidden behind JS" decision, not drift to paper over. 142 KB still gives a ~2.7×
 reduction from the original's 380 KB, achieved with real content, not by hiding it behind
 JavaScript. Standalone pages (`/contact/`, `/imprint/`, `/privacy/`, 404) stay well
 under 25 KB each; `scripts/verify-output.mjs` checks the budget per page, not summed across the
