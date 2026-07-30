@@ -93,8 +93,9 @@ These exist because of specific findings during discovery. Do not quietly relax 
    and contact form may hydrate. Accordions use native `<details>`.
 8. **Semantic HTML over visual copying.** The original has an `<h1>` on a concert date and no
    page `<h1>`. Reproduce the _look_, not the defects.
-9. **Concerts sort by date, automatically — never hand-order them.** Upcoming concerts show
-   soonest-first, past concerts show most-recent-first, both computed from `date`/`endDate` in
+9. **Concerts sort by date, automatically — never hand-order them.** Newest date first,
+   throughout: upcoming concerts show furthest-out-first, then past concerts below them show
+   most-recent-first — one continuous descending sequence, computed from `date`/`endDate` in
    `src/lib/concerts.ts` (`sortConcerts`). This needs zero maintenance as a concert moves from
    upcoming to past — a newly-added concert always lands in the right place on its own. Never
    add a manual `order` field to concerts or hardcode display order; if a concert appears in the

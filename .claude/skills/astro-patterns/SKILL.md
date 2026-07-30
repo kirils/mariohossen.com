@@ -113,13 +113,16 @@ const all = await getCollection('concerts', ({ data }) => !data.draft)
 const now = new Date()
 const upcoming = all
   .filter((c) => (c.data.endDate ?? c.data.date) >= now)
-  .sort((a, b) => +a.data.date - +b.data.date)
+  .sort((a, b) => +b.data.date - +a.data.date)
 const past = all
   .filter((c) => (c.data.endDate ?? c.data.date) < now)
   .sort((a, b) => +b.data.date - +a.data.date)
 ```
 
-Note the `endDate ?? date` — a multi-day run is still "upcoming" on its final day.
+Note the `endDate ?? date` — a multi-day run is still "upcoming" on its final day. Both buckets
+sort newest-first (`sortConcerts` in `src/lib/concerts.ts`), not just `past` — every upcoming
+date is later than every past date, so this makes `[...upcoming, ...past]` one continuous
+descending sequence with no reversal at the seam between them.
 
 ## Images
 

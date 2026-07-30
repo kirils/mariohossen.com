@@ -3,15 +3,18 @@ import type { CollectionEntry } from 'astro:content'
 type Concert = CollectionEntry<'concerts'>
 
 /**
- * Upcoming first (soonest date first), then past below (most recent first) — the whole point
- * of a date-typed field: concerts reorder themselves as time passes, with no manual editing.
- * A multi-day run counts as "upcoming" through its own final day (endDate ?? date).
+ * Newest date first, throughout — upcoming concerts (furthest-out first), then past concerts
+ * (most recent first) below them. Because every upcoming date is by definition later than every
+ * past date, sorting each bucket newest-first makes `all` one continuous descending sequence
+ * with no reversal at the upcoming/past seam. The whole point of a date-typed field: concerts
+ * reorder themselves as time passes, with no manual editing. A multi-day run counts as
+ * "upcoming" through its own final day (endDate ?? date).
  */
 export function sortConcerts(concerts: Concert[], now: Date = new Date()) {
   const withEnd = concerts.map((c) => ({ c, end: c.data.endDate ?? c.data.date }))
   const upcoming = withEnd
     .filter(({ end }) => end >= now)
-    .sort((a, b) => +a.c.data.date - +b.c.data.date)
+    .sort((a, b) => +b.c.data.date - +a.c.data.date)
     .map(({ c }) => c)
   const past = withEnd
     .filter(({ end }) => end < now)
