@@ -144,7 +144,7 @@ Measured against the current site:
 
 |                         | Now                                                                 | Target                                                |
 | ----------------------- | ------------------------------------------------------------------- | ----------------------------------------------------- |
-| HTML (homepage)         | 380 KB                                                              | < 142 KB                                              |
+| HTML (homepage)         | 380 KB                                                              | < 143 KB                                              |
 | Stylesheets             | 47 files                                                            | 1 file, < 40 KB                                       |
 | JavaScript              | jQuery + Isotope + Magnific + Vegas + Swiper + Elementor + 6 addons | < 15 KB, only for menu/lightbox/accordion             |
 | Images                  | unoptimised JPEG                                                    | AVIF + WebP, responsive `srcset`, lazy below the fold |
@@ -160,10 +160,12 @@ matching the original site (up to 33 instances). That markup was already cut ~80
 shared CSS classes (`.hover-overlay`, `.hover-badge`) instead of repeating full path data and
 long Tailwind utility strings on every item — the remaining ~1 KB is genuine new content
 (the overlay markup itself), not something left uncompressed. Revised again, 134 KB → 142 KB,
-when 7 new concerts were added to the calendar (34 → 41). This budget will keep needing small
-upward revisions as the touring calendar grows — that is the expected cost of the "all static
-HTML, nothing hidden behind JS" decision, not drift to paper over. 142 KB still gives a ~2.7×
-reduction from the original's 380 KB, achieved with real content, not by hiding it behind
+when 7 new concerts were added to the calendar (34 → 41). Revised again, 142 KB → 143 KB, for
+`itemprop="name"` on each concert's series title (a real semantic-markup addition, not slack).
+This budget will keep needing small upward revisions as the touring calendar grows — that is
+the expected cost of the "all static HTML, nothing hidden behind JS" decision, not drift to
+paper over. 143 KB still gives a ~2.7× reduction from the original's 380 KB, achieved with real
+content, not by hiding it behind
 JavaScript. Standalone pages (`/contact/`, `/imprint/`, `/privacy/`, 404) stay well
 under 25 KB each; `scripts/verify-output.mjs` checks the budget per page, not summed across the
 site.

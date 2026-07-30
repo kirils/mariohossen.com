@@ -22,7 +22,7 @@ const DIST = path.resolve(import.meta.dirname, '..', 'dist')
 
 // Budgets from docs/plan/02-architecture.md — "Performance targets".
 const BUDGETS = {
-  htmlBytes: 145_408, // 142 KB — homepage-scoped, see the note under "Performance targets"
+  htmlBytes: 146_432, // 143 KB — homepage-scoped, see the note under "Performance targets"
   cssBytes: 40_960, // 40 KB
   jsBytes: 15_360, // 15 KB
 }

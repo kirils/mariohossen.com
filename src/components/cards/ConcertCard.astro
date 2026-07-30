@@ -33,6 +33,20 @@ const location = country ? `${city} (${country})` : city
   </div>
 
   {
+    /* series is the concert's own name (a themed night, festival, or cycle — "Mario Hossen and
+     Friends", "China Tour", "Concert Spirituel") — styled as a title distinct from the plain
+     detail text below it, at the same 20px/700 scale used for card titles elsewhere on the
+     site (recordings, editions), not folded into the ensemble/performers block. */
+  }
+  {
+    series && (
+      <p class="mt-4 text-[20px] leading-tight font-bold text-white" itemprop="name">
+        {series}
+      </p>
+    )
+  }
+
+  {
     /* A one-line-per-performer list reads well for the usual 2–5 person ensemble, but a large
      guest lineup (e.g. a "…and Friends" festival) would stretch the card far taller than its
      neighbours in the same grid row. Past a handful of names, wrap them into a single
@@ -40,9 +54,13 @@ const location = country ? `${city} (${country})` : city
      shown (nothing truncated). */
   }
   {
-    (series || ensemble || performers.length > 0) && (
-      <div class="mt-4 space-y-0.5 text-[15px] leading-snug font-bold text-white">
-        {series && <p>{series}</p>}
+    (ensemble || performers.length > 0) && (
+      <div
+        class:list={[
+          'space-y-0.5 text-[15px] leading-snug font-bold text-white',
+          series ? 'mt-2' : 'mt-4',
+        ]}
+      >
         {ensemble && <p itemprop="performer">{ensemble}</p>}
         {performers.length > 6 ? (
           <p itemprop="performer">{performers.join(' · ')}</p>
