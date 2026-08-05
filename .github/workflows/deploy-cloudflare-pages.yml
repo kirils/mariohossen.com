@@ -33,4 +33,8 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          # wrangler-action's default (3.90.0) conflicts with @cloudflare/workers-types@^5
+          # (functions/api/contact.ts's types, package.json) — its peer dep wants ^4. Pin to the
+          # same major used locally instead of downgrading workers-types.
+          version: 4.119.0
           command: pages deploy dist --project-name=mariohossen-com --branch=master
