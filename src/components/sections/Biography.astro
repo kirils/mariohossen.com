@@ -1,6 +1,6 @@
 ---
 import { getEntry } from 'astro:content'
-import { Image } from 'astro:assets'
+import { Picture } from 'astro:assets'
 import Accordion from '../ui/Accordion.astro'
 import { parseBiography } from '../../lib/parse-biography'
 
@@ -24,7 +24,7 @@ const { intro, readMore, panels } = parseBiography(entry.body ?? '')
       {
         entry.data.portrait && (
           <div class="aspect-[476/713] w-full overflow-hidden">
-            <Image
+            <Picture
               src={entry.data.portrait}
               alt="Mario Hossen holding his violin, studio portrait"
               class="h-full w-full object-fill"
@@ -32,6 +32,8 @@ const { intro, readMore, panels } = parseBiography(entry.body ?? '')
               sizes="(max-width: 767px) 100vw, 50vw"
               loading="eager"
               fetchpriority="high"
+              formats={['avif', 'webp']}
+              pictureAttributes={{ style: 'display: contents' }}
             />
           </div>
         )

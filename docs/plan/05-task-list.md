@@ -138,7 +138,10 @@ Each in the order it appears on the page.
 - [ ] **7.5** `sitemap.xml` + `robots.txt`
 - [ ] **7.6** Image optimisation verified — AVIF/WebP served, `width`/`height` set, below-fold lazy
 - [ ] **7.7** Lighthouse ≥ 95 on Performance, Accessibility, Best Practices, SEO (mobile + desktop)
-- [ ] **7.8** Confirm HTML < 60 KB, CSS < 40 KB, JS < 15 KB
+- [ ] **7.8** Confirm HTML, CSS, JS stay within budget — see the current figures (revised upward
+      several times as real content grew; 60 KB was the pre-Phase-5 estimate) in
+      [02-architecture.md § Performance targets](./02-architecture.md#performance-targets),
+      continuously enforced by `scripts/verify-output.mjs`
 - [ ] **7.9** Cross-browser: Chrome, Firefox, Safari, iOS Safari, Android Chrome
 
 ---

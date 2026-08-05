@@ -1,4 +1,5 @@
 ---
+import { getCollection } from 'astro:content'
 import BaseLayout from '../layouts/BaseLayout.astro'
 import Biography from '../components/sections/Biography.astro'
 import Repertoire from '../components/sections/Repertoire.astro'
@@ -7,9 +8,19 @@ import Recordings from '../components/sections/Recordings.astro'
 import Editions from '../components/sections/Editions.astro'
 import Gallery from '../components/sections/Gallery.astro'
 import ContactSection from '../components/sections/ContactSection.astro'
+import { sortConcerts } from '../lib/concerts'
+import { eventSchema, musicAlbumSchema } from '../lib/schema'
+
+// Task 7.3 — JSON-LD for the entities this page actually renders. Only *upcoming* concerts get
+// an Event node (see the comment on eventSchema); every recording gets a MusicAlbum node, since
+// those stay relevant regardless of when they were released.
+const concerts = await getCollection('concerts', ({ data }) => !data.draft)
+const { upcoming } = sortConcerts(concerts)
+const recordings = await getCollection('recordings', ({ data }) => !data.draft)
+const structuredData = [...upcoming.map(eventSchema), ...recordings.map(musicAlbumSchema)]
 ---
 
-<BaseLayout title="Mario Hossen – violin soloist and conductor">
+<BaseLayout title="Mario Hossen – violin soloist and conductor" structuredData={structuredData}>
   <Biography />
   <Repertoire />
   <Concerts />

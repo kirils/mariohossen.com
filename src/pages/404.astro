@@ -1,14 +1,30 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
-import { Image } from 'astro:assets'
+import { Picture } from 'astro:assets'
 import logo from '../assets/brand/404-logo.png'
 import { withBase } from '../lib/url'
 ---
 
-<BaseLayout title="Page not found – Mario Hossen">
+<BaseLayout
+  title="Page not found – Mario Hossen"
+  description="The page you're looking for doesn't exist."
+  noindex
+>
   <section class="bg-bg flex min-h-[60vh] items-center py-16 md:py-20">
     <div class="mx-auto max-w-(--container-site) px-5 text-center md:px-10">
-      <Image src={logo} alt="404" width={280} class="mx-auto invert" loading="eager" />
+      {
+        /* Decorative — the adjacent paragraph already says "This page could not be found",
+         so a screen reader doesn't need the image announced a second time. */
+      }
+      <Picture
+        src={logo}
+        alt=""
+        width={280}
+        class="mx-auto invert"
+        loading="eager"
+        formats={['avif', 'webp']}
+        pictureAttributes={{ style: 'display: contents' }}
+      />
       <p class="text-text mt-8 text-lg">This page could not be found.</p>
       <a
         href={withBase('/')}

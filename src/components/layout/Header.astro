@@ -31,8 +31,18 @@ const NAV = [
   <div class="mx-auto flex max-w-(--container-site) flex-col items-center px-5 md:px-10">
     <SocialLinks class="mb-1.5" />
 
-    <h1 class="mb-1.5 w-[260px] md:w-[380px]" role="img" aria-label="Mario Hossen">
-      <a href={withBase('/')} class="logo-mark block" set:html={logoRaw} />
+    {
+      /* The accessible name belongs on the <a> — it's the focusable element, and an aria-label
+       on its non-interactive <h1> ancestor doesn't name it (aria-label never cascades to
+       descendants). role="img" previously sat on the <h1>, which also meant an "image"
+       (semantically childless) contained a real focusable link — axe's link-name and
+       nested-interactive checks both point at exactly this. A plain labelled link, with the
+       decorative SVG hidden from assistive tech, needs no role override at all. */
+    }
+    <h1 class="mb-1.5 w-[260px] md:w-[380px]">
+      <a href={withBase('/')} class="logo-mark block" aria-label="Mario Hossen">
+        <span set:html={logoRaw} aria-hidden="true" />
+      </a>
     </h1>
 
     <nav aria-label="Primary" class="hidden lg:block">

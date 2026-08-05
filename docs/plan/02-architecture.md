@@ -144,7 +144,7 @@ Measured against the current site:
 
 |                         | Now                                                                 | Target                                                |
 | ----------------------- | ------------------------------------------------------------------- | ----------------------------------------------------- |
-| HTML (homepage)         | 380 KB                                                              | < 144 KB                                              |
+| HTML (homepage)         | 380 KB                                                              | < 174 KB                                              |
 | Stylesheets             | 47 files                                                            | 1 file, < 40 KB                                       |
 | JavaScript              | jQuery + Isotope + Magnific + Vegas + Swiper + Elementor + 6 addons | < 15 KB, only for menu/lightbox/accordion             |
 | Images                  | unoptimised JPEG                                                    | AVIF + WebP, responsive `srcset`, lazy below the fold |
@@ -166,13 +166,35 @@ Revised again, 143 KB → 144 KB, for Phase 6's contact form: the honeypot field
 `formLoadedAt` minimum-submit-time field, and the `aria-live` status paragraph (tasks 6.4, 6.7)
 are real accessibility/anti-spam markup on the homepage's embedded contact section, not slack
 either — the Turnstile widget itself adds nothing to this count, since it renders empty until
-`PUBLIC_TURNSTILE_SITE_KEY` is configured. This budget will keep needing small upward revisions
-as the touring calendar grows — that is the expected cost of the "all static HTML, nothing
-hidden behind JS" decision, not drift to paper over. 144 KB still gives a ~2.6× reduction from
-the original's 380 KB, achieved with real content, not by hiding it behind
-JavaScript. Standalone pages (`/contact/`, `/imprint/`, `/privacy/`, 404) stay well
-under 25 KB each; `scripts/verify-output.mjs` checks the budget per page, not summed across the
-site.
+`PUBLIC_TURNSTILE_SITE_KEY` is configured. Revised again, 144 KB → 152 KB, for Phase 7's JSON-LD
+(task 7.3): one `@graph` script carrying a site-wide `Person` plus a `MusicAlbum` node for all 21
+recordings and an `Event` node per _upcoming_ concert only (2, as of this revision) — 7,968 bytes
+total. Deliberately scoped to upcoming concerts, not all 41: a past `Event` has nothing to offer
+a rich-result search, so marking one up would cost real budget for zero benefit; `MusicAlbum`
+nodes stay in regardless of age since a recording doesn't stop being real. This is the biggest
+single jump in the budget's history so far, but it is exactly what task 7.3 asks for and there is
+no duplication left to optimise away the way the earlier hover-icon revision found — every byte is
+a distinct entity's real data. Revised again, 152 KB → 172 KB, for task 7.6: every `<Image>` on
+the site became a `<Picture formats={['avif', 'webp']}>`, so all 39 images on the homepage now
+ship a `<source>` for AVIF and one for WebP ahead of the JPEG `<img>` fallback, instead of a
+single `<img>`. That's real HTML markup cost (~20 KB) for a real, measured win in what actually
+gets downloaded: the biography portrait's largest AVIF variant is 38 KB against 77 KB for the
+equivalent WebP — roughly half, and that pattern holds across the other 38 images. Reducing the
+`widths` arrays to fewer breakpoints would have clawed some of that HTML cost back, but at the
+price of the responsive images themselves — the actual bytes a visitor's browser downloads, which
+matter far more to real load time (and to task 7.7's Lighthouse target) than the HTML byte count
+does on its own. Trading real image weight for HTML markup weight in that direction would be
+optimising the proxy metric instead of the thing it stands in for. This budget will keep needing
+small upward revisions as the touring calendar and recording catalogue grow — that is the expected
+cost of the "all static HTML, nothing hidden behind JS" decision, not drift to paper over. 172 KB
+still gives a ~2.2× reduction from the original's 380 KB _of HTML_, on top of the images
+themselves now being roughly half the size they were before task 7.6. Revised once more, 172 KB → 174 KB, for task 7.4/7.7: every concert's "Info" link and each
+edition's "see more" link gained a descriptive `aria-label` (the composer/title, or the concert's
+series and date) instead of relying on their generic visible text alone — a real fix, not
+decoration, for a screen-reader user navigating the page by its links list, where "Info, Info,
+Info…" repeated across dozens of concert cards is not distinguishable. Standalone pages
+(`/contact/`, `/imprint/`, `/privacy/`, 404) stay well under 26 KB each; `scripts/verify-output.mjs`
+checks the budget per page, not summed across the site.
 
 ---
 

@@ -85,6 +85,7 @@ const location = country ? `${city} (${country})` : city
         href={infoUrl}
         target="_blank"
         rel="noopener noreferrer"
+        aria-label={`Info: ${series ?? ensemble ?? location} — ${formatConcertDate(date, endDate)}`}
         class="text-gold mt-6 inline-block bg-black px-5 py-2.5 text-[13px]"
       >
         Info

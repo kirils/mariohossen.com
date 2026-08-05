@@ -22,7 +22,7 @@ const DIST = path.resolve(import.meta.dirname, '..', 'dist')
 
 // Budgets from docs/plan/02-architecture.md — "Performance targets".
 const BUDGETS = {
-  htmlBytes: 147_456, // 144 KB — homepage-scoped, see the note under "Performance targets"
+  htmlBytes: 178_176, // 174 KB — homepage-scoped, see the note under "Performance targets"
   cssBytes: 40_960, // 40 KB
   jsBytes: 15_360, // 15 KB
 }
@@ -65,8 +65,13 @@ function findHtmlFiles(dir) {
 
 function inlineScriptBytes(html) {
   let total = 0
-  // Non-greedy, tag-aware: stop at the first </script>, not the last.
-  for (const m of html.matchAll(/<script(?![^>]*\bsrc=)[^>]*>([\s\S]*?)<\/script>/gi)) {
+  // Non-greedy, tag-aware: stop at the first </script>, not the last. Also excludes
+  // type="application/ld+json" (task 7.3's structured data) — the browser never executes it as
+  // code, so counting it against the *JS* budget would be double-charging the same bytes that
+  // already, correctly, count toward the HTML budget.
+  for (const m of html.matchAll(
+    /<script(?![^>]*\bsrc=)(?![^>]*\btype="application\/ld\+json")[^>]*>([\s\S]*?)<\/script>/gi
+  )) {
     total += bytesOf(m[1])
   }
   return total

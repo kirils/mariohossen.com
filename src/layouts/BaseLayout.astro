@@ -1,22 +1,48 @@
 ---
+import { getImage } from 'astro:assets'
 import '../styles/global.css'
 import Header from '../components/layout/Header.astro'
 import Footer from '../components/layout/Footer.astro'
 import { withBase } from '../lib/url'
+import { personSchema } from '../lib/schema'
+import shareImageSource from '../assets/images/gallery/Mario-Hossen-1.jpg'
 
 interface Props {
   title: string
   description?: string
   /** Path-only canonical, e.g. "/contact/". Defaults to the current URL. */
   canonical?: string
+  /** 404 and similar non-content pages shouldn't be indexed. */
+  noindex?: boolean
+  /**
+   * Extra JSON-LD nodes beyond the site-wide Person (task 7.3) — e.g. index.astro's upcoming
+   * Events and MusicAlbums. Merged into one `@graph` rather than one <script> per entity type.
+   */
+  structuredData?: Record<string, unknown>[]
 }
 
-const { title, description, canonical } = Astro.props
+const { title, description, canonical, noindex = false, structuredData = [] } = Astro.props
+const jsonLd = { '@context': 'https://schema.org', '@graph': [personSchema(), ...structuredData] }
 
 const canonicalUrl = new URL(canonical ?? Astro.url.pathname, Astro.site)
 const desc =
   description ??
   'Mario Hossen — Austro-Bulgarian violin soloist and conductor. Concerts, recordings, editions and biography.'
+
+// One fixed share image for every page — task 7.2. 1200×630 is the OpenGraph-recommended size;
+// `fit: 'cover'` crops the source (a landscape studio portrait, gallery item 01) to match it.
+// JPG, not AVIF/WebP: social-media crawlers (Facebook, older link-preview bots) are far less
+// reliable at rendering modern formats for share images than browsers are for page content.
+const shareImage = await getImage({
+  src: shareImageSource,
+  width: 1200,
+  height: 630,
+  fit: 'cover',
+  format: 'jpg',
+})
+// getImage's output path already respects astro.config.mjs's `base` (see src/lib/url.ts) —
+// wrapping it in withBase() again would double-prefix it on the GitHub Pages build.
+const shareImageUrl = new URL(shareImage.src, Astro.site)
 ---
 
 <!doctype html>
@@ -26,6 +52,7 @@ const desc =
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={desc} />
+    {noindex && <meta name="robots" content="noindex" />}
     <link rel="canonical" href={canonicalUrl.href} />
     <link rel="icon" href={withBase('/favicon.svg')} type="image/svg+xml" />
     <link rel="sitemap" href={withBase('/sitemap-index.xml')} />
@@ -35,7 +62,16 @@ const desc =
     <meta property="og:title" content={title} />
     <meta property="og:description" content={desc} />
     <meta property="og:url" content={canonicalUrl.href} />
+    <meta property="og:image" content={shareImageUrl.href} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Mario Hossen playing the violin" />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={desc} />
+    <meta name="twitter:image" content={shareImageUrl.href} />
+
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 
     {
       /* Blocking on purpose: this must land before first paint. It gates the scroll-reveal

@@ -8,7 +8,10 @@ if (!entry) throw new Error('content/pages/imprint.md is missing')
 const { Content } = await render(entry)
 ---
 
-<BaseLayout title="Imprint – Mario Hossen">
+<BaseLayout
+  title="Imprint – Mario Hossen"
+  description="Legal notice and publisher information for the Mario Hossen website."
+>
   <section class="bg-bg py-16 md:py-20">
     <div class="mx-auto max-w-(--container-site) px-5 md:px-10">
       <SectionTitle text={entry.data.title} />

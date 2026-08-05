@@ -1,6 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content'
-import { Image } from 'astro:assets'
+import { Picture } from 'astro:assets'
 
 interface Props {
   edition: CollectionEntry<'editions'>
@@ -12,13 +12,15 @@ const { composer, title, volume, scoring, editor, cover, alt, moreUrl } = editio
 
 <article class="text-ink flex flex-col bg-white">
   <div class="p-6 pb-0">
-    <Image
+    <Picture
       src={cover}
       alt={alt ?? `${composer} — ${title}${volume ? ` ${volume}` : ''}`}
       class="w-full"
       widths={[300, 500, 750]}
       sizes="(max-width: 767px) 50vw, (max-width: 1023px) 33vw, 25vw"
       loading="lazy"
+      formats={['avif', 'webp']}
+      pictureAttributes={{ style: 'display: contents' }}
     />
   </div>
 
@@ -51,6 +53,7 @@ const { composer, title, volume, scoring, editor, cover, alt, moreUrl } = editio
           href={moreUrl}
           target="_blank"
           rel="noopener noreferrer"
+          aria-label={`See more: ${composer} — ${title}${volume ? ` ${volume}` : ''}`}
           class="block bg-black py-2.5 text-center text-[13px] text-white"
         >
           see more
