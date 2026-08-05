@@ -158,9 +158,15 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY as string | u
       status?.classList.add('hidden')
 
       try {
+        // URLSearchParams (application/x-www-form-urlencoded), not FormData
+        // (multipart/form-data) — functions/api/contact.ts's request.formData() parses either
+        // identically, and there's no file input on this form, so nothing is lost. Cloudflare's
+        // proxy in front of the real domain (unlike the bare *.pages.dev one) 502s on multipart
+        // POST bodies specifically; this sidesteps it entirely rather than depending on a zone
+        // setting outside this repo.
         const response = await fetch(form.action, {
           method: 'POST',
-          body: new FormData(form),
+          body: new URLSearchParams(new FormData(form) as unknown as Record<string, string>),
           headers: { accept: 'application/json' },
         })
         const result = (await response.json().catch(() => ({ ok: response.ok }))) as {
