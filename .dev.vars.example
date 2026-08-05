@@ -1,0 +1,12 @@
+# Local dev vars for functions/api/contact.ts, read by `wrangler pages dev`.
+# Copy to .dev.vars (already gitignored) and fill in real values from Resend/Turnstile —
+# never commit .dev.vars. The same four names are set as Cloudflare Pages environment
+# variables in production; see docs/plan/06-deployment-dns.md.
+
+RESEND_API_KEY=
+CONTACT_TO_EMAIL=
+TURNSTILE_SECRET_KEY=
+
+# Public by design — also set as PUBLIC_TURNSTILE_SITE_KEY in the Astro build environment
+# (not this file) so ContactForm.astro can read it via import.meta.env at build time.
+PUBLIC_TURNSTILE_SITE_KEY=

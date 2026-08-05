@@ -2,13 +2,13 @@
 
 Live status of the rebuild. **Update this file whenever a task completes.**
 
-|                   |                                                                                                 |
-| ----------------- | ----------------------------------------------------------------------------------------------- |
-| **Started**       | 2026-07-28                                                                                      |
-| **Current phase** | Phase 6 — Contact form                                                                          |
-| **Overall**       | 53 / 76 tasks (70%) — Phases 0, 2, 3, 4 and 5 done; Phase 1 done bar the client-dependent parts |
-| **Blocked on**    | Task 1.6 — 13 open questions for the client (8 original + 5 from the decisions pass)            |
-| **Next action**   | Phase 6 (task 6.1) — `functions/api/contact.ts` Cloudflare Pages Function                       |
+|                   |                                                                                                                                              |
+| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Started**       | 2026-07-28                                                                                                                                   |
+| **Current phase** | Phase 6 — Contact form                                                                                                                       |
+| **Overall**       | 60 / 76 tasks (79%) — Phases 0, 2, 3, 4 and 5 done; Phase 6 done bar two client-blocked tasks                                                |
+| **Blocked on**    | Task 1.6 (13 client questions) · Task 6.5/6.8 — need a real Resend account and a Cloudflare Pages project (Phase 9 territory pulled forward) |
+| **Next action**   | Phase 7 (task 7.1) — meta/OpenGraph/JSON-LD, or set up Cloudflare Pages to unblock 6.5/6.8                                                   |
 
 Task definitions and acceptance criteria: [docs/plan/05-task-list.md](./docs/plan/05-task-list.md).
 
@@ -24,7 +24,7 @@ Task definitions and acceptance criteria: [docs/plan/05-task-list.md](./docs/pla
 | 3 — Design system             | ✅ **complete**    | 10/10 | —      |
 | 4 — Content collections       | ✅ **complete**    | 10/10 | —      |
 | 5 — Page sections             | ✅ **complete**    | 11/11 | —      |
-| 6 — Contact form              | ⬜ not started     | 0/9   | 0.5 d  |
+| 6 — Contact form              | ⏳ **in progress** | 7/9   | 0.5 d  |
 | 7 — SEO / a11y / performance  | ⬜ not started     | 0/9   | 0.75 d |
 | 8 — Client tooling & docs     | ⬜ not started     | 0/8   | 0.5 d  |
 | 9 — Deploy & DNS cutover      | ⬜ not started     | 0/12  | 0.5 d  |
@@ -275,6 +275,51 @@ because Phase 5 (the actual section content the nav anchors point to) hadn't bee
 Verified output: **index.html 126 KB · other pages 20–23 KB each · 34 KB CSS · 8.9 KB inline JS ·
 0 external requests**, all passing the (now per-page) `npm run verify` budget gate.
 
+### Phase 6 — Contact form · 2026-08-05
+
+- [x] **6.1** `functions/api/contact.ts` — Cloudflare Pages Function, edge runtime
+- [x] **6.2** Zod validation server-side — name, email, subject, message (now `required` in the
+      markup too, matching the other fields), consent
+- [x] **6.3** Cloudflare Turnstile verified when a token is present
+- [x] **6.4** Honeypot (`website`) + minimum-submit-time (`formLoadedAt`, 3s) — both fail silently
+      (a generic "thanks" response, no email sent) rather than telling a bot what tripped it
+- [ ] **6.5** ⚑ Resend + encrypted `RESEND_API_KEY` — **blocked**, needs a real Resend account and
+      a live Cloudflare Pages project; the Function already reads it from `env` and fails with a
+      clear message if unset, rather than crashing
+- [x] **6.6** Works with JS disabled — the Function branches on the request's `Accept` header,
+      rendering a small standalone HTML confirmation page for a plain form POST and JSON for the
+      fetch-enhanced path, rather than assuming JS ran
+- [x] **6.7** Friendly success/error states, `aria-live="polite"` on the enhanced path
+- [ ] **6.8** ⚑ End-to-end test on a Cloudflare preview — **blocked on the same Cloudflare Pages
+      project as 6.5**; local `wrangler pages dev` smoke test done instead (see below)
+- [x] **6.9** Web3Forms fallback documented — `docs/plan/02-architecture.md`, "Contact form"
+
+**Turnstile is enforced, never required** — its widget needs JavaScript to produce a token at
+all, so requiring one unconditionally would reject every no-JS submission outright and break 6.6.
+When a token is present it's verified server-side and rejected on failure; when absent (no JS, or
+the client hasn't set `PUBLIC_TURNSTILE_SITE_KEY` yet) the submission falls back to the honeypot
+and timing checks instead. Documented inline in `functions/api/contact.ts`.
+
+**The Turnstile script is the one deliberate exception to "no third-party requests."** It only
+ever appears in the built output once `PUBLIC_TURNSTILE_SITE_KEY` is set (ContactForm.astro
+renders the widget/script conditionally on it) — until the client turns it on, the build stays
+exactly as third-party-free as before. `scripts/verify-output.mjs` now allowlists
+`challenges.cloudflare.com` by name, narrowly, with the same reasoning recorded next to the
+constant, rather than loosening the third-party check in general.
+
+**HTML budget revised again, 143 KB → 144 KB**, for the honeypot field, `formLoadedAt`, and the
+`aria-live` status paragraph — real anti-spam/accessibility markup on the homepage's embedded
+contact section, not slack. Same "small, documented, upward-only as real content grows" pattern
+as the four earlier revisions; rationale recorded in `docs/plan/02-architecture.md`.
+
+**Verified locally with `wrangler pages dev dist`** (not just `astro dev`, which doesn't serve
+`functions/`) against the built `dist/`, with no real secrets configured: honeypot-filled →
+`200 {"ok":true}` without calling Resend; too-fast submit (`formLoadedAt` = now) → same silent
+success; valid submission with no `RESEND_API_KEY`/`CONTACT_TO_EMAIL` → `500` with the friendly
+"not set up yet" message rather than a crash; invalid fields → `400` with the first Zod message;
+a plain (no `Accept: application/json`) POST → the styled standalone HTML confirmation page. A
+real send-to-inbox test needs 6.5's live Resend key and is deferred with it.
+
 ---
 
 ## ⬜ Upcoming
@@ -282,11 +327,12 @@ Verified output: **index.html 126 KB · other pages 20–23 KB each · 34 KB CSS
 Condensed. Full detail in [docs/plan/05-task-list.md](./docs/plan/05-task-list.md).
 
 <details>
-<summary><b>Phase 6 — Contact form</b> (9 tasks)</summary>
+<summary><b>Phase 6 — Contact form</b> (7/9 done — see the Phase 6 log entry above)</summary>
 
-- [ ] 6.1 Pages Function · 6.2 Zod validation · 6.3 Turnstile · 6.4 Honeypot
-- [ ] 6.5 ⚑ Resend + encrypted env var · 6.6 Works without JS · 6.7 `aria-live` states
-- [ ] 6.8 End-to-end test on a preview deploy · 6.9 Document Web3Forms fallback
+- [x] 6.1 Pages Function · 6.2 Zod validation · 6.3 Turnstile · 6.4 Honeypot
+- [ ] 6.5 ⚑ Resend + encrypted env var — blocked on a real Cloudflare Pages project
+- [x] 6.6 Works without JS · 6.7 `aria-live` states · 6.9 Document Web3Forms fallback
+- [ ] 6.8 ⚑ End-to-end test on a preview deploy — blocked on the same project as 6.5
 
 </details>
 
@@ -381,6 +427,28 @@ Full analysis: [docs/plan/08-risks-and-decisions.md](./docs/plan/08-risks-and-de
 ## Log
 
 Newest first.
+
+### 2026-08-05 — Phase 6: contact form (7/9 — 2 blocked on a live Cloudflare project)
+
+- Built `functions/api/contact.ts`: Zod validation, honeypot, minimum-submit-time, Resend send,
+  and Turnstile verification that's enforced-when-present rather than required (see the Phase 6
+  log entry above for why an unconditional requirement would break task 6.6).
+- Wired `ContactForm.astro`'s fetch-based progressive enhancement — `aria-live` success/error
+  states, disabled-while-submitting button — while the plain `method="post"` form still works
+  identically with JS off, because the Function itself branches on the `Accept` header.
+- Verified all of it locally with `wrangler pages dev` against the real built `dist/` (not
+  `astro dev`, which doesn't serve `functions/`) — honeypot, timing check, validation errors, the
+  no-JS HTML response, and the "not configured" failure mode all behave as designed with zero
+  real secrets set.
+- Allowlisted `challenges.cloudflare.com` by name in `scripts/verify-output.mjs` — the one
+  deliberate exception to the third-party-request gate, scoped narrowly and only ever exercised
+  once the client sets `PUBLIC_TURNSTILE_SITE_KEY`.
+- HTML budget: 143 KB → 144 KB for the new form fields, documented in
+  `docs/plan/02-architecture.md` alongside the four earlier revisions.
+- **6.5 (Resend) and 6.8 (live preview test) are genuinely blocked**, not skipped: they need a
+  real Resend account and a Cloudflare Pages project connected to this repo, which is Phase 9
+  work pulled forward. Everything up to that boundary — validation, spam defenses, progressive
+  enhancement, accessibility — is done and independently verified.
 
 ### 2026-07-29 — Phase 5 complete: page sections, plus a content edit
 
