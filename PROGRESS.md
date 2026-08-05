@@ -2,13 +2,13 @@
 
 Live status of the rebuild. **Update this file whenever a task completes.**
 
-|                   |                                                                                                                                                                      |
-| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Started**       | 2026-07-28                                                                                                                                                           |
-| **Current phase** | Phase 8 — Client tooling & documentation (Phase 6 now fully complete)                                                                                                |
-| **Overall**       | 81 / 93 tasks (87%) — see the Phase 8 log entry for the 76→93 denominator correction; Phases 0, 2, 3, 4, 5, 6 and 7 done; Phase 9 started (3/12)                     |
-| **Blocked on**    | Task 1.6 (13 client questions) · Task 8.8 — needs the client, not more agent work                                                                                    |
-| **Next action**   | Task 8.8 (client tries the guide unassisted), Phase 9 (task 9.4, client review), or Phase 1's open client questions — all three are ready and waiting on you, not me |
+|                   |                                                                                                                                                                |
+| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Started**       | 2026-07-28                                                                                                                                                     |
+| **Current phase** | Phase 8 — Client tooling & documentation (Phase 6 now fully complete)                                                                                          |
+| **Overall**       | 82 / 93 tasks (88%) — see the Phase 8 log entry for the 76→93 denominator correction; Phases 0, 2, 3, 4, 5, 6 and 7 done; Phase 9 started (4/12)               |
+| **Blocked on**    | Task 1.6 (13 client questions) · Task 8.8 — needs the client, not more agent work                                                                              |
+| **Next action**   | Task 8.8 (client tries the guide unassisted), Phase 1's open client questions, or Phase 9's `_redirects`/DNS-cutover prep (9.5 onward) — all ready and waiting |
 
 Task definitions and acceptance criteria: [docs/plan/05-task-list.md](./docs/plan/05-task-list.md).
 
@@ -27,7 +27,7 @@ Task definitions and acceptance criteria: [docs/plan/05-task-list.md](./docs/pla
 | 6 — Contact form              | ✅ **complete**    | 9/9   | 0.5 d  |
 | 7 — SEO / a11y / performance  | ✅ **complete**    | 9/9   | 0.75 d |
 | 8 — Client tooling & docs     | ⏳ **in progress** | 7/8   | 0.5 d  |
-| 9 — Deploy & DNS cutover      | ⏳ **in progress** | 3/12  | 0.5 d  |
+| 9 — Deploy & DNS cutover      | ⏳ **in progress** | 4/12  | 0.5 d  |
 
 ---
 
@@ -475,7 +475,11 @@ Pulled forward out of order to unblock 6.5/6.8, at the client's request.
       same 146,486-byte homepage as the local build, all four other pages `200`, unknown paths
       `404`, and `functions/api/contact.ts` confirmed live (honeypot, validation errors, the no-JS
       HTML response) against the real deployment
-- [ ] 9.4–9.12 not started — real DNS cutover work, well out of scope for "get a preview live"
+- [x] **9.4** ⚑ Client review — reviewed the live preview on their own phone against the checklist
+      (nav/mobile menu, biography accordion, repertoire accordions, concert card heights, load-more
+      on recordings/editions, gallery lightbox, contact form layout, footer) — **"All looks fine."**
+      No issues reported, nothing to fix.
+- [ ] 9.5–9.12 not started — real DNS cutover work
 
 **Two real problems hit setting up the GitHub Actions deploy, both worth recording:**
 
@@ -522,11 +526,11 @@ Condensed. Full detail in [docs/plan/05-task-list.md](./docs/plan/05-task-list.m
 </details>
 
 <details>
-<summary><b>Phase 9 — Deploy & DNS cutover</b> (3/12 done — see the Phase 9 log entry above)</summary>
+<summary><b>Phase 9 — Deploy & DNS cutover</b> (4/12 done — see the Phase 9 log entry above)</summary>
 
 - [x] 9.1 GitHub repo · 9.2 Cloudflare Pages (via GitHub Actions + wrangler, not the dashboard's
       git integration) · 9.3 Verify on `.pages.dev`
-- [ ] 9.4 ⚑ Client review
+- [x] 9.4 ⚑ Client review — done, no issues
 - [ ] 9.5 ⚠ `_redirects` — nothing from the old sitemap may 404
 - [ ] 9.6 ⚠ Lower DNS TTL to 300 s, 24 h ahead
 - [ ] 9.7 ⚠ **Full WordPress backup, verified openable**
@@ -594,6 +598,13 @@ Full analysis: [docs/plan/08-risks-and-decisions.md](./docs/plan/08-risks-and-de
 ## Log
 
 Newest first.
+
+### 2026-08-06 — Task 9.4: client review, no issues
+
+Client reviewed `https://mariohossen-com.pages.dev` on their own phone against a checklist
+(mobile menu, biography/repertoire accordions, concert card heights, recordings/editions
+load-more, gallery lightbox, contact form layout, footer). Response: **"All looks fine."** Nothing
+to fix. Phase 9 now 4/12.
 
 ### 2026-08-06 — Housekeeping: removed a stray GitHub App leaving a permanent red X
 
