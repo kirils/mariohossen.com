@@ -2,13 +2,13 @@
 
 Live status of the rebuild. **Update this file whenever a task completes.**
 
-|                   |                                                                                                                                                                                                             |
-| ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Started**       | 2026-07-28                                                                                                                                                                                                  |
-| **Current phase** | Phase 8 — Client tooling & documentation                                                                                                                                                                    |
-| **Overall**       | 79 / 93 tasks (85%) — see the Phase 8 log entry for why this is 93, not the 76 this row said all session; Phases 0, 2, 3, 4, 5 and 7 done; Phase 6 done bar one client-blocked task; Phase 9 started (3/12) |
-| **Blocked on**    | Task 1.6 (13 client questions) · Task 6.5/6.8 — need a real Resend account (the Cloudflare Pages project itself is live and verified, task 9.2/9.3 done) · Task 8.8 — needs the client, not more agent work |
-| **Next action**   | Task 8.8 — client tries the guide unassisted; task 6.5 can slot in whenever a Resend account exists; otherwise Phase 9 (task 9.4, client review) is next                                                    |
+|                   |                                                                                                                                                                      |
+| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Started**       | 2026-07-28                                                                                                                                                           |
+| **Current phase** | Phase 8 — Client tooling & documentation (Phase 6 now fully complete)                                                                                                |
+| **Overall**       | 81 / 93 tasks (87%) — see the Phase 8 log entry for the 76→93 denominator correction; Phases 0, 2, 3, 4, 5, 6 and 7 done; Phase 9 started (3/12)                     |
+| **Blocked on**    | Task 1.6 (13 client questions) · Task 8.8 — needs the client, not more agent work                                                                                    |
+| **Next action**   | Task 8.8 (client tries the guide unassisted), Phase 9 (task 9.4, client review), or Phase 1's open client questions — all three are ready and waiting on you, not me |
 
 Task definitions and acceptance criteria: [docs/plan/05-task-list.md](./docs/plan/05-task-list.md).
 
@@ -24,7 +24,7 @@ Task definitions and acceptance criteria: [docs/plan/05-task-list.md](./docs/pla
 | 3 — Design system             | ✅ **complete**    | 10/10 | —      |
 | 4 — Content collections       | ✅ **complete**    | 10/10 | —      |
 | 5 — Page sections             | ✅ **complete**    | 11/11 | —      |
-| 6 — Contact form              | ⏳ **in progress** | 7/9   | 0.5 d  |
+| 6 — Contact form              | ✅ **complete**    | 9/9   | 0.5 d  |
 | 7 — SEO / a11y / performance  | ✅ **complete**    | 9/9   | 0.75 d |
 | 8 — Client tooling & docs     | ⏳ **in progress** | 7/8   | 0.5 d  |
 | 9 — Deploy & DNS cutover      | ⏳ **in progress** | 3/12  | 0.5 d  |
@@ -283,18 +283,28 @@ Verified output: **index.html 126 KB · other pages 20–23 KB each · 34 KB CSS
 - [x] **6.3** Cloudflare Turnstile verified when a token is present
 - [x] **6.4** Honeypot (`website`) + minimum-submit-time (`formLoadedAt`, 3s) — both fail silently
       (a generic "thanks" response, no email sent) rather than telling a bot what tripped it
-- [ ] **6.5** ⚑ Resend + encrypted `RESEND_API_KEY` — **blocked**, needs a real Resend account (the
-      Cloudflare Pages project itself now exists, see the Phase 9 log entry below); the Function
-      already reads it from `env` and fails with a clear message if unset, rather than crashing
+- [x] **6.5** Resend + encrypted `RESEND_API_KEY` — real Resend account created, API key set as a
+      Cloudflare Pages secret via `wrangler pages secret put` (never displayed in chat — piped
+      straight from clipboard, same pattern as the Cloudflare API token in Phase 9)
 - [x] **6.6** Works with JS disabled — the Function branches on the request's `Accept` header,
       rendering a small standalone HTML confirmation page for a plain form POST and JSON for the
       fetch-enhanced path, rather than assuming JS ran
 - [x] **6.7** Friendly success/error states, `aria-live="polite"` on the enhanced path
-- [ ] **6.8** ⚑ End-to-end test on a Cloudflare preview — the preview itself is live and verified
-      (honeypot/validation/no-JS paths, all confirmed against the real deployment, see the Phase 9
-      log entry); **only the "real submission → real inbox" part is still blocked**, on 6.5's
-      Resend key
+- [x] **6.8** End-to-end test on the real Cloudflare deployment — a real POST to
+      `https://mariohossen-com.pages.dev/api/contact` returned `{"ok":true}` and the client
+      **confirmed the email actually arrived** in the inbox. Genuinely done, not just plausible.
 - [x] **6.9** Web3Forms fallback documented — `docs/plan/02-architecture.md`, "Contact form"
+
+**`CONTACT_TO_EMAIL` is temporarily `kiril.stoilov@gmail.com`, not the real
+`mariohossen@gmail.com` yet.** Resend's sandbox mode (no verified domain) only delivers to the
+account's own signup email — and the account ended up registered under
+`kiril.stoilov@gmail.com`, discovered from Resend's own rejection message on the first attempt,
+not assumed in advance. Verifying `mariohossen.com` as a domain with Resend needs DNS records
+added at the domain's authoritative provider, which is deliberately not happening before the
+Phase 9 cutover (still Hostinger). **Task 9.8/9.9 (DNS cutover) must include switching
+`CONTACT_TO_EMAIL` back to `mariohossen@gmail.com`** once the domain is verified — flagged here
+so it isn't forgotten; `site/settings.json`'s `contactEmail` field already correctly holds the
+real intended address throughout, only the Cloudflare secret is temporarily different.
 
 **Turnstile is enforced, never required** — its widget needs JavaScript to produce a token at
 all, so requiring one unconditionally would reject every no-JS submission outright and break 6.6.
@@ -501,17 +511,6 @@ that point printed, or could have printed, any part of a secret's actual value.
 Condensed. Full detail in [docs/plan/05-task-list.md](./docs/plan/05-task-list.md).
 
 <details>
-<summary><b>Phase 6 — Contact form</b> (7/9 done — see the Phase 6 log entry above)</summary>
-
-- [x] 6.1 Pages Function · 6.2 Zod validation · 6.3 Turnstile · 6.4 Honeypot
-- [ ] 6.5 ⚑ Resend + encrypted env var — blocked on a real Resend account
-- [x] 6.6 Works without JS · 6.7 `aria-live` states · 6.9 Document Web3Forms fallback
-- [ ] 6.8 ⚑ Real submission → real inbox — blocked on the same Resend account as 6.5 (the preview
-      itself is live and otherwise verified, see the Phase 9 log entry)
-
-</details>
-
-<details>
 <summary><b>Phase 8 — Client tooling & documentation</b> (7/8 done — see the Phase 8 log entry above)</summary>
 
 - [x] 8.1 Repo `CLAUDE.md` for the content model · 8.2 `docs/CLIENT-GUIDE.md` (plain language)
@@ -542,15 +541,15 @@ Condensed. Full detail in [docs/plan/05-task-list.md](./docs/plan/05-task-list.m
 
 Blocking parts of Phase 1 and Phase 6. Chase these early — they have lead time.
 
-| #   | Question                                                                                                                                                                             | Blocks |
-| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------ |
-| 1   | Which email address should contact-form enquiries go to? (`settings.json` currently uses the public Imprint address, `mariohossen@gmail.com`, as a placeholder pending confirmation) | 6.5    |
-| 2   | Higher-resolution album covers? Several are only ~300 px wide.                                                                                                                       | 1.6    |
-| 3   | Photographer credits for the 12 gallery portraits? (~~alt text~~ done — all 12 written directly from viewing the photos, task 4.6)                                                   | 4.6    |
-| 4   | Existing Google Search Console access to hand over?                                                                                                                                  | 9.11   |
-| 5   | Analytics wanted at all? (Cloudflare Web Analytics is free + cookieless)                                                                                                             | 7.x    |
-| 6   | Repertoire lists — still accurate? Worth reviewing while we are in there.                                                                                                            | 1.5    |
-| 7   | **Does email run through this domain?** Determines DNS-move care. Assume yes until confirmed.                                                                                        | 9.8    |
+| #     | Question                                                                                                                                                                                                             | Blocks |
+| ----- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| ~~1~~ | ~~Which email address should contact-form enquiries go to?~~ ✅ confirmed `mariohossen@gmail.com` — live today as `kiril.stoilov@gmail.com` instead, temporarily, per the Phase 6 note; switches over at DNS cutover | 6.5    |
+| 2     | Higher-resolution album covers? Several are only ~300 px wide.                                                                                                                                                       | 1.6    |
+| 3     | Photographer credits for the 12 gallery portraits? (~~alt text~~ done — all 12 written directly from viewing the photos, task 4.6)                                                                                   | 4.6    |
+| 4     | Existing Google Search Console access to hand over?                                                                                                                                                                  | 9.11   |
+| 5     | Analytics wanted at all? (Cloudflare Web Analytics is free + cookieless)                                                                                                                                             | 7.x    |
+| 6     | Repertoire lists — still accurate? Worth reviewing while we are in there.                                                                                                                                            | 1.5    |
+| 7     | **Does email run through this domain?** Determines DNS-move care. Assume yes until confirmed.                                                                                                                        | 9.8    |
 
 Raised by the decisions pass on 2026-07-28 — each is recorded against its card in
 [`decisions.json`](./extraction/data/content/decisions.json):
@@ -595,6 +594,23 @@ Full analysis: [docs/plan/08-risks-and-decisions.md](./docs/plan/08-risks-and-de
 ## Log
 
 Newest first.
+
+### 2026-08-06 — Phase 6 complete: real Resend account, real email delivered (9/9)
+
+- Real Resend account created, API key set as a Cloudflare Pages secret via
+  `wrangler pages secret put` — piped directly from clipboard, never displayed, same discipline as
+  the Cloudflare API token earlier.
+- First real send attempt failed with a genuinely useful error from Resend itself: sandbox mode
+  (no verified domain) only delivers to the account's own signup email, which turned out to be
+  `kiril.stoilov@gmail.com` — not `mariohossen@gmail.com` as originally intended, discovered from
+  the rejection message rather than assumed. `CONTACT_TO_EMAIL` temporarily points at
+  `kiril.stoilov@gmail.com` as a result; **must switch to `mariohossen@gmail.com` during the
+  Phase 9 DNS cutover**, once a domain is verified with Resend — flagged in the Phase 6 section
+  above so it survives to that point.
+- Second attempt: `{"ok":true}` from `https://mariohossen-com.pages.dev/api/contact`, and the
+  client confirmed the email actually arrived. Task 6.8 is now genuinely done, not just plausible
+  from structural testing.
+- Phase 6 is now 9/9 — the only phase besides 0/2/3/4/5/7 that's fully closed out.
 
 ### 2026-08-05 — Phase 8: client tooling & documentation (7/8)
 
