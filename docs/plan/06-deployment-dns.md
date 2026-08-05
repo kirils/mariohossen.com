@@ -33,7 +33,7 @@ bundle. Reasoning recorded in `PROGRESS.md`'s Phase 6 log.
 Auth is a Cloudflare API token, **not** the account's own login — `CLOUDFLARE_API_TOKEN` (repo
 secret) + `CLOUDFLARE_ACCOUNT_ID` (repo variable, not secret — it's not sensitive).
 
-> **Two real gotchas hit while setting this up, worth knowing if this ever needs redoing:**
+> **Three real gotchas hit while setting this up, worth knowing if this ever needs redoing:**
 >
 > 1. `cloudflare/wrangler-action@v3` defaults to installing wrangler 3.90.0, which has a peer
 >    dependency on `@cloudflare/workers-types@^4` — conflicts with the `^5` this repo uses for
@@ -44,9 +44,22 @@ secret) + `CLOUDFLARE_ACCOUNT_ID` (repo variable, not secret — it's not sensit
 >    auto-generated onboarding token from account signup, which looks valid (`/user/tokens/verify`
 >    reports it active) but can't actually read Pages projects. A token created explicitly via
 >    **API Tokens → Create Token → "Edit Cloudflare Workers" template** worked immediately. If
->    this error reappears, verify with `curl -H "Authorization: Bearer $TOKEN"
-https://api.cloudflare.com/client/v4/accounts/{id}/pages/projects` directly — it isolates the
->    token from any GitHub Actions/wrangler-action noise.
+>    this error reappears, verify directly with `curl -H "Authorization: Bearer $TOKEN"` against
+>    `https://api.cloudflare.com/client/v4/accounts/{id}/pages/projects` — it isolates the token
+>    from any GitHub Actions/wrangler-action noise.
+> 3. Account signup also silently installs the **"Cloudflare Workers and Pages" GitHub App** on
+>    the repo, wired to Cloudflare's own separate "Workers Builds" CI feature — nothing we set up
+>    or use. It auto-triggers a `Workers Builds: mariohossen-com` check on every push, using a
+>    build token that's invalid from the start (same root cause as #2 — an onboarding-created
+>    credential that doesn't actually work), so it fails every single time and leaves a red X on
+>    every commit. The Pages project's own git integration is unaffected — checking it still
+>    correctly reports `Git Provider: No` — this is a second, independent integration layered on
+>    top by the GitHub App, not the same thing. Fix: **uninstall the
+>    GitHub App** (`github.com/settings/installations` → Cloudflare Workers and Pages → Configure
+>    → Uninstall) rather than fixing its token — regenerating the token would make Cloudflare's
+>    own git-based builds start actually running, which is exactly the second, competing deploy
+>    mechanism this project deliberately avoided by choosing GitHub Actions + `wrangler` in the
+>    first place.
 
 ### 3. Environment variables
 

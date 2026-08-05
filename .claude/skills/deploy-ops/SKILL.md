@@ -31,12 +31,16 @@ feature this setup doesn't have), and "check the Pages dashboard for a failed bu
 checking the **GitHub Actions** run instead — Cloudflare only ever sees a finished `dist/`, it
 never runs the build itself.
 
-Two real gotchas if this workflow ever needs rebuilding from scratch — both cost real time once
-already, both documented with the exact fix in
+Three real gotchas if this workflow ever needs rebuilding from scratch — all cost real time once
+already, all documented with the exact fix in
 [docs/plan/06-deployment-dns.md § Cloudflare Pages](../../../docs/plan/06-deployment-dns.md):
 `cloudflare/wrangler-action`'s default wrangler version conflicts with this repo's
-`@cloudflare/workers-types`, and Cloudflare's auto-generated onboarding token silently can't read
-Pages projects (looks valid, isn't) — a token from **API Tokens → Create Token** works.
+`@cloudflare/workers-types`; Cloudflare's auto-generated onboarding token silently can't read
+Pages projects (looks valid, isn't) — a token from **API Tokens → Create Token** works; and
+account signup also silently installs a **"Cloudflare Workers and Pages" GitHub App** wired to a
+separate, unused "Workers Builds" CI feature, which fails on every push with an invalid token and
+leaves a red X on every commit — uninstall the app (don't fix its token, that would turn on a
+second, competing deploy mechanism this project deliberately doesn't use).
 
 ### Environment variables — two different places now
 

@@ -595,6 +595,29 @@ Full analysis: [docs/plan/08-risks-and-decisions.md](./docs/plan/08-risks-and-de
 
 Newest first.
 
+### 2026-08-06 — Housekeeping: removed a stray GitHub App leaving a permanent red X
+
+Not tied to a numbered task — operational cleanup the client noticed and flagged.
+
+- The client spotted a Cloudflare dashboard error ("build token has been deleted or rolled") and,
+  separately, a red X on GitHub commits: a `Workers Builds: mariohossen-com` check, owned by a
+  **"Cloudflare Workers and Pages" GitHub App** neither of us had knowingly installed.
+- Traced it to account signup: the same onboarding flow that silently created a broken default
+  API token (see the Phase 9 log entry below) also silently installed this GitHub App, wired to
+  Cloudflare's separate "Workers Builds" CI feature — not the same thing as the Pages project's
+  own git integration (`wrangler pages project list` correctly showed `Git Provider: No`
+  throughout; this was a second, independent layer). Its build token was invalid from the start,
+  so it failed on every single push.
+- **Fixed by uninstalling the GitHub App**, not by fixing its token — regenerating the token would
+  have turned on Cloudflare's own git-based builds, a second deploy mechanism competing with the
+  GitHub Actions + `wrangler` pipeline this project deliberately chose instead (see Phase 9 below
+  and `docs/plan/06-deployment-dns.md`). GitHub only allows an app in "selected repositories" mode
+  to have zero repos by uninstalling it entirely, which is also the semantically correct fix here
+  since the repo doesn't use the feature at all.
+- Documented as gotcha #3 in `docs/plan/06-deployment-dns.md` and the `deploy-ops` skill, next to
+  the two from the original Cloudflare Pages setup — all three trace back to the same root cause
+  (things Cloudflare's account-signup flow creates automatically, silently, and half-working).
+
 ### 2026-08-06 — Phase 6 complete: real Resend account, real email delivered (9/9)
 
 - Real Resend account created, API key set as a Cloudflare Pages secret via
