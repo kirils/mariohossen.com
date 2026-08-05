@@ -1,0 +1,29 @@
+# Task 9.5 — every URL in the original WordPress sitemap (wp-sitemap-index.xml, fetched live
+# and cross-checked against docs/plan/01-discovery-findings.md, not guessed) must land somewhere
+# real, never 404. Real content pages (/, /contact/, /imprint/) aren't listed here because Astro
+# already serves them directly at the same paths — this file only covers what's retired.
+
+/events/              /#concerts    301
+/mario-hossen-disco/  /#recordings  301
+/cookie-policy-eu/    /privacy/     301
+
+# "Blog 1"-"Blog 4" (2018) - leftover Zugan theme demo posts, unlinked, no real content.
+/blog1/  /  301
+/blog2/  /  301
+/blog3/  /  301
+/blog4/  /  301
+
+# Demo taxonomy scaffolding that shipped with the theme, never used for real content - category
+# archives (texte/moderation/kunst/videos), the two placeholder tags, and the two post-format
+# archives (video/gallery). Wildcards so nothing under these paths (e.g. a category's own feed)
+# 404s either.
+/category/*  /  301
+/tag/*       /  301
+/type/*      /  301
+
+# Elementor's internal header/footer template posts - WordPress itself already 301s these to the
+# homepage; matched here so the new site does the same instead of a plain 404.
+/elementor-hf/*  /  301
+
+# RSS feed and per-category feeds (the /category/* wildcard above already covers the latter).
+/feed/  /  301

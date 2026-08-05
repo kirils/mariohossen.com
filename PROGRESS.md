@@ -2,13 +2,13 @@
 
 Live status of the rebuild. **Update this file whenever a task completes.**
 
-|                   |                                                                                                                                                                |
-| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Started**       | 2026-07-28                                                                                                                                                     |
-| **Current phase** | Phase 8 — Client tooling & documentation (Phase 6 now fully complete)                                                                                          |
-| **Overall**       | 82 / 93 tasks (88%) — see the Phase 8 log entry for the 76→93 denominator correction; Phases 0, 2, 3, 4, 5, 6 and 7 done; Phase 9 started (4/12)               |
-| **Blocked on**    | Task 1.6 (13 client questions) · Task 8.8 — needs the client, not more agent work                                                                              |
-| **Next action**   | Task 8.8 (client tries the guide unassisted), Phase 1's open client questions, or Phase 9's `_redirects`/DNS-cutover prep (9.5 onward) — all ready and waiting |
+|                   |                                                                                                                                                                                    |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Started**       | 2026-07-28                                                                                                                                                                         |
+| **Current phase** | Phase 8 — Client tooling & documentation (Phase 6 now fully complete)                                                                                                              |
+| **Overall**       | 83 / 93 tasks (89%) — see the Phase 8 log entry for the 76→93 denominator correction; Phases 0, 2, 3, 4, 5, 6 and 7 done; Phase 9 at 5/12                                          |
+| **Blocked on**    | Task 1.6 (13 client questions) · Task 8.8 (needs the client) · Task 9.6/9.7 (need Hostinger access the agent doesn't have)                                                         |
+| **Next action**   | 9.6 (lower DNS TTL — needs you at Hostinger) and 9.7 (verified WordPress backup) come before the actual cutover can start; task 8.8 and the open questions are also ready whenever |
 
 Task definitions and acceptance criteria: [docs/plan/05-task-list.md](./docs/plan/05-task-list.md).
 
@@ -27,7 +27,7 @@ Task definitions and acceptance criteria: [docs/plan/05-task-list.md](./docs/pla
 | 6 — Contact form              | ✅ **complete**    | 9/9   | 0.5 d  |
 | 7 — SEO / a11y / performance  | ✅ **complete**    | 9/9   | 0.75 d |
 | 8 — Client tooling & docs     | ⏳ **in progress** | 7/8   | 0.5 d  |
-| 9 — Deploy & DNS cutover      | ⏳ **in progress** | 4/12  | 0.5 d  |
+| 9 — Deploy & DNS cutover      | ⏳ **in progress** | 5/12  | 0.5 d  |
 
 ---
 
@@ -479,7 +479,17 @@ Pulled forward out of order to unblock 6.5/6.8, at the client's request.
       (nav/mobile menu, biography accordion, repertoire accordions, concert card heights, load-more
       on recordings/editions, gallery lightbox, contact form layout, footer) — **"All looks fine."**
       No issues reported, nothing to fix.
-- [ ] 9.5–9.12 not started — real DNS cutover work
+- [x] **9.5** ⚠ `public/_redirects` — every URL in the _live_ original site's
+      `wp-sitemap-index.xml` (fetched directly, not assumed from memory) now redirects instead of
+      404ing: `/events/`, `/mario-hossen-disco/`, `/cookie-policy-eu/`, the 4 demo blog posts,
+      `/category/*`, `/tag/*`, `/type/*` (all default theme-demo taxonomy scaffolding, empty of
+      real content), and `/elementor-hf/*` (Elementor's internal template posts — WordPress
+      itself already 301s these, matched so the new site does the same). Verified against a real
+      `wrangler pages dev` server, not just read for correctness: every redirect fires with the
+      right target, real pages (`/contact/`, `/imprint/`) still resolve normally, and a genuinely
+      unknown path still correctly 404s.
+- [ ] 9.6–9.12 not started — needs Hostinger access (9.6 TTL, 9.7 backup) the agent doesn't have,
+      then the actual DNS cutover, which needs explicit go-ahead given how hard it is to reverse
 
 **Two real problems hit setting up the GitHub Actions deploy, both worth recording:**
 
@@ -526,12 +536,12 @@ Condensed. Full detail in [docs/plan/05-task-list.md](./docs/plan/05-task-list.m
 </details>
 
 <details>
-<summary><b>Phase 9 — Deploy & DNS cutover</b> (4/12 done — see the Phase 9 log entry above)</summary>
+<summary><b>Phase 9 — Deploy & DNS cutover</b> (5/12 done — see the Phase 9 log entry above)</summary>
 
 - [x] 9.1 GitHub repo · 9.2 Cloudflare Pages (via GitHub Actions + wrangler, not the dashboard's
       git integration) · 9.3 Verify on `.pages.dev`
 - [x] 9.4 ⚑ Client review — done, no issues
-- [ ] 9.5 ⚠ `_redirects` — nothing from the old sitemap may 404
+- [x] 9.5 ⚠ `_redirects` — done, verified against a real server, every old sitemap URL covered
 - [ ] 9.6 ⚠ Lower DNS TTL to 300 s, 24 h ahead
 - [ ] 9.7 ⚠ **Full WordPress backup, verified openable**
 - [ ] 9.8 Move DNS · 9.9 SSL + canonical host · 9.10 Post-cutover checks (**including a real email test**)
@@ -598,6 +608,22 @@ Full analysis: [docs/plan/08-risks-and-decisions.md](./docs/plan/08-risks-and-de
 ## Log
 
 Newest first.
+
+### 2026-08-06 — Task 9.5: `_redirects`, built from the live sitemap, not memory
+
+- Fetched `https://www.mariohossen.com/wp-sitemap-index.xml` and all six sub-sitemaps directly
+  rather than relying on `docs/plan/01-discovery-findings.md`'s summary — found two real URL
+  groups the existing plan/skill redirect list didn't cover: `/elementor-hf/*` (Elementor's
+  internal template posts) and `/tag/*` + `/type/*` (default WordPress taxonomy demo archives,
+  same category as the already-known `/category/*` theme-demo scaffolding).
+- `/elementor-hf/*` already 301s to the homepage on the _live_ WordPress site itself — matched
+  that behaviour rather than inventing different handling.
+- `public/_redirects` now covers every URL the old sitemap ever listed. Verified against a real
+  `wrangler pages dev` server, not just by reading the file: every redirect fires correctly, real
+  pages are unaffected, and a genuinely unknown path still 404s as it should.
+- Starts what's next: 9.6 (lower DNS TTL) and 9.7 (verified WordPress backup) both need Hostinger
+  access only the client has, and 9.6 has a mandatory 24-hour wait before cutover can start —
+  this phase can't be rushed through in one sitting even once those two are done.
 
 ### 2026-08-06 — Task 9.4: client review, no issues
 
