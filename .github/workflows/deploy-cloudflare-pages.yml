@@ -1,0 +1,36 @@
+name: Deploy to Cloudflare Pages
+
+# The documented production target (docs/plan/02-architecture.md, docs/plan/06-deployment-dns.md)
+# — deploys the real build (no DEPLOY_TARGET override, so astro.config.mjs picks the custom
+# domain + no base path) to the `mariohossen-com` Cloudflare Pages project via wrangler, rather
+# than Cloudflare's own git integration — see PROGRESS.md's Phase 6 log for why.
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+concurrency:
+  group: cloudflare-pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run build
+
+      - uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dist --project-name=mariohossen-com --branch=master

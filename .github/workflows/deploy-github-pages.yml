@@ -1,7 +1,8 @@
 name: Deploy to GitHub Pages
 
 # Temporary preview host — the documented production target is Cloudflare Pages at the custom
-# domain (docs/plan/02-architecture.md, docs/plan/09-deployment.md). DEPLOY_TARGET=github-pages
+# domain (docs/plan/02-architecture.md, docs/plan/06-deployment-dns.md; deployed by the sibling
+# deploy-cloudflare-pages.yml workflow). DEPLOY_TARGET=github-pages
 # switches astro.config.mjs to a /mariohossen.com base path, matching this project repo's URL
 # (kirils.github.io/mariohossen.com/) — see src/lib/url.ts for how internal links respect it.
 
