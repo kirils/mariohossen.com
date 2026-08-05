@@ -2,13 +2,13 @@
 
 Live status of the rebuild. **Update this file whenever a task completes.**
 
-|                   |                                                                                                                                              |
-| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Started**       | 2026-07-28                                                                                                                                   |
-| **Current phase** | Phase 6 — Contact form                                                                                                                       |
-| **Overall**       | 60 / 76 tasks (79%) — Phases 0, 2, 3, 4 and 5 done; Phase 6 done bar two client-blocked tasks                                                |
-| **Blocked on**    | Task 1.6 (13 client questions) · Task 6.5/6.8 — need a real Resend account and a Cloudflare Pages project (Phase 9 territory pulled forward) |
-| **Next action**   | Phase 7 (task 7.1) — meta/OpenGraph/JSON-LD, or set up Cloudflare Pages to unblock 6.5/6.8                                                   |
+|                   |                                                                                                                                                          |
+| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Started**       | 2026-07-28                                                                                                                                               |
+| **Current phase** | Phase 6 — Contact form (Phase 9's Cloudflare Pages setup pulled forward, done)                                                                           |
+| **Overall**       | 63 / 76 tasks (83%) — Phases 0, 2, 3, 4 and 5 done; Phase 6 done bar one client-blocked task; Phase 9 started (3/12)                                     |
+| **Blocked on**    | Task 1.6 (13 client questions) · Task 6.5/6.8 — need a real Resend account (the Cloudflare Pages project itself is live and verified, task 9.2/9.3 done) |
+| **Next action**   | Phase 7 (task 7.1) — meta/OpenGraph/JSON-LD; task 6.5 can slot in whenever a Resend account exists                                                       |
 
 Task definitions and acceptance criteria: [docs/plan/05-task-list.md](./docs/plan/05-task-list.md).
 
@@ -27,7 +27,7 @@ Task definitions and acceptance criteria: [docs/plan/05-task-list.md](./docs/pla
 | 6 — Contact form              | ⏳ **in progress** | 7/9   | 0.5 d  |
 | 7 — SEO / a11y / performance  | ⬜ not started     | 0/9   | 0.75 d |
 | 8 — Client tooling & docs     | ⬜ not started     | 0/8   | 0.5 d  |
-| 9 — Deploy & DNS cutover      | ⬜ not started     | 0/12  | 0.5 d  |
+| 9 — Deploy & DNS cutover      | ⏳ **in progress** | 3/12  | 0.5 d  |
 
 ---
 
@@ -283,15 +283,17 @@ Verified output: **index.html 126 KB · other pages 20–23 KB each · 34 KB CSS
 - [x] **6.3** Cloudflare Turnstile verified when a token is present
 - [x] **6.4** Honeypot (`website`) + minimum-submit-time (`formLoadedAt`, 3s) — both fail silently
       (a generic "thanks" response, no email sent) rather than telling a bot what tripped it
-- [ ] **6.5** ⚑ Resend + encrypted `RESEND_API_KEY` — **blocked**, needs a real Resend account and
-      a live Cloudflare Pages project; the Function already reads it from `env` and fails with a
-      clear message if unset, rather than crashing
+- [ ] **6.5** ⚑ Resend + encrypted `RESEND_API_KEY` — **blocked**, needs a real Resend account (the
+      Cloudflare Pages project itself now exists, see the Phase 9 log entry below); the Function
+      already reads it from `env` and fails with a clear message if unset, rather than crashing
 - [x] **6.6** Works with JS disabled — the Function branches on the request's `Accept` header,
       rendering a small standalone HTML confirmation page for a plain form POST and JSON for the
       fetch-enhanced path, rather than assuming JS ran
 - [x] **6.7** Friendly success/error states, `aria-live="polite"` on the enhanced path
-- [ ] **6.8** ⚑ End-to-end test on a Cloudflare preview — **blocked on the same Cloudflare Pages
-      project as 6.5**; local `wrangler pages dev` smoke test done instead (see below)
+- [ ] **6.8** ⚑ End-to-end test on a Cloudflare preview — the preview itself is live and verified
+      (honeypot/validation/no-JS paths, all confirmed against the real deployment, see the Phase 9
+      log entry); **only the "real submission → real inbox" part is still blocked**, on 6.5's
+      Resend key
 - [x] **6.9** Web3Forms fallback documented — `docs/plan/02-architecture.md`, "Contact form"
 
 **Turnstile is enforced, never required** — its widget needs JavaScript to produce a token at
@@ -320,6 +322,52 @@ success; valid submission with no `RESEND_API_KEY`/`CONTACT_TO_EMAIL` → `500` 
 a plain (no `Accept: application/json`) POST → the styled standalone HTML confirmation page. A
 real send-to-inbox test needs 6.5's live Resend key and is deferred with it.
 
+### Phase 9 (started early) — Cloudflare Pages project · 2026-08-05
+
+Pulled forward out of order to unblock 6.5/6.8, at the client's request.
+
+- [x] **9.1** GitHub repo — already existed (`kirils/mariohossen.com`, set up for the GitHub
+      Pages preview)
+- [x] **9.2** Cloudflare Pages connected — **not** via the dashboard's native "Connect to Git"
+      (the originally documented approach); instead `.github/workflows/deploy-cloudflare-pages.yml`
+      runs `wrangler pages deploy` on every push to `master`, mirroring the existing GitHub Pages
+      workflow. Chosen over the dashboard flow specifically because it avoids one more
+      browser/GitHub-App-authorization round trip and keeps both deploy targets in the same CI
+      mechanism — a genuine deviation from `docs/plan/06-deployment-dns.md`'s original plan,
+      recorded there with full reasoning rather than silently switched
+- [x] **9.3** Verified on `*.pages.dev` — `https://mariohossen-com.pages.dev` serves the exact
+      same 146,486-byte homepage as the local build, all four other pages `200`, unknown paths
+      `404`, and `functions/api/contact.ts` confirmed live (honeypot, validation errors, the no-JS
+      HTML response) against the real deployment
+- [ ] 9.4–9.12 not started — real DNS cutover work, well out of scope for "get a preview live"
+
+**Two real problems hit setting up the GitHub Actions deploy, both worth recording:**
+
+1. `cloudflare/wrangler-action@v3` installs wrangler 3.90.0 by default, whose peer dependency on
+   `@cloudflare/workers-types@^4` conflicts with the `^5` this repo added for
+   `functions/api/contact.ts`'s types — `ERESOLVE` failure on install. Fixed by pinning
+   `wranglerVersion: 4.119.0` in the workflow (same version verified locally).
+2. **Cloudflare's own auto-generated onboarding token** (created automatically at account signup)
+   authenticates fine — `/user/tokens/verify` reports it active — but returns a generic
+   `Authentication error [code: 10000]` on the Pages-projects API specifically, with no indication
+   the problem is the token's origin rather than its permissions. Cost real back-and-forth
+   (including trying both a hand-picked "Cloudflare Pages: Edit" custom token and the "Edit
+   Cloudflare Workers" template, both against the _same_ onboarding token) before isolating it by
+   comparing a working request (this session's own `wrangler login` OAuth session, which uses
+   full account access) against the failing one (the API token) on the _identical_ endpoint. A
+   token created explicitly via **API Tokens → Create Token** worked on the first try. Recorded in
+   `docs/plan/06-deployment-dns.md` with the direct `curl` command that isolates it, so this
+   doesn't need rediscovering.
+
+**A real, if partial, secret-exposure incident happened during this process** — while debugging
+the token failure, an `od -c` byte-inspection command printed roughly the last 16 characters of
+one Cloudflare API token into this conversation's tool output. The token was treated as
+compromised immediately: the client revoked it in the Cloudflare dashboard and issued a fresh one
+before continuing, rather than trying to salvage or reuse it. Every secret set afterward went
+through an unexamined pipe straight into `gh secret set` (`pbpaste | gh secret set ...`), with
+shape checks limited to byte counts (`wc -c`) that can never reveal content — no tool call after
+that point printed, or could have printed, any part of a secret's actual value.
+
 ---
 
 ## ⬜ Upcoming
@@ -330,9 +378,10 @@ Condensed. Full detail in [docs/plan/05-task-list.md](./docs/plan/05-task-list.m
 <summary><b>Phase 6 — Contact form</b> (7/9 done — see the Phase 6 log entry above)</summary>
 
 - [x] 6.1 Pages Function · 6.2 Zod validation · 6.3 Turnstile · 6.4 Honeypot
-- [ ] 6.5 ⚑ Resend + encrypted env var — blocked on a real Cloudflare Pages project
+- [ ] 6.5 ⚑ Resend + encrypted env var — blocked on a real Resend account
 - [x] 6.6 Works without JS · 6.7 `aria-live` states · 6.9 Document Web3Forms fallback
-- [ ] 6.8 ⚑ End-to-end test on a preview deploy — blocked on the same project as 6.5
+- [ ] 6.8 ⚑ Real submission → real inbox — blocked on the same Resend account as 6.5 (the preview
+      itself is live and otherwise verified, see the Phase 9 log entry)
 
 </details>
 
@@ -357,9 +406,11 @@ Condensed. Full detail in [docs/plan/05-task-list.md](./docs/plan/05-task-list.m
 </details>
 
 <details>
-<summary><b>Phase 9 — Deploy & DNS cutover</b> (12 tasks)</summary>
+<summary><b>Phase 9 — Deploy & DNS cutover</b> (3/12 done — see the Phase 9 log entry above)</summary>
 
-- [ ] 9.1 GitHub repo · 9.2 Cloudflare Pages · 9.3 Verify on `.pages.dev` · 9.4 ⚑ Client review
+- [x] 9.1 GitHub repo · 9.2 Cloudflare Pages (via GitHub Actions + wrangler, not the dashboard's
+      git integration) · 9.3 Verify on `.pages.dev`
+- [ ] 9.4 ⚑ Client review
 - [ ] 9.5 ⚠ `_redirects` — nothing from the old sitemap may 404
 - [ ] 9.6 ⚠ Lower DNS TTL to 300 s, 24 h ahead
 - [ ] 9.7 ⚠ **Full WordPress backup, verified openable**
@@ -427,6 +478,22 @@ Full analysis: [docs/plan/08-risks-and-decisions.md](./docs/plan/08-risks-and-de
 ## Log
 
 Newest first.
+
+### 2026-08-05 — Cloudflare Pages project live (Phase 9 pulled forward, 3/12)
+
+- New Cloudflare account, `mariohossen-com` Pages project created via `wrangler`, deployed via a
+  new `.github/workflows/deploy-cloudflare-pages.yml` on every push to `master` — see the Phase 9
+  log entry above for the two real technical snags (a `wrangler-action` version conflict, and a
+  Cloudflare onboarding token that authenticates but can't actually read Pages projects) and the
+  partial-secret-exposure incident during debugging, handled by immediately treating the token as
+  compromised and revoking it, before continuing with a clean one.
+- Live and verified at `https://mariohossen-com.pages.dev` — matches the local build byte-for-byte,
+  and `functions/api/contact.ts` responds correctly to the same test cases proven locally in the
+  Phase 6 work below. Unblocks 6.8 except for the final "real inbox" step, which still needs 6.5.
+- `docs/plan/06-deployment-dns.md` updated to match reality: GitHub Actions + wrangler instead of
+  Cloudflare's native git integration (a deliberate, documented deviation — reasoning inline), and
+  a corrected two-places breakdown for environment variables now that the build happens outside
+  Cloudflare's own build system.
 
 ### 2026-08-05 — Phase 6: contact form (7/9 — 2 blocked on a live Cloudflare project)
 

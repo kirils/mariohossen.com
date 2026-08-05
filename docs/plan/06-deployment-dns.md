@@ -22,34 +22,73 @@ Private, because it contains the client's content and configuration.
 
 ### 2. Cloudflare Pages
 
-Dashboard → **Workers & Pages** → **Create** → **Pages** → **Connect to Git**
+**Actually done this way, not the dashboard's "Connect to Git":** `wrangler pages project create
+mariohossen-com --production-branch master` created the project, and
+`.github/workflows/deploy-cloudflare-pages.yml` (mirroring the existing GitHub Pages workflow)
+builds and runs `wrangler pages deploy dist` on every push to `master`. Cloudflare's dashboard
+build config (build command / output directory / Node version) is irrelevant here — GitHub
+Actions builds the site, wrangler only uploads the finished `dist/` plus the `functions/`
+bundle. Reasoning recorded in `PROGRESS.md`'s Phase 6 log.
 
-| Setting           | Value           |
-| ----------------- | --------------- |
-| Production branch | `main`          |
-| Build command     | `npm run build` |
-| Output directory  | `dist`          |
-| Node version      | `20` (`.nvmrc`) |
+Auth is a Cloudflare API token, **not** the account's own login — `CLOUDFLARE_API_TOKEN` (repo
+secret) + `CLOUDFLARE_ACCOUNT_ID` (repo variable, not secret — it's not sensitive).
+
+> **Two real gotchas hit while setting this up, worth knowing if this ever needs redoing:**
+>
+> 1. `cloudflare/wrangler-action@v3` defaults to installing wrangler 3.90.0, which has a peer
+>    dependency on `@cloudflare/workers-types@^4` — conflicts with the `^5` this repo uses for
+>    `functions/api/contact.ts`'s types (task 6.1) and fails the install with `ERESOLVE`. Fixed by
+>    pinning `wranglerVersion: 4.119.0` in the workflow (matching the version used locally).
+> 2. A **custom API token** returns a generic `Authentication error [code: 10000]` on
+>    `/accounts/{id}/pages/projects` if it's the wrong token — including Cloudflare's own
+>    auto-generated onboarding token from account signup, which looks valid (`/user/tokens/verify`
+>    reports it active) but can't actually read Pages projects. A token created explicitly via
+>    **API Tokens → Create Token → "Edit Cloudflare Workers" template** worked immediately. If
+>    this error reappears, verify with `curl -H "Authorization: Bearer $TOKEN"
+https://api.cloudflare.com/client/v4/accounts/{id}/pages/projects` directly — it isolates the
+>    token from any GitHub Actions/wrangler-action noise.
 
 ### 3. Environment variables
 
-Cloudflare → Pages project → **Settings → Environment variables** (Production **and** Preview):
+Two different places, because the build now happens in GitHub Actions, not Cloudflare's own build
+— see the note in step 2:
 
-| Name                        | Value                        | Encrypted             |
-| --------------------------- | ---------------------------- | --------------------- |
-| `RESEND_API_KEY`            | from resend.com              | **yes**               |
-| `CONTACT_TO_EMAIL`          | client's destination address | no                    |
-| `TURNSTILE_SECRET_KEY`      | from Cloudflare Turnstile    | **yes**               |
-| `PUBLIC_TURNSTILE_SITE_KEY` | from Cloudflare Turnstile    | no (public by design) |
+**Cloudflare dashboard → Pages project → Settings → Environment variables** (read at request time
+by `functions/api/contact.ts`, so dashboard-set values apply regardless of how the deploy got
+there):
+
+| Name                   | Value                        | Encrypted |
+| ---------------------- | ---------------------------- | --------- |
+| `RESEND_API_KEY`       | from resend.com              | **yes**   |
+| `CONTACT_TO_EMAIL`     | client's destination address | no        |
+| `TURNSTILE_SECRET_KEY` | from Cloudflare Turnstile    | **yes**   |
+
+**GitHub repo → Settings → Secrets and variables → Actions** (needed at _build_ time, since
+`PUBLIC_TURNSTILE_SITE_KEY` becomes part of the static HTML via `import.meta.env` —
+Cloudflare-dashboard-only values never reach a build that happens outside Cloudflare):
+
+| Name                        | Value                     | Type                                   |
+| --------------------------- | ------------------------- | -------------------------------------- |
+| `PUBLIC_TURNSTILE_SITE_KEY` | from Cloudflare Turnstile | secret (not sensitive, but consistent) |
+
+Once that secret exists, add `env: { PUBLIC_TURNSTILE_SITE_KEY: ${{ secrets.PUBLIC_TURNSTILE_SITE_KEY }} }`
+to the `npm run build` step in `deploy-cloudflare-pages.yml` — omitted for now since the value
+doesn't exist yet (task 6.5, blocked on a Turnstile account).
 
 > Encrypted values are write-only — you cannot read them back. Store them in a password manager
 > and hand them to the client, or they will be unrecoverable when someone else takes over.
 
 ### 4. Verify on the preview URL
 
-The site is now live at `https://mariohossen-com.pages.dev` with no DNS change.
+The site is live at `https://mariohossen-com.pages.dev` with no DNS change — verified: all pages
+`200`, unknown paths `404`, `functions/api/contact.ts` live (honeypot, validation, and the no-JS
+HTML response path all confirmed against the real deployment, not just `wrangler pages dev`
+locally).
 
-Every push to `main` deploys production; every PR gets its own preview URL.
+Every push to `master` deploys production via the GitHub Actions workflow above; there are no
+automatic PR preview URLs the way Cloudflare's native git integration would give — a real
+trade-off of the GitHub-Actions-driven approach, acceptable since PR-based review isn't part of
+this project's workflow.
 
 **Client review happens here** (task 9.4) — on their phone, on their laptop, every section.
 
