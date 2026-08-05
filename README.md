@@ -7,6 +7,7 @@ maintained through Claude.
 - **Plan and specification:** [`docs/plan/`](./docs/plan/)
 - **Live status:** [`PROGRESS.md`](./PROGRESS.md)
 - **Working rules for Claude:** [`CLAUDE.md`](./CLAUDE.md)
+- **Plain-language guide for the site owner:** [`docs/CLIENT-GUIDE.md`](./docs/CLIENT-GUIDE.md)
 
 ## Requirements
 
@@ -37,6 +38,8 @@ src/
 └── assets/images/  Processed by Astro into responsive AVIF/WebP
 
 docs/plan/          The 9-document specification
+docs/CLIENT-GUIDE.md Plain-language guide for the site owner
+docs/templates/     Copy-paste content templates
 extraction/         Snapshots, screenshots and tooling from the original WordPress site
 assets/originals/   The 59 media files downloaded from the original — archival, read-only
 ```
@@ -52,5 +55,6 @@ assets/originals/   The 59 media files downloaded from the original — archival
 
 ## Deployment
 
-Cloudflare Pages, deployed on push to `main`. Full runbook, including the DNS cutover from
-Hostinger: [`docs/plan/06-deployment-dns.md`](./docs/plan/06-deployment-dns.md).
+Cloudflare Pages, deployed by GitHub Actions (`wrangler`) on push to `master`. Full runbook,
+including the DNS cutover from Hostinger:
+[`docs/plan/06-deployment-dns.md`](./docs/plan/06-deployment-dns.md).

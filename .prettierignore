@@ -9,3 +9,9 @@ extraction/rendered/
 extraction/reference-css/
 extraction/screenshots/
 extraction/data/
+
+# Copy-paste content templates — the frontmatter's exact YAML whitespace is load-bearing.
+# Prettier's markdown formatter doesn't recognise frontmatter preceded by a comment block and
+# reflows the YAML list under `performers:` as if it were a markdown list, breaking it — bit
+# once already (docs/templates/concert.md), not worth risking again.
+docs/templates/

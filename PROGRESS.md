@@ -2,13 +2,13 @@
 
 Live status of the rebuild. **Update this file whenever a task completes.**
 
-|                   |                                                                                                                                                          |
-| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Started**       | 2026-07-28                                                                                                                                               |
-| **Current phase** | Phase 8 — Client tooling & documentation                                                                                                                 |
-| **Overall**       | 72 / 76 tasks (95%) — Phases 0, 2, 3, 4, 5 and 7 done; Phase 6 done bar one client-blocked task; Phase 9 started (3/12)                                  |
-| **Blocked on**    | Task 1.6 (13 client questions) · Task 6.5/6.8 — need a real Resend account (the Cloudflare Pages project itself is live and verified, task 9.2/9.3 done) |
-| **Next action**   | Phase 8 (task 8.1) — client-facing documentation; task 6.5 can slot in whenever a Resend account exists                                                  |
+|                   |                                                                                                                                                                                                             |
+| ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Started**       | 2026-07-28                                                                                                                                                                                                  |
+| **Current phase** | Phase 8 — Client tooling & documentation                                                                                                                                                                    |
+| **Overall**       | 79 / 93 tasks (85%) — see the Phase 8 log entry for why this is 93, not the 76 this row said all session; Phases 0, 2, 3, 4, 5 and 7 done; Phase 6 done bar one client-blocked task; Phase 9 started (3/12) |
+| **Blocked on**    | Task 1.6 (13 client questions) · Task 6.5/6.8 — need a real Resend account (the Cloudflare Pages project itself is live and verified, task 9.2/9.3 done) · Task 8.8 — needs the client, not more agent work |
+| **Next action**   | Task 8.8 — client tries the guide unassisted; task 6.5 can slot in whenever a Resend account exists; otherwise Phase 9 (task 9.4, client review) is next                                                    |
 
 Task definitions and acceptance criteria: [docs/plan/05-task-list.md](./docs/plan/05-task-list.md).
 
@@ -26,7 +26,7 @@ Task definitions and acceptance criteria: [docs/plan/05-task-list.md](./docs/pla
 | 5 — Page sections             | ✅ **complete**    | 11/11 | —      |
 | 6 — Contact form              | ⏳ **in progress** | 7/9   | 0.5 d  |
 | 7 — SEO / a11y / performance  | ✅ **complete**    | 9/9   | 0.75 d |
-| 8 — Client tooling & docs     | ⬜ not started     | 0/8   | 0.5 d  |
+| 8 — Client tooling & docs     | ⏳ **in progress** | 7/8   | 0.5 d  |
 | 9 — Deploy & DNS cutover      | ⏳ **in progress** | 3/12  | 0.5 d  |
 
 ---
@@ -377,6 +377,77 @@ being charged against the 15 KB JS budget. Fixed the regex to exclude it; JS byt
 exactly what they were before task 7.3, confirming it was purely a measurement bug, not a real
 9 KB of new JavaScript.
 
+### Phase 8 — Client tooling & documentation · 2026-08-05
+
+- [x] **8.1** `CLAUDE.md` reviewed, not rewritten — it already covered the content model and
+      conventions well; fixed two things that had actually gone stale (see below) and added
+      pointers to the two new docs this phase produced
+- [x] **8.2** [`docs/CLIENT-GUIDE.md`](./docs/CLIENT-GUIDE.md) — promoted from
+      `docs/plan/07-client-handbook.md`, which turned out to already be a complete, correctly-
+      voiced draft (task 8.2's own note said as much: "the finished version ships as
+      `docs/CLIENT-GUIDE.md`"). Added one section covering the current pre-cutover preview URL so
+      the client isn't confused checking `mariohossen-com.pages.dev` against a guide written as if
+      `www.mariohossen.com` already worked
+- [x] **8.3** [`docs/templates/`](./docs/templates/) — concert / recording / edition, copy-paste
+      ready, every field cross-checked against `content.config.ts` and validated by actually
+      parsing the frontmatter with a YAML parser, not just eyeballing it (worth doing — see below)
+- [x] **8.4** `npm run verify` — already existed (Phase 2)
+- [x] **8.5** `npm run preview` — already existed (Phase 2)
+- [x] **8.6** Deploy-on-push + "how do I know if it failed" — covered in `CLIENT-GUIDE.md`'s
+      "When something goes wrong" section and the `deploy-ops` skill's now-corrected build-failure
+      guidance (see below)
+- [x] **8.7** Rollback — `CLIENT-GUIDE.md`'s "Undoing something" section (`git revert`, one command,
+      never rewrites history) plus the full situational table already in the `deploy-ops` skill
+- [ ] **8.8** ⚑ Live walkthrough — **not something I can complete myself**, see the note at the end
+      of this entry
+
+**A real, fresh bug, caught immediately rather than shipped:** Prettier reformatted
+`docs/templates/concert.md` and broke its YAML — it doesn't recognise frontmatter preceded by an
+HTML comment block, so it reflowed the `performers:` list as if it were a Markdown list, losing
+the indentation that makes it valid YAML. Caught because every template got parsed with a real
+YAML parser after writing it, not just visually reviewed — the corruption was invisible on a
+casual read (still looked like a list) but `yaml.safe_load` failed immediately. Fixed the file and
+added `docs/templates/` to `.prettierignore` so it can't happen again silently.
+
+**Two real staleness bugs in `CLAUDE.md` and `docs/plan/04-content-model.md`, caught while
+reviewing them for task 8.1, not introduced today:**
+
+- `CLAUDE.md`'s "Current state" table still said "site scaffold not yet created" and "there is no
+  `package.json` yet" — true at the very start of the project, wrong since Phase 2. Replaced with
+  a pointer to `PROGRESS.md` instead of a second copy of status that can drift, which is exactly
+  what happened here.
+- The content-facts table said "Concerts: 34" with a note "if a number here stops matching
+  reality, something was lost" — but the real count is 41 now, correctly, because concerts get
+  added over time. The framing itself was the bug: it couldn't distinguish "content was lost" from
+  "content grew as intended." Rewrote it to call out concerts as the one number expected to grow,
+  with a live command to check the real total instead of trusting a hardcoded one.
+- `04-content-model.md`'s concert example showed `venue: null` for an omitted optional field —
+  the schema is `.optional()`, not `.nullable()`, so a literal `null` fails the build. Real
+  concert files simply omit the line; fixed the example and the new templates to match.
+
+**`docs/plan/06-deployment-dns.md`'s successor doc, `.claude/skills/deploy-ops/SKILL.md`, was
+still describing the originally-planned dashboard git integration** (production branch `main`,
+Node 20, Cloudflare "builds and deploys in ~60 seconds") — none of which is how the site is
+actually deployed after the Phase 9 work earlier this session (GitHub Actions + `wrangler`,
+branch `master`, Node 22). Updated to match reality, including the two real gotchas from that
+session (wrangler-action's version conflict, the onboarding-token trap) so a future session
+troubleshooting a deploy doesn't have to rediscover them.
+
+**A stale total surfaced while writing this section up.** This file's header has said "X / 76
+tasks" all session — but `docs/plan/05-task-list.md` actually lists **93** numbered tasks across
+all ten phases; 76 only ever covered the phases that happened to already have their checkboxes
+written up in bold `**N.M**` form here, undercounting Phase 8 (not written up until now) and
+Phase 9's not-yet-started tasks 9.4–9.12 (listed in plain, non-bold form). Every "X / 76" figure
+reported earlier this session was arithmetically correct against the wrong denominator. Corrected
+below to 93; nothing about actual progress changed, only the fraction describing it.
+
+**Task 8.8 needs the client, not more of me.** Its own done-condition is "the client has published
+a change without help" — by definition not something I can complete on my own. The
+guide (`CLIENT-GUIDE.md`) and templates it depends on are ready; whenever you want to try it,
+open a terminal, `cd` into the repo, and try one of the "Things you will actually do" prompts
+verbatim, unassisted, and see whether it actually works the way the guide claims it does. That's
+also the best remaining test of whether the guide itself is any good.
+
 ### Phase 9 (started early) — Cloudflare Pages project · 2026-08-05
 
 Pulled forward out of order to unblock 6.5/6.8, at the client's request.
@@ -441,12 +512,13 @@ Condensed. Full detail in [docs/plan/05-task-list.md](./docs/plan/05-task-list.m
 </details>
 
 <details>
-<summary><b>Phase 8 — Client tooling & documentation</b> (8 tasks)</summary>
+<summary><b>Phase 8 — Client tooling & documentation</b> (7/8 done — see the Phase 8 log entry above)</summary>
 
-- [ ] 8.1 Repo `CLAUDE.md` for the content model · 8.2 `docs/CLIENT-GUIDE.md` (plain language)
-- [ ] 8.3 Content templates · 8.4 `npm run verify` · 8.5 `npm run preview`
-- [ ] 8.6 Deploy-on-push docs · 8.7 Rollback guide
-- [ ] 8.8 ⚑ **Live walkthrough — client publishes a real change themselves**
+- [x] 8.1 Repo `CLAUDE.md` for the content model · 8.2 `docs/CLIENT-GUIDE.md` (plain language)
+- [x] 8.3 Content templates · 8.4 `npm run verify` · 8.5 `npm run preview`
+- [x] 8.6 Deploy-on-push docs · 8.7 Rollback guide
+- [ ] 8.8 ⚑ **Live walkthrough — client publishes a real change themselves** — needs you, not me;
+      see the note at the end of the Phase 8 log entry
 
 </details>
 
@@ -523,6 +595,20 @@ Full analysis: [docs/plan/08-risks-and-decisions.md](./docs/plan/08-risks-and-de
 ## Log
 
 Newest first.
+
+### 2026-08-05 — Phase 8: client tooling & documentation (7/8)
+
+- `docs/CLIENT-GUIDE.md` and `docs/templates/` written — see the Phase 8 log entry above for the
+  full breakdown, including a real Prettier-corrupts-YAML bug caught before it shipped, two real
+  staleness bugs found in `CLAUDE.md` and `04-content-model.md` while reviewing them, and the
+  `deploy-ops` skill's deploy instructions being rewritten to match how the site is actually
+  deployed rather than the original dashboard-git-integration plan.
+- **Corrected this file's own task-total denominator**: 76 → 93. It was arithmetically consistent
+  all session, just against a total that undercounted Phase 8 and part of Phase 9. Nothing about
+  actual progress changed.
+- **8.8 (live walkthrough) is the one task in this phase that isn't mine to finish** — its
+  done-condition is literally "the client published a change without help." Everything it depends
+  on is ready.
 
 ### 2026-08-05 — Phase 7 complete: SEO, accessibility, performance (9/9)
 

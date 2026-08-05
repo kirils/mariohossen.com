@@ -21,27 +21,26 @@ impossible_ rather than toward developer convenience.
 
 ## Current state
 
-|                                     |                                  |
-| ----------------------------------- | -------------------------------- |
-| Phase 0 — discovery & asset capture | ✅ complete                      |
-| Phases 1–9 — implementation         | see [PROGRESS.md](./PROGRESS.md) |
-| Site scaffold                       | not yet created                  |
-
-There is no `package.json` yet. The repo currently holds the plan, the extracted source
-material, and the 59 downloaded media originals.
+See [PROGRESS.md](./PROGRESS.md) — it's updated every session and is the only place phase/task
+completion is tracked. Do not duplicate that status here; a second copy is a second thing to
+forget to update; this file has already shipped a stale "site scaffold not yet created" claim
+once, long after Phase 2 built one.
 
 ## Repository layout
 
 ```
 docs/plan/            The specification. 9 documents. Authoritative.
+docs/CLIENT-GUIDE.md  Plain-language guide, written for the client, not for Claude.
+docs/templates/       Copy-paste content templates (concert / recording / edition).
 PROGRESS.md           Live status. Update it as work completes.
 assets/originals/     59 media files from the WordPress site (6.3 MB). Archival — never edit.
 extraction/           Rendered HTML, screenshots, design tokens, the crawler.
 .claude/skills/       Project skills — see below.
 
-src/                  (Phase 2 onward) the Astro site
+src/                  The Astro site
 ├── content/          Markdown/JSON content — what the client edits
 ├── content.config.ts Zod schemas — the guardrail
+├── lib/schema.ts      JSON-LD builders (Person / Event / MusicAlbum)
 ├── components/
 ├── layouts/
 ├── pages/
@@ -110,19 +109,22 @@ npm run preview    # preview the production build
 npm run verify     # astro check + build — run before every commit
 ```
 
-_(Available from Phase 2 onward.)_
-
 ## Content facts
 
-Counts verified during discovery. If a number here stops matching reality, something was lost:
+Counts verified during discovery, from the original WordPress site. Recordings, gallery photos,
+editions and repertoire categories are a fixed migrated set — if one of those four stops matching
+reality, something was lost, so treat a mismatch as a bug. **Concerts are the one number expected
+to grow** as new ones get added (34 at discovery, more since) — a higher count there is normal,
+not a red flag; run `ls src/content/concerts/*.md | wc -l` for the real current total rather than
+trusting a number in this file.
 
-| Collection            | Items |
-| --------------------- | ----- |
-| Concerts              | 34    |
-| Recordings            | 21    |
-| Gallery photos        | 12    |
-| Editions              | 4     |
-| Repertoire categories | 6     |
+| Collection            | Items at discovery   |
+| --------------------- | -------------------- |
+| Concerts              | 34 (grows over time) |
+| Recordings            | 21                   |
+| Gallery photos        | 12                   |
+| Editions              | 4                    |
+| Repertoire categories | 6                    |
 
 Media originals: **59 files**.
 

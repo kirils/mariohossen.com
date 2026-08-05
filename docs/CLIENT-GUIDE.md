@@ -1,18 +1,20 @@
-# 07 — Client Handbook (source)
+# Your website — a plain-language guide
 
-> This was the **specification** for the guide the client receives. Task 8.2 promoted it to
-> [`../CLIENT-GUIDE.md`](../CLIENT-GUIDE.md), which is the one to keep updated and the one to
-> actually hand the client — this file stays only as the historical spec/rationale. If the two
-> ever disagree, `CLIENT-GUIDE.md` is correct.
-
----
+> Everything below is written for you, not for a developer. If a word needs a developer instead,
+> that's called out explicitly in [What needs a developer](#what-needs-a-developer).
 
 ## Your website, in one paragraph
 
 Your website is now a set of simple text files. When you want to change something, you tell
 Claude in plain English — "add a concert in Vienna on 12 September" — and Claude makes the
-change and publishes it. About a minute later it is live. There is no login to remember, no
+change and publishes it. A couple of minutes later it is live. There is no login to remember, no
 plugins to update, and nothing that can be hacked.
+
+**While we're still testing, before the real domain is switched over:** the site previews at
+`https://mariohossen-com.pages.dev` — that's a temporary address Cloudflare gives every project.
+Once the domain cutover happens (task 9.8 in the plan), the exact same site starts appearing at
+`www.mariohossen.com` instead, and the preview address stops mattering. Nothing about how you
+make changes is different before or after that switch.
 
 ---
 
@@ -103,8 +105,9 @@ you are happy:
 
 > Undo the last change.
 
-Every version of the site is kept forever. You can go back to how it was last Tuesday, or last
-year. Nothing is ever really lost.
+Every version of the site is kept forever, and undoing never rewrites or hides that history — it
+adds one more entry that puts things back the way they were. You can go back to how it was last
+Tuesday, or last year. Nothing is ever really lost.
 
 ---
 
@@ -115,11 +118,14 @@ Good — that is the safety net doing its job. Your live site is untouched. Show
 and say "fix this".
 
 **"I published but the site looks the same."**
-Wait a minute and refresh with `Cmd+Shift+R`. Publishing takes about 60 seconds.
+Wait a couple of minutes and refresh with `Cmd+Shift+R`. Publishing isn't instant — GitHub has to
+build the site and Cloudflare has to deploy it.
 
 **"I am not sure whether it worked."**
 
 > Is the site up to date with my latest change?
+
+Claude can check the build status directly and tell you.
 
 ---
 
@@ -129,7 +135,7 @@ Ask your developer for:
 
 - Changing the **design** — colours, fonts, layout
 - Adding a **new kind of section** (e.g. a press area, a video page)
-- Anything involving the **domain name**, email, or the contact form
+- Anything involving the **domain name**, email, or the contact form's email delivery
 - Adding **YouTube or Spotify players** — these have privacy rules and must be set up correctly
 
 Everything on the "things you will actually do" list above is yours.
@@ -153,6 +159,15 @@ naively it re-introduces tracking and would put the cookie banner back.
 **€0 per month.** Hosting, security certificate, worldwide delivery and the contact form are all
 on free plans that this site will not come close to outgrowing. The only bill is your domain name
 renewal, which you already pay.
+
+---
+
+## If you'd rather edit a file yourself
+
+You never have to — everything above works by just talking to Claude. But if you ever want to see
+what a concert, recording or edition actually looks like as a file, or add one by hand,
+ready-to-copy examples are in [`docs/templates/`](./templates/) — one for each of the three kinds
+of item you'll add most often.
 
 ---
 

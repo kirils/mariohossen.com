@@ -16,25 +16,53 @@ lowered first.
 
 ## Part 1 — Deploy (zero risk)
 
-### Pages project settings
+### How it's actually deployed — not the dashboard's "Connect to Git"
 
-| Setting           | Value               |
-| ----------------- | ------------------- |
-| Production branch | `main`              |
-| Build command     | `npm run build`     |
-| Output directory  | `dist`              |
-| Node version      | `20` (via `.nvmrc`) |
+The Pages project `mariohossen-com` is deployed by
+`.github/workflows/deploy-cloudflare-pages.yml`: GitHub Actions builds the site (`npm ci && npm
+run build`) and runs `wrangler pages deploy dist` on every push to **`master`**, authenticated
+with a scoped `CLOUDFLARE_API_TOKEN` repo secret + `CLOUDFLARE_ACCOUNT_ID` repo variable — **not**
+Cloudflare's own git integration. Cloudflare's dashboard build settings (build command / output
+directory / Node version) are irrelevant as a result; GitHub Actions reads `.nvmrc` (22) via
+`actions/setup-node`. Full reasoning: `PROGRESS.md`'s Phase 6/9 log entries.
 
-### Environment variables
+Practical difference from the plan below: no automatic PR preview URLs (a native-git-integration
+feature this setup doesn't have), and "check the Pages dashboard for a failed build" means
+checking the **GitHub Actions** run instead — Cloudflare only ever sees a finished `dist/`, it
+never runs the build itself.
 
-Set in **Settings → Environment variables**, for **both** Production and Preview:
+Two real gotchas if this workflow ever needs rebuilding from scratch — both cost real time once
+already, both documented with the exact fix in
+[docs/plan/06-deployment-dns.md § Cloudflare Pages](../../../docs/plan/06-deployment-dns.md):
+`cloudflare/wrangler-action`'s default wrangler version conflicts with this repo's
+`@cloudflare/workers-types`, and Cloudflare's auto-generated onboarding token silently can't read
+Pages projects (looks valid, isn't) — a token from **API Tokens → Create Token** works.
 
-| Name                        | Encrypted             |
-| --------------------------- | --------------------- |
-| `RESEND_API_KEY`            | **yes**               |
-| `TURNSTILE_SECRET_KEY`      | **yes**               |
-| `CONTACT_TO_EMAIL`          | no                    |
-| `PUBLIC_TURNSTILE_SITE_KEY` | no — public by design |
+### Environment variables — two different places now
+
+Because GitHub Actions builds the site (not Cloudflare), a variable needed at _build_ time and one
+needed at _request_ time no longer live in the same place.
+
+**Cloudflare dashboard → Pages project → Settings → Environment variables** — read at request
+time by `functions/api/contact.ts`, so it doesn't matter that Cloudflare didn't build the site:
+
+| Name                   | Encrypted |
+| ---------------------- | --------- |
+| `RESEND_API_KEY`       | **yes**   |
+| `TURNSTILE_SECRET_KEY` | **yes**   |
+| `CONTACT_TO_EMAIL`     | no        |
+
+**GitHub repo → Settings → Secrets and variables → Actions** — needed at _build_ time, since
+`PUBLIC_TURNSTILE_SITE_KEY` becomes part of the static HTML via `import.meta.env`:
+
+| Name                        | Type                                    |
+| --------------------------- | --------------------------------------- |
+| `PUBLIC_TURNSTILE_SITE_KEY` | secret (not sensitive, kept consistent) |
+| `CLOUDFLARE_API_TOKEN`      | secret — scoped, see the gotcha above   |
+| `CLOUDFLARE_ACCOUNT_ID`     | variable — not sensitive                |
+
+Once `PUBLIC_TURNSTILE_SITE_KEY` exists, it also needs adding to the `npm run build` step's `env:`
+in `deploy-cloudflare-pages.yml` — omitted today since the value doesn't exist yet (task 6.5).
 
 Rules:
 
@@ -136,15 +164,19 @@ git add -A && git commit -m "content: add Vienna concert 12 September 2026"
 git push
 ```
 
-Cloudflare builds and deploys in ~60 seconds. Every PR gets its own preview URL.
+GitHub Actions builds and `wrangler` deploys — a couple of minutes end to end. No automatic PR
+preview URLs (see the note under Environment variables above); `gh run watch` or the Actions tab
+shows progress.
 
 ## When a build fails
 
-**The live site is untouched** — Cloudflare only swaps in successful builds. There is no partial
-or broken state to clean up.
+**The live site is untouched** — `npm run build` failing in GitHub Actions means the workflow
+never reaches the `wrangler pages deploy` step at all. There is no partial or broken state to
+clean up.
 
-Read the error in the Pages dashboard or the GitHub Actions check; it names the file and field.
-Most failures are content-schema violations — fix the content, never the schema. See the
+Read the error in the GitHub Actions run (`gh run view <id> --log-failed`, or the Actions tab); it
+names the file and field. Most failures are content-schema violations — fix the content, never
+the schema. See the
 `content-editing` skill.
 
 ## Monitoring

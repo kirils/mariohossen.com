@@ -41,7 +41,9 @@ date: 2026-05-22
 endDate: 2026-05-29 # optional — only for multi-day runs
 city: 'Beijing · Shanghai · Shenzhen · Tianjin · Jinan'
 country: 'CN'
-venue: null # optional — 6 of 34 concerts state no venue
+# venue omitted — optional; 6 of 34 concerts state no venue. Leave the line out entirely
+# rather than writing `venue: null` or `venue: ''` — the schema is `.optional()`, not
+# `.nullable()`, so an explicit null fails the build.
 series: 'China Tour' # the festival, tour or concert series
 ensemble: 'Paganini Ensemble Vienna' # the performing group
 performers:
