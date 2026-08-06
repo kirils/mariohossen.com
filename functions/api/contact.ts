@@ -172,7 +172,11 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     await sendViaResend(env, fields)
   } catch (err) {
     console.error('contact function: Resend send failed', err)
-    return respond(request, false, 'Could not send your message — please try again shortly.', 502)
+    // Not 502/503/504: Cloudflare's edge treats those specifically as "origin unreachable" and
+    // replaces the response with its own generic error page, discarding ours — silently turning
+    // a helpful message into a raw platform error. 500 passes through untouched. Found live,
+    // in production, after a genuine Resend rejection triggered exactly this.
+    return respond(request, false, 'Could not send your message — please try again shortly.', 500)
   }
 
   return respond(request, true, 'Thanks for reaching out — I will get back to you soon.', 200)
