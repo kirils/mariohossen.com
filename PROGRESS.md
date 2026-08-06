@@ -2,13 +2,13 @@
 
 Live status of the rebuild. **Update this file whenever a task completes.**
 
-|                   |                                                                                                                                                                             |
-| ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Started**       | 2026-07-28                                                                                                                                                                  |
-| **Current phase** | Phase 9 — Deploy & DNS cutover (**the domain is live on Cloudflare now** — see the cutover log entry below)                                                                 |
-| **Overall**       | 85 / 93 tasks (91%) — see the Phase 8 log entry for the 76→93 denominator correction; Phases 0, 2, 3, 4, 5, 6 and 7 done; Phase 9 at 7/12 (two more partially done)         |
-| **Blocked on**    | Task 1.6 (13 client questions) · Task 8.8 (needs the client) · confirming a real email arrived at `maestrohossen@gmail.com` · the apex→www redirect rule (9.9, interrupted) |
-| **Next action**   | Confirm the test email arrived; add the apex→`www` Redirect Rule; re-run the GitHub Actions deploy once its current outage clears (site itself is fine, deployed directly)  |
+|                   |                                                                                                                                                                                    |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Started**       | 2026-07-28                                                                                                                                                                         |
+| **Current phase** | Phase 9 — Deploy & DNS cutover (**the domain is live on Cloudflare now** — see the cutover log entry below)                                                                        |
+| **Overall**       | 86 / 93 tasks (92%) — see the Phase 8 log entry for the 76→93 denominator correction; Phases 0, 2, 3, 4, 5, 6 and 7 done; Phase 9 at 8/12 (one more partially done)                |
+| **Blocked on**    | Task 1.6 (13 client questions) · Task 8.8 (needs the client) · the apex→www redirect rule (9.9, interrupted)                                                                       |
+| **Next action**   | Add the apex→`www` Redirect Rule; re-run the GitHub Actions deploy once its current external outage clears (site itself is fine, deployed directly via `wrangler` in the meantime) |
 
 Task definitions and acceptance criteria: [docs/plan/05-task-list.md](./docs/plan/05-task-list.md).
 
@@ -27,7 +27,7 @@ Task definitions and acceptance criteria: [docs/plan/05-task-list.md](./docs/pla
 | 6 — Contact form              | ✅ **complete**    | 9/9   | 0.5 d  |
 | 7 — SEO / a11y / performance  | ✅ **complete**    | 9/9   | 0.75 d |
 | 8 — Client tooling & docs     | ⏳ **in progress** | 7/8   | 0.5 d  |
-| 9 — Deploy & DNS cutover      | ⏳ **in progress** | 7/12  | 0.5 d  |
+| 9 — Deploy & DNS cutover      | ⏳ **in progress** | 8/12  | 0.5 d  |
 
 ---
 
@@ -500,10 +500,10 @@ Pulled forward out of order to unblock 6.5/6.8, at the client's request.
   Nov 2026). Canonical host (apex → `www` redirect, per decision D10) — **still open**, needs
   a Cloudflare Redirect Rule; got interrupted by the contact-form incident below before this
   was finished
-- [~] **9.10** Post-cutover checks — pages all `200`, `_redirects` verified live, email DNS
-  (MX/SPF/DKIM/DMARC) all confirmed intact and now properly verified with Resend. **The "real
-  email test" itself needs final client confirmation** — Resend accepted the send (`ok:true`)
-  but inbox receipt at `maestrohossen@gmail.com` wasn't confirmed before this session paused
+- [x] **9.10** Post-cutover checks — pages all `200`, `_redirects` verified live, email DNS
+      (MX/SPF/DKIM/DMARC) all confirmed intact and properly verified with Resend, **and the client
+      confirmed the real test email actually arrived** at `maestrohossen@gmail.com` — the whole chain
+      proven end to end, not just `{"ok":true}` trusted at face value
 - [ ] 9.11–9.12 not started
 
 **Two real problems hit setting up the GitHub Actions deploy, both worth recording:**
@@ -551,7 +551,7 @@ Condensed. Full detail in [docs/plan/05-task-list.md](./docs/plan/05-task-list.m
 </details>
 
 <details>
-<summary><b>Phase 9 — Deploy & DNS cutover</b> (7/12 done, 2 more partial — see the cutover log entry above)</summary>
+<summary><b>Phase 9 — Deploy & DNS cutover</b> (8/12 done, 1 more partial — see the cutover log entry above)</summary>
 
 - [x] 9.1 GitHub repo · 9.2 Cloudflare Pages (via GitHub Actions + wrangler, not the dashboard's
       git integration) · 9.3 Verify on `.pages.dev`
@@ -562,8 +562,8 @@ Condensed. Full detail in [docs/plan/05-task-list.md](./docs/plan/05-task-list.m
 - [x] 9.7 ⚠ **Full WordPress backup** — confirmed, verified by client
 - [x] 9.8 Move DNS — done, live on Cloudflare nameservers
 - [~] 9.9 SSL done; canonical apex→`www` redirect still open
-- [~] 9.10 Post-cutover checks — pages/redirects/email-DNS all confirmed; real email receipt
-  needs final client confirmation
+- [x] 9.10 Post-cutover checks — pages/redirects/email-DNS confirmed, **and the client confirmed
+      the real test email arrived**
 - [ ] 9.11 Search Console · 9.12 Cancel Hostinger after 30 days
 
 </details>
@@ -627,6 +627,24 @@ Full analysis: [docs/plan/08-risks-and-decisions.md](./docs/plan/08-risks-and-de
 ## Log
 
 Newest first.
+
+### 2026-08-06 — 9.10 closed out; real favicon found and shipped
+
+- **Client confirmed the test email arrived** at `maestrohossen@gmail.com` — task 9.10 is now
+  fully done, not just `{"ok":true}` trusted at face value.
+- **The favicon was never actually the original's.** Phase 3 placed a generic SVG mark as a
+  stand-in and it was never revisited. The real one — a photograph of the scroll of Mario
+  Hossen's own violin — was archived the entire time at
+  `assets/originals/2020/07/favicon_MH_violine.png`, found by checking the crawled HTML's actual
+  `<link rel="icon">` tags rather than assuming the placeholder was deliberate. Copied out of the
+  read-only archive, run through Astro's image pipeline into properly-sized PNGs (32×32, 192×192,
+  180×180 apple-touch-icon — not the original's own inaccurate `sizes="192x192"` on a 300×300
+  file), and `favicon.ico` regenerated from the same source via Pillow.
+- GitHub's outage was still ongoing at deploy time; used `wrangler pages deploy` directly again.
+  Saw genuine Cloudflare edge propagation lag afterward (favicon links inconsistently old/new
+  across consecutive requests to the live domain for about a minute) — confirmed this was
+  propagation, not a bad deploy, by checking the deployment's own URL and the `.pages.dev`
+  production alias directly, both correct immediately.
 
 ### 2026-08-06 — DNS cutover: the domain is live on Cloudflare (9.8 done, 9.9/9.10 partial)
 
