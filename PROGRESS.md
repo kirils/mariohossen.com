@@ -2,13 +2,13 @@
 
 Live status of the rebuild. **Update this file whenever a task completes.**
 
-|                   |                                                                                                                                                                                    |
-| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Started**       | 2026-07-28                                                                                                                                                                         |
-| **Current phase** | Phase 8 — Client tooling & documentation (Phase 6 now fully complete)                                                                                                              |
-| **Overall**       | 83 / 93 tasks (89%) — see the Phase 8 log entry for the 76→93 denominator correction; Phases 0, 2, 3, 4, 5, 6 and 7 done; Phase 9 at 5/12                                          |
-| **Blocked on**    | Task 1.6 (13 client questions) · Task 8.8 (needs the client) · Task 9.6/9.7 (need Hostinger access the agent doesn't have)                                                         |
-| **Next action**   | 9.6 (lower DNS TTL — needs you at Hostinger) and 9.7 (verified WordPress backup) come before the actual cutover can start; task 8.8 and the open questions are also ready whenever |
+|                   |                                                                                                                                                                             |
+| ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Started**       | 2026-07-28                                                                                                                                                                  |
+| **Current phase** | Phase 9 — Deploy & DNS cutover (**the domain is live on Cloudflare now** — see the cutover log entry below)                                                                 |
+| **Overall**       | 85 / 93 tasks (91%) — see the Phase 8 log entry for the 76→93 denominator correction; Phases 0, 2, 3, 4, 5, 6 and 7 done; Phase 9 at 7/12 (two more partially done)         |
+| **Blocked on**    | Task 1.6 (13 client questions) · Task 8.8 (needs the client) · confirming a real email arrived at `maestrohossen@gmail.com` · the apex→www redirect rule (9.9, interrupted) |
+| **Next action**   | Confirm the test email arrived; add the apex→`www` Redirect Rule; re-run the GitHub Actions deploy once its current outage clears (site itself is fine, deployed directly)  |
 
 Task definitions and acceptance criteria: [docs/plan/05-task-list.md](./docs/plan/05-task-list.md).
 
@@ -27,7 +27,7 @@ Task definitions and acceptance criteria: [docs/plan/05-task-list.md](./docs/pla
 | 6 — Contact form              | ✅ **complete**    | 9/9   | 0.5 d  |
 | 7 — SEO / a11y / performance  | ✅ **complete**    | 9/9   | 0.75 d |
 | 8 — Client tooling & docs     | ⏳ **in progress** | 7/8   | 0.5 d  |
-| 9 — Deploy & DNS cutover      | ⏳ **in progress** | 5/12  | 0.5 d  |
+| 9 — Deploy & DNS cutover      | ⏳ **in progress** | 7/12  | 0.5 d  |
 
 ---
 
@@ -488,8 +488,23 @@ Pulled forward out of order to unblock 6.5/6.8, at the client's request.
       `wrangler pages dev` server, not just read for correctness: every redirect fires with the
       right target, real pages (`/contact/`, `/imprint/`) still resolve normally, and a genuinely
       unknown path still correctly 404s.
-- [ ] 9.6–9.12 not started — needs Hostinger access (9.6 TTL, 9.7 backup) the agent doesn't have,
-      then the actual DNS cutover, which needs explicit go-ahead given how hard it is to reverse
+- [ ] **9.6** ⚠ Lower DNS TTL 24h ahead — **never actually done**; no Hostinger access materialised
+      (see the cutover log entry below for the full story). Proceeded anyway once TTLs were
+      confirmed already reasonably low (60s–6h, not the days a stale zone could have) — a real,
+      knowing deviation from the ideal runbook, not an oversight
+- [x] **9.7** ⚠ Full WordPress backup — confirmed done and verified by the client
+- [x] **9.8** Move DNS — done. Registrar (GoDaddy) → nameservers now Cloudflare's; DNS hosting
+      moved from Hostinger. Full story, including a wrong assumption caught and corrected before
+      acting on it, in the cutover log entry below
+- [~] **9.9** SSL — done, valid cert confirmed (`openssl s_client`, Google Trust Services, through
+  Nov 2026). Canonical host (apex → `www` redirect, per decision D10) — **still open**, needs
+  a Cloudflare Redirect Rule; got interrupted by the contact-form incident below before this
+  was finished
+- [~] **9.10** Post-cutover checks — pages all `200`, `_redirects` verified live, email DNS
+  (MX/SPF/DKIM/DMARC) all confirmed intact and now properly verified with Resend. **The "real
+  email test" itself needs final client confirmation** — Resend accepted the send (`ok:true`)
+  but inbox receipt at `maestrohossen@gmail.com` wasn't confirmed before this session paused
+- [ ] 9.11–9.12 not started
 
 **Two real problems hit setting up the GitHub Actions deploy, both worth recording:**
 
@@ -536,15 +551,19 @@ Condensed. Full detail in [docs/plan/05-task-list.md](./docs/plan/05-task-list.m
 </details>
 
 <details>
-<summary><b>Phase 9 — Deploy & DNS cutover</b> (5/12 done — see the Phase 9 log entry above)</summary>
+<summary><b>Phase 9 — Deploy & DNS cutover</b> (7/12 done, 2 more partial — see the cutover log entry above)</summary>
 
 - [x] 9.1 GitHub repo · 9.2 Cloudflare Pages (via GitHub Actions + wrangler, not the dashboard's
       git integration) · 9.3 Verify on `.pages.dev`
 - [x] 9.4 ⚑ Client review — done, no issues
 - [x] 9.5 ⚠ `_redirects` — done, verified against a real server, every old sitemap URL covered
-- [ ] 9.6 ⚠ Lower DNS TTL to 300 s, 24 h ahead
-- [ ] 9.7 ⚠ **Full WordPress backup, verified openable**
-- [ ] 9.8 Move DNS · 9.9 SSL + canonical host · 9.10 Post-cutover checks (**including a real email test**)
+- [ ] 9.6 ⚠ Lower DNS TTL 24h ahead — never done, no Hostinger access; proceeded anyway once
+      already-low TTLs were confirmed (see the cutover log entry)
+- [x] 9.7 ⚠ **Full WordPress backup** — confirmed, verified by client
+- [x] 9.8 Move DNS — done, live on Cloudflare nameservers
+- [~] 9.9 SSL done; canonical apex→`www` redirect still open
+- [~] 9.10 Post-cutover checks — pages/redirects/email-DNS all confirmed; real email receipt
+  needs final client confirmation
 - [ ] 9.11 Search Console · 9.12 Cancel Hostinger after 30 days
 
 </details>
@@ -555,15 +574,15 @@ Condensed. Full detail in [docs/plan/05-task-list.md](./docs/plan/05-task-list.m
 
 Blocking parts of Phase 1 and Phase 6. Chase these early — they have lead time.
 
-| #     | Question                                                                                                                                                                                                             | Blocks |
-| ----- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| ~~1~~ | ~~Which email address should contact-form enquiries go to?~~ ✅ confirmed `mariohossen@gmail.com` — live today as `kiril.stoilov@gmail.com` instead, temporarily, per the Phase 6 note; switches over at DNS cutover | 6.5    |
-| 2     | Higher-resolution album covers? Several are only ~300 px wide.                                                                                                                                                       | 1.6    |
-| 3     | Photographer credits for the 12 gallery portraits? (~~alt text~~ done — all 12 written directly from viewing the photos, task 4.6)                                                                                   | 4.6    |
-| 4     | Existing Google Search Console access to hand over?                                                                                                                                                                  | 9.11   |
-| 5     | Analytics wanted at all? (Cloudflare Web Analytics is free + cookieless)                                                                                                                                             | 7.x    |
-| 6     | Repertoire lists — still accurate? Worth reviewing while we are in there.                                                                                                                                            | 1.5    |
-| 7     | **Does email run through this domain?** Determines DNS-move care. Assume yes until confirmed.                                                                                                                        | 9.8    |
+| #     | Question                                                                                                                                                                                                                                                                                                                     | Blocks |
+| ----- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| ~~1~~ | ~~Which email address should contact-form enquiries go to?~~ ✅ `maestrohossen@gmail.com` — confirmed by the client mid-cutover, correcting an earlier `mariohossen@gmail.com` guess. Live today as the real `CONTACT_TO_EMAIL`; `site/settings.json`'s `contactEmail` placeholder still needs updating to match (follow-up) | 6.5    |
+| 2     | Higher-resolution album covers? Several are only ~300 px wide.                                                                                                                                                                                                                                                               | 1.6    |
+| 3     | Photographer credits for the 12 gallery portraits? (~~alt text~~ done — all 12 written directly from viewing the photos, task 4.6)                                                                                                                                                                                           | 4.6    |
+| 4     | Existing Google Search Console access to hand over?                                                                                                                                                                                                                                                                          | 9.11   |
+| 5     | Analytics wanted at all? (Cloudflare Web Analytics is free + cookieless)                                                                                                                                                                                                                                                     | 7.x    |
+| 6     | Repertoire lists — still accurate? Worth reviewing while we are in there.                                                                                                                                                                                                                                                    | 1.5    |
+| ~~7~~ | ~~**Does email run through this domain?**~~ ✅ confirmed yes — MX/SPF verified live at Hostinger both before and after the DNS cutover, unaffected throughout                                                                                                                                                                | 9.8    |
 
 Raised by the decisions pass on 2026-07-28 — each is recorded against its card in
 [`decisions.json`](./extraction/data/content/decisions.json):
@@ -608,6 +627,100 @@ Full analysis: [docs/plan/08-risks-and-decisions.md](./docs/plan/08-risks-and-de
 ## Log
 
 Newest first.
+
+### 2026-08-06 — DNS cutover: the domain is live on Cloudflare (9.8 done, 9.9/9.10 partial)
+
+The real thing. `mariohossen.com` and `www.mariohossen.com` now serve this site, not WordPress.
+Several real problems surfaced doing this live rather than in a rehearsal — recorded in full
+because every one of them would burn time again if rediscovered.
+
+**Prerequisites weren't fully met, and that was a knowing choice, not an oversight.** The client
+didn't have Hostinger access, so task 9.6 (lower TTL 24h ahead) never happened. Checked actual
+TTLs first rather than proceeding blind: A record 60s, MX ~3.8h, SPF 4h, NS 6h — already far
+below the "up to 4 hours" worst case the runbook warned about for an untouched zone, so the
+residual risk (up to ~6h to fully roll back, instead of 5 minutes) was small enough to proceed
+with, with the client's explicit go-ahead at each step.
+
+**A wrong assumption caught before acting on it.** The domain's nameservers
+(`ns1/ns2.dns-parking.com`) looked like a GoDaddy default at first glance — they're actually
+Hostinger's own DNS hosting brand (confirmed via `whois`: registered to "HOSTINGER operations,
+UAB"). GoDaddy's own dashboard said as much ("DNS Provider: Hostinger") when the client relayed
+it, which is what triggered double-checking instead of trusting the first guess. Domain
+_registration_ had moved to GoDaddy; DNS _hosting_ was still fully at Hostinger throughout.
+
+**The cutover itself:** client changed nameservers at GoDaddy to Cloudflare's. Verified
+immediately, not assumed — `dig` confirmed the switch took effect, and critically, **MX and SPF
+came through the Cloudflare import correctly**, so email kept working through the entire process
+without ever going down.
+
+**Adding the domain as a Cloudflare Pages custom domain needed a manual DNS fix.** Cloudflare's
+own zone import kept the _existing_ Hostinger-pointing A/AAAA records (proxied), which is exactly
+why nothing broke immediately — the site visitors saw was still WordPress, just now proxied
+through Cloudflare. But it also meant the Pages custom domain couldn't auto-configure itself:
+`"error_message": "CNAME record not set"`. Fixed by deleting the four old apex A/AAAA records and
+replacing them with a CNAME to `mariohossen-com.pages.dev` (apex CNAME flattening), and
+retargeting the existing `www` CNAME the same way. Needed a fourth scoped API token this session
+(Zone → DNS → Edit) — same clipboard-only discipline as every other token today, value never
+printed. Within a couple of minutes both domains were verified, SSL issued (Google Trust
+Services, valid through Nov 2026), and confirmed serving the real Astro site (177,242 bytes,
+`astro-island` markers present, no `x-powered-by: PHP` — the WordPress tell).
+
+**A real production bug, found live: `multipart/form-data` POST bodies 502 through the full
+proxied zone.** `ContactForm.astro`'s fetch-based submit sends a `FormData` body (multipart) —
+worked perfectly through `mariohossen-com.pages.dev` the whole time, but 502'd immediately once
+real visitors hit it through the actual domain, with **the Function never even invoked**
+(confirmed via `wrangler pages deployment tail` showing zero log lines for the failing requests —
+this is Cloudflare's edge rejecting the request before it reaches the Worker, not a code bug).
+Plain `application/x-www-form-urlencoded` POSTs worked fine through the identical path. Fixed by
+switching `ContactForm.astro`'s fetch call from `FormData` to `URLSearchParams` — the Function's
+`request.formData()` parses either identically, and the form has no file input, so nothing is
+lost. Sidesteps whatever zone-level setting causes this rather than depending on it.
+
+**A second real bug, found immediately after fixing the first: Cloudflare swallows the Function's
+own 502 responses.** Once a genuine Resend rejection occurred (see below), `contact.ts`'s own
+catch block correctly returned a styled `502` — and Cloudflare's edge, which treats _any_
+502/503/504 from the origin as "gateway down" regardless of whether the origin is healthy and
+chose that status deliberately, replaced it with its own generic "Error 502: Bad gateway" page,
+discarding the real message entirely. Fixed by using `500` instead — passes through untouched.
+Both this and the multipart bug were invisible during every earlier local/`.pages.dev` test this
+project ever ran, because neither reproduces without the full proxied zone in front of it — a
+real argument for testing against the actual production domain before calling deployment done,
+not just the preview URL.
+
+**Resend domain verification, done properly, with a duplicate-record bug caught along the way.**
+`CONTACT_TO_EMAIL` had been `mariohossen@gmail.com` since Phase 6 (Resend sandbox mode), which
+fails without a verified sending domain. Client verified `mariohossen.com` in Resend's dashboard;
+Resend returned the exact DKIM/SPF/DMARC records needed, added directly to Cloudflare DNS via the
+same scoped token. Two of those record names already had pre-existing, **malformed** entries
+(literal `"` characters baked into the TXT content, not just display quoting) — leftovers from an
+earlier, incorrectly-copied setup attempt at Hostinger, imported along with everything else when
+the zone was added. Caught by listing all records after adding the new ones rather than trusting
+the additions alone, and deleted the malformed duplicates. Also set `CONTACT_FROM_EMAIL` to
+`Mario Hossen Website <contact@mariohossen.com>` — domain verification alone doesn't lift Resend's
+sandbox restriction; the `from` address has to actually be on the verified domain too, which
+wasn't obvious until the _same_ sandbox-rejection error kept recurring after verification
+succeeded.
+
+**The destination address itself was wrong, twice.** First `mariohossen@gmail.com` (the
+`settings.json` placeholder, confirmed by the client early in Phase 6) turned out not to be the
+right address at all — the client corrected it mid-session to `maestrohossen@gmail.com`, the real
+one. Both `CONTACT_TO_EMAIL` and (pending) `site/settings.json`'s `contactEmail` field need to
+reflect this — the secret is already updated and redeployed; the settings.json placeholder text
+still needs a follow-up pass.
+
+**GitHub had a real, external partial outage during this exact window** (confirmed via
+`githubstatus.com`, not assumed) — three separate deploy attempts sat `queued` for minutes then
+failed outright, unrelated to anything in this repo. Deployed directly via `wrangler pages deploy`
+instead each time rather than blocking on it; the git-based GitHub Actions pipeline itself hasn't
+been re-verified end to end since, and should be once GitHub recovers, so the two deployment paths
+don't silently drift apart.
+
+**What's still open:** the apex → `www` canonical redirect (task 9.9's other half — got
+interrupted by the contact-form incident above before it was finished; needs a Cloudflare Redirect
+Rule, which needs a permission this session's tokens don't have); final client confirmation that
+the test email actually arrived at `maestrohossen@gmail.com`; re-verifying the GitHub Actions
+deploy pipeline once the outage clears; and `site/settings.json`'s `contactEmail` placeholder
+still says the old, wrong address.
 
 ### 2026-08-06 — Task 9.5: `_redirects`, built from the live sitemap, not memory
 
