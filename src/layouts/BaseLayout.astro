@@ -6,6 +6,7 @@ import Footer from '../components/layout/Footer.astro'
 import { withBase } from '../lib/url'
 import { personSchema } from '../lib/schema'
 import shareImageSource from '../assets/images/gallery/Mario-Hossen-1.jpg'
+import faviconSource from '../assets/brand/favicon-source.png'
 
 interface Props {
   title: string
@@ -43,6 +44,20 @@ const shareImage = await getImage({
 // getImage's output path already respects astro.config.mjs's `base` (see src/lib/url.ts) —
 // wrapping it in withBase() again would double-prefix it on the GitHub Pages build.
 const shareImageUrl = new URL(shareImage.src, Astro.site)
+
+// The site's real favicon — the original's own favicon_MH_violine.png (a photo of the scroll of
+// Mario Hossen's violin, archived at assets/originals/2020/07/), not the generic SVG mark placed
+// here as a stand-in before this was tracked down. PNG, not SVG: the source is a photograph, not
+// vector art. Sized to match what each `rel` actually needs, rather than the original's own
+// markup, which declared sizes="192x192" on a file that was really 300×300.
+const favicon32 = await getImage({ src: faviconSource, width: 32, height: 32, format: 'png' })
+const favicon192 = await getImage({ src: faviconSource, width: 192, height: 192, format: 'png' })
+const appleTouchIcon = await getImage({
+  src: faviconSource,
+  width: 180,
+  height: 180,
+  format: 'png',
+})
 ---
 
 <!doctype html>
@@ -54,7 +69,10 @@ const shareImageUrl = new URL(shareImage.src, Astro.site)
     <meta name="description" content={desc} />
     {noindex && <meta name="robots" content="noindex" />}
     <link rel="canonical" href={canonicalUrl.href} />
-    <link rel="icon" href={withBase('/favicon.svg')} type="image/svg+xml" />
+    <link rel="icon" href={favicon32.src} sizes="32x32" type="image/png" />
+    <link rel="icon" href={favicon192.src} sizes="192x192" type="image/png" />
+    <link rel="apple-touch-icon" href={appleTouchIcon.src} />
+    <link rel="icon" href={withBase('/favicon.ico')} sizes="any" />
     <link rel="sitemap" href={withBase('/sitemap-index.xml')} />
 
     <meta property="og:type" content="website" />
