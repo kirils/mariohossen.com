@@ -2,13 +2,13 @@
 
 Live status of the rebuild. **Update this file whenever a task completes.**
 
-|                   |                                                                                                                                                                                    |
-| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Started**       | 2026-07-28                                                                                                                                                                         |
-| **Current phase** | Phase 9 — Deploy & DNS cutover (**the domain is live on Cloudflare now** — see the cutover log entry below)                                                                        |
-| **Overall**       | 86 / 93 tasks (92%) — see the Phase 8 log entry for the 76→93 denominator correction; Phases 0, 2, 3, 4, 5, 6 and 7 done; Phase 9 at 8/12 (one more partially done)                |
-| **Blocked on**    | Task 1.6 (13 client questions) · Task 8.8 (needs the client) · the apex→www redirect rule (9.9, interrupted)                                                                       |
-| **Next action**   | Add the apex→`www` Redirect Rule; re-run the GitHub Actions deploy once its current external outage clears (site itself is fine, deployed directly via `wrangler` in the meantime) |
+|                   |                                                                                                                                                                               |
+| ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Started**       | 2026-07-28                                                                                                                                                                    |
+| **Current phase** | Phase 9 — Deploy & DNS cutover (**site fully live and correct on Cloudflare** — see the cutover log entries below)                                                            |
+| **Overall**       | 87 / 93 tasks (94%) — see the Phase 8 log entry for the 76→93 denominator correction; Phases 0, 2, 3, 4, 5, 6 and 7 done; Phase 9 at 9/12                                     |
+| **Blocked on**    | Task 1.6 (13 client questions) · Task 8.8 (needs the client) · GitHub Actions itself (confirmed `major_outage` on githubstatus.com — nothing to fix on our end, just waiting) |
+| **Next action**   | Re-run the GitHub Actions deploy once its outage clears (site is unaffected — deployed directly via `wrangler` throughout); otherwise task 8.8 or the Phase 1 open questions  |
 
 Task definitions and acceptance criteria: [docs/plan/05-task-list.md](./docs/plan/05-task-list.md).
 
@@ -27,7 +27,7 @@ Task definitions and acceptance criteria: [docs/plan/05-task-list.md](./docs/pla
 | 6 — Contact form              | ✅ **complete**    | 9/9   | 0.5 d  |
 | 7 — SEO / a11y / performance  | ✅ **complete**    | 9/9   | 0.75 d |
 | 8 — Client tooling & docs     | ⏳ **in progress** | 7/8   | 0.5 d  |
-| 9 — Deploy & DNS cutover      | ⏳ **in progress** | 8/12  | 0.5 d  |
+| 9 — Deploy & DNS cutover      | ⏳ **in progress** | 9/12  | 0.5 d  |
 
 ---
 
@@ -496,10 +496,13 @@ Pulled forward out of order to unblock 6.5/6.8, at the client's request.
 - [x] **9.8** Move DNS — done. Registrar (GoDaddy) → nameservers now Cloudflare's; DNS hosting
       moved from Hostinger. Full story, including a wrong assumption caught and corrected before
       acting on it, in the cutover log entry below
-- [~] **9.9** SSL — done, valid cert confirmed (`openssl s_client`, Google Trust Services, through
-  Nov 2026). Canonical host (apex → `www` redirect, per decision D10) — **still open**, needs
-  a Cloudflare Redirect Rule; got interrupted by the contact-form incident below before this
-  was finished
+- [x] **9.9** SSL — valid cert confirmed (`openssl s_client`, Google Trust Services, through Nov
+      2026). Canonical host (apex → `www`, per decision D10) — done via a Cloudflare Redirect Rule
+      (the built-in "Redirect from root to WWW" template, client set it up directly in the dashboard
+      with step-by-step guidance). Verified: apex 301s to `www` with path and query string both
+      preserved, `www` still serves directly with no redirect loop, and the existing `_redirects`
+      file (old WordPress URLs) is unaffected — a separate, zone-level mechanism from Cloudflare
+      Pages' own `_redirects`, confirmed both still work together correctly
 - [x] **9.10** Post-cutover checks — pages all `200`, `_redirects` verified live, email DNS
       (MX/SPF/DKIM/DMARC) all confirmed intact and properly verified with Resend, **and the client
       confirmed the real test email actually arrived** at `maestrohossen@gmail.com` — the whole chain
@@ -551,7 +554,7 @@ Condensed. Full detail in [docs/plan/05-task-list.md](./docs/plan/05-task-list.m
 </details>
 
 <details>
-<summary><b>Phase 9 — Deploy & DNS cutover</b> (8/12 done, 1 more partial — see the cutover log entry above)</summary>
+<summary><b>Phase 9 — Deploy & DNS cutover</b> (9/12 done — see the cutover log entries above)</summary>
 
 - [x] 9.1 GitHub repo · 9.2 Cloudflare Pages (via GitHub Actions + wrangler, not the dashboard's
       git integration) · 9.3 Verify on `.pages.dev`
@@ -561,7 +564,7 @@ Condensed. Full detail in [docs/plan/05-task-list.md](./docs/plan/05-task-list.m
       already-low TTLs were confirmed (see the cutover log entry)
 - [x] 9.7 ⚠ **Full WordPress backup** — confirmed, verified by client
 - [x] 9.8 Move DNS — done, live on Cloudflare nameservers
-- [~] 9.9 SSL done; canonical apex→`www` redirect still open
+- [x] 9.9 SSL + canonical apex→`www` redirect — both done, redirect verified live
 - [x] 9.10 Post-cutover checks — pages/redirects/email-DNS confirmed, **and the client confirmed
       the real test email arrived**
 - [ ] 9.11 Search Console · 9.12 Cancel Hostinger after 30 days
@@ -627,6 +630,30 @@ Full analysis: [docs/plan/08-risks-and-decisions.md](./docs/plan/08-risks-and-de
 ## Log
 
 Newest first.
+
+### 2026-08-07 — Task 9.9 closed out: apex → www redirect live
+
+- Two scoped tokens failed for this before switching approach — Cloudflare's Redirect Rules API
+  needs a permission neither "search for 'redirect' in the token UI" attempt actually granted
+  (confirmed via direct API calls: `Authentication error [code: 10000]` on both the modern
+  Rulesets endpoint and the legacy Page Rules one). Rather than guess a third permission name,
+  walked the client through the dashboard directly instead — Cloudflare has a **built-in
+  "Redirect from root to WWW" template** that pre-fills exactly the right wildcard pattern, target
+  URL, and status code; the client just needed to check "Preserve query string" and deploy.
+- Verified properly, not just "it looks deployed": apex 301s to `www` with both the path and a
+  query string preserved, `www` itself still resolves directly (no redirect loop), and the
+  existing Cloudflare Pages `_redirects` file (old WordPress URLs) still fires correctly — two
+  independent redirect mechanisms (zone-level Redirect Rules vs. Pages' own `_redirects`)
+  confirmed to coexist without interfering with each other.
+- Same edge-propagation lag pattern as the favicon fix — 200 immediately after deploying, then
+  301 consistently about 30 seconds later. Not treated as a failure; just re-checked after a
+  short wait, same as before.
+- **GitHub Actions confirmed in a genuine `major_outage`** (githubstatus.com's own component
+  status, not just slow) — new pushes since 2026-08-06T16:48 haven't triggered a single workflow
+  run. Nothing to fix here; deploying directly via `wrangler` throughout, will re-verify the
+  normal pipeline once the outage clears.
+- **Phase 9 is now 9/12** — only 9.6 (TTL, never applicable without Hostinger access), 9.11
+  (Search Console) and 9.12 (cancel Hostinger, time-gated to 30 days post-cutover) remain.
 
 ### 2026-08-06 — 9.10 closed out; real favicon found and shipped
 
